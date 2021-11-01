@@ -30,6 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   audioplayers: ^0.20.1
+  flutter_svg: ^0.23.0+1
   screenshot: ^1.2.3
   image_gallery_saver: ^1.7.1
   permission_handler: ^8.2.5
@@ -70,6 +71,7 @@ flutter:
     - assets/lottie/bye_bye.json
     - assets/lottie/green_bye.json
     - assets/lottie/done.json
+    - assets/images/Geeta.jfif
   # - images/a_dot_burr.jpeg
   # - images/a_dot_ham.jpeg
 

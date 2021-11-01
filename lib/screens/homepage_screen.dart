@@ -2,16 +2,17 @@
 
 import 'package:flutter/material.dart';
 
+import './geeta_read_screen.dart';
 import '../widgets/profile_picture.dart';
 import '../screens/desired_shlok_screen.dart';
-import '../screens/choose_avatar_screen.dart';
 
 class HomepageScreen extends StatefulWidget {
   @override
   State<HomepageScreen> createState() => _HomepageScreenState();
 }
 
-class _HomepageScreenState extends State<HomepageScreen>  with TickerProviderStateMixin  {
+class _HomepageScreenState extends State<HomepageScreen>
+    with TickerProviderStateMixin {
   var _currentPageIndex = 1;
 
   @override
@@ -55,15 +56,16 @@ class _HomepageScreenState extends State<HomepageScreen>  with TickerProviderSta
           setState(() {
             _currentPageIndex = index;
           });
-          if (_currentPageIndex == 2) {
-            Navigator.pushNamed(context, ChooseAvatarScreen.routeName);
+
+          if (index == 1) {
+            Navigator.of(context).pushNamed(GeetaReadScreen.routeName);
           }
         },
         currentIndex: _currentPageIndex,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.comment), label: "Comment"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.auto_awesome), label: "Shlok"),
+              icon: Icon(Icons.menu_book_outlined), label: "Read Geeta"),
           BottomNavigationBarItem(icon: Icon(Icons.share), label: "Share App"),
         ],
       ),

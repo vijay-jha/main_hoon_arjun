@@ -7,6 +7,7 @@ import './screens/language_preference_screen.dart';
 import './screens/homepage_screen.dart';
 import './screens/signout_splash_screen.dart';
 import './screens/choose_avatar_screen.dart';
+import './screens/geeta_read_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
             foregroundColor: Colors.white,
           ),
         ),
-        home: ChooseAvatarScreen(),
+        home: HomepageScreen(),
         // home: HomepageScreen(),
         routes: {
           SettingsScreen.routeName: (ctx) => SettingsScreen(),
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
           DesiredShlokScreen.routeName: (ctx) => DesiredShlokScreen(),
           LanguagePreferenceScreen.routeName: (ctx) => LanguagePreferenceScreen(),
           SignOutSplashScreen.routeName: (ctx) => SignOutSplashScreen(),
-          ChooseAvatarScreen.routeName: (ctx) => ChooseAvatarScreen(),
+          DisplayAvatar.routeName: (ctx) =>  DisplayAvatar(),
+          GeetaReadScreen.routeName: (ctx) => GeetaReadScreen(),
         });
   }
 }

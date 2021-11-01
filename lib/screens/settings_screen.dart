@@ -1,11 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:main_hoon_arjun/screens/homepage_screen.dart';
 
 import './about_screen.dart';
-import '../screens/desired_shlok_screen.dart';
 import '../screens/language_preference_screen.dart';
+import '../screens/choose_avatar_screen.dart';
 import '../screens/signout_splash_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -54,6 +53,7 @@ class SettingsScreen extends StatelessWidget {
           const SizedBox(
             height: 50,
           ),
+          choice(context, 'Edit Profile'),
           choice(context, 'About'),
           choice(context, 'Language'),
           const SizedBox(
@@ -117,7 +117,10 @@ class SettingsScreen extends StatelessWidget {
       onTap: () {
         if (choice == "About") {
           Navigator.pushNamed(ctx, AboutScreen.routeName);
-        } else {
+        } else if (choice == "Edit Profile") {
+          Navigator.pushNamed(ctx, DisplayAvatar.routeName);
+        }
+         else {
           Navigator.pushNamed(ctx, LanguagePreferenceScreen.routeName);
         }
       },
