@@ -18,7 +18,7 @@ class Adhyay extends StatelessWidget {
                     adhyayName: name,
                   ))),
       child: Container(
-        height: 200,
+        // height: 200,
         padding:
             const EdgeInsets.only(left: 11, top: 10, bottom: 10, right: 11),
         child: Container(

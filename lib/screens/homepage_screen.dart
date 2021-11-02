@@ -3,8 +3,9 @@
 import 'package:flutter/material.dart';
 
 import './geeta_read_screen.dart';
+import './desired_shlok_screen.dart';
+import './favorites_screen.dart';
 import '../widgets/profile_picture.dart';
-import '../screens/desired_shlok_screen.dart';
 
 class HomepageScreen extends StatefulWidget {
   @override
@@ -57,13 +58,16 @@ class _HomepageScreenState extends State<HomepageScreen>
             _currentPageIndex = index;
           });
 
-          if (index == 1) {
+          if (index == 0) {
+            Navigator.of(context).pushNamed(FavoritesScreen.routeName);
+          } else if (index == 1) {
             Navigator.of(context).pushNamed(GeetaReadScreen.routeName);
           }
         },
         currentIndex: _currentPageIndex,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.comment), label: "Comment"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.favorite), label: "Favorites"),
           BottomNavigationBarItem(
               icon: Icon(Icons.menu_book_outlined), label: "Read Geeta"),
           BottomNavigationBarItem(icon: Icon(Icons.share), label: "Share App"),

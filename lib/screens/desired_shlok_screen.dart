@@ -68,7 +68,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
             if (_currentPageIndex == 2) {
               final image = await _controller.capture();
               if (image != null) {
-                // await saveImage(image);
+                await saveImage(image);
                 saveAndShare(image);
               }
             }
