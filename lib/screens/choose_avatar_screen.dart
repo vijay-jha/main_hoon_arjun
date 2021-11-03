@@ -4,9 +4,10 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ViewportOffset;
+import 'package:provider/provider.dart';
 
-import '../helpers/mahabharat_characters.dart';
 import './animated_dialog_box.dart';
+import '../providers/mahabharat_characters.dart';
 
 class DisplayAvatar extends StatefulWidget {
   static const routeName = '/display-avatar-screen';
@@ -16,23 +17,20 @@ class DisplayAvatar extends StatefulWidget {
 }
 
 class _DisplayAvatarState extends State<DisplayAvatar> {
-  String _AvatarImageUrl =
-      'https://cdni.iconscout.com/illustration/premium/thumb/arjun-standing-in-welcome-pose-3247069-2706135.png';
-
-  int choosenAvatarIndex = 0;
-
-  void _selectAvatar(String updatedImageUrl, int index) {
+  void _selectAvatar(int index) {
     setState(() {
-      _AvatarImageUrl = updatedImageUrl;
-      choosenAvatarIndex = index;
+      Provider.of<MahabharatCharacters>(context, listen: false)
+          .currentAvatar(index);
     });
   }
 
-  void _onTapOnAvatar() {
+  void _onTapAvatar() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (BuildContext context) =>
-            Avatar(onSelectAvatar: _selectAvatar),
+        builder: (BuildContext context) => Avatar(
+          onSelectAvatar: _selectAvatar,
+          ctx: context,
+        ),
       ),
     );
   }
@@ -49,7 +47,8 @@ class _DisplayAvatarState extends State<DisplayAvatar> {
             height: 20,
           ),
           Text(
-            MahabharatCharacters.getCharacterName(choosenAvatarIndex),
+            Provider.of<MahabharatCharacters>(context, listen: false)
+                .getChosenAvatarName(),
             style: TextStyle(
               color: Colors.orange,
               fontSize: 50,
@@ -61,7 +60,8 @@ class _DisplayAvatarState extends State<DisplayAvatar> {
               margin: EdgeInsets.symmetric(vertical: 5),
               height: 500,
               child: Image.network(
-                _AvatarImageUrl,
+                Provider.of<MahabharatCharacters>(context, listen: false)
+                    .getChosenAvatarLink(),
                 fit: BoxFit.none,
               ),
             ),
@@ -70,7 +70,7 @@ class _DisplayAvatarState extends State<DisplayAvatar> {
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.orange),
             ),
-            onPressed: _onTapOnAvatar,
+            onPressed: _onTapAvatar,
             child: Text(
               "Change Your Avatar",
               style: TextStyle(fontSize: 20),
@@ -85,64 +85,18 @@ class _DisplayAvatarState extends State<DisplayAvatar> {
 
 @immutable
 class Avatar extends StatefulWidget {
-  const Avatar({Key key, @required this.onSelectAvatar}) : super(key: key);
-  final Function(String, int) onSelectAvatar;
+  Avatar({@required this.onSelectAvatar, @required this.ctx});
+  final Function(int) onSelectAvatar;
+  final BuildContext ctx;
   @override
   _AvatarState createState() => _AvatarState();
 }
 
 class _AvatarState extends State<Avatar> {
   // final mahabharatAvatars = MahabharatCharacters();
-  final _mahabharatCharacters = [
-    {
-      'name': 'Arjun',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/arjun-standing-in-welcome-pose-3247069-2706135.png',
-    },
-    {
-      'name': 'Draupadi',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/draupadi-holding-worship-plate-3220909-2703406.png',
-    },
-    {
-      'name': 'Bhishma',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/bhishma-pitamaha-3247112-2706051.png',
-    },
-    {
-      'name': 'Dhritarashtra',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/king-dhritarashtra-3247180-2706118.png',
-    },
-    {
-      'name': 'Karan',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/karna-removing-his-crown-3220949-2694481.png',
-    },
-    {
-      'name': 'Duryodhan',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/angry-duryodhana-3220998-2694531.png',
-    },
-    {
-      'name': 'Bheem',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/bheem-standing-in-welcome-pose-3247133-2706072.png',
-    },
-    {
-      'name': 'Dronacharya',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/dronacharya-standing-in-namaste-pose-3220920-2703417.png',
-    },
-    {
-      'name': 'Shakuni',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/shakuni-standing-in-welcome-pose-3260304-2726033.png',
-    },
-  ];
 
   final _filterCharacters = ValueNotifier<String>(
-    MahabharatCharacters.getCharacterImageLink(0),
+    'https://cdni.iconscout.com/illustration/premium/thumb/arjun-standing-in-welcome-pose-3247069-2706135.png',
   );
 
   int currentPageIndex = 0;
@@ -170,7 +124,8 @@ class _AvatarState extends State<Avatar> {
             child: Container(
               margin: EdgeInsets.symmetric(vertical: 25),
               child: Text(
-                MahabharatCharacters.getCharacterName(currentPageIndex),
+                Provider.of<MahabharatCharacters>(context, listen: false)
+                    .getCharacterName(currentPageIndex),
                 style: const TextStyle(
                   color: Colors.orange,
                   fontSize: 50,
@@ -207,24 +162,24 @@ class _AvatarState extends State<Avatar> {
     return FilterSelector(
       onSelectAvatar: widget.onSelectAvatar,
       onFilterChanged: _onFilterChanged,
-      filters: _mahabharatCharacters,
+      filters: Provider.of<MahabharatCharacters>(context, listen: false)
+          .mahabharatCharacters,
     );
   }
 }
 
 @immutable
 class FilterSelector extends StatefulWidget {
-  const FilterSelector({
-    Key key,
+  FilterSelector({
     @required this.filters,
     @required this.onFilterChanged,
     @required this.onSelectAvatar,
     this.padding = const EdgeInsets.symmetric(vertical: 24.0),
-  }) : super(key: key);
+  });
 
   final List<Map<String, String>> filters;
   final void Function(String link, int index) onFilterChanged;
-  final Function(String, int) onSelectAvatar;
+  final Function(int) onSelectAvatar;
   final EdgeInsets padding;
 
   @override
@@ -282,7 +237,6 @@ class _FilterSelectorState extends State<FilterSelector> {
           child: const Text('Ok'),
           onPressed: () {
             widget.onSelectAvatar(
-              MahabharatCharacters.getCharacterImageLink(currentIndexForSelect),
               currentIndexForSelect,
             );
             Navigator.of(context).pop();

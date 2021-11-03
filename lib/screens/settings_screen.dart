@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import './about_screen.dart';
 import '../screens/language_preference_screen.dart';
 import '../screens/choose_avatar_screen.dart';
 import '../screens/signout_splash_screen.dart';
+import '../providers/mahabharat_characters.dart';
 
 class SettingsScreen extends StatelessWidget {
   static const routeName = '/settings-screen';
@@ -31,8 +33,9 @@ class SettingsScreen extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(70),
                     child: Image.network(
-                      "https://pbs.twimg.com/profile_images/843401950448111617/M_vs7v5C_400x400.jpg",
-                      fit: BoxFit.contain,
+                      Provider.of<MahabharatCharacters>(context)
+                          .getChosenAvatarLink(),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -119,8 +122,7 @@ class SettingsScreen extends StatelessWidget {
           Navigator.pushNamed(ctx, AboutScreen.routeName);
         } else if (choice == "Edit Profile") {
           Navigator.pushNamed(ctx, DisplayAvatar.routeName);
-        }
-         else {
+        } else {
           Navigator.pushNamed(ctx, LanguagePreferenceScreen.routeName);
         }
       },

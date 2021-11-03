@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import './providers/mahabharat_characters.dart';
 import './screens/desired_shlok_screen.dart';
 import './screens/settings_screen.dart';
 import './screens/about_screen.dart';
@@ -15,25 +17,28 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.orange,
-          appBarTheme: const AppBarTheme(
-            foregroundColor: Colors.white,
+    return ChangeNotifierProvider(
+      create: (ctx) => MahabharatCharacters(),
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.orange,
+            appBarTheme: const AppBarTheme(
+              foregroundColor: Colors.white,
+            ),
           ),
-        ),
-        home: HomepageScreen(),
-        // home: HomepageScreen(),
-        routes: {
-          SettingsScreen.routeName: (ctx) => SettingsScreen(),
-          AboutScreen.routeName: (ctx) => AboutScreen(),
-          DesiredShlokScreen.routeName: (ctx) => DesiredShlokScreen(),
-          LanguagePreferenceScreen.routeName: (ctx) => LanguagePreferenceScreen(),
-          SignOutSplashScreen.routeName: (ctx) => SignOutSplashScreen(),
-          DisplayAvatar.routeName: (ctx) =>  DisplayAvatar(),
-          GeetaReadScreen.routeName: (ctx) => GeetaReadScreen(),
-          FavoritesScreen.routeName: (ctx) => FavoritesScreen(),
-        });
+          home: HomepageScreen(),
+          // home: HomepageScreen(),
+          routes: {
+            SettingsScreen.routeName: (ctx) => SettingsScreen(),
+            AboutScreen.routeName: (ctx) => AboutScreen(),
+            DesiredShlokScreen.routeName: (ctx) => DesiredShlokScreen(),
+            LanguagePreferenceScreen.routeName: (ctx) => LanguagePreferenceScreen(),
+            SignOutSplashScreen.routeName: (ctx) => SignOutSplashScreen(),
+            DisplayAvatar.routeName: (ctx) =>  DisplayAvatar(),
+            GeetaReadScreen.routeName: (ctx) => GeetaReadScreen(),
+            FavoritesScreen.routeName: (ctx) => FavoritesScreen(),
+          }),
+    );
   }
 }

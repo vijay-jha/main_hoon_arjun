@@ -14,6 +14,7 @@ import 'package:path_provider/path_provider.dart';
 import '../widgets/translation_card.dart';
 import '../widgets/profile_picture.dart';
 import '../widgets/shlok_card.dart';
+import '../widgets/speaker_icon_button.dart';
 
 class DesiredShlokScreen extends StatefulWidget {
   static const routeName = '/desiredShlok-screen';
@@ -56,7 +57,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
         body: ListView(
           children: [
             ShlokCard(shlok: shlok),
-            speakerButtton(),
+            SpeakerIcnBtn(),
             TranslationCard(),
           ],
         ),
@@ -69,13 +70,14 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
               final image = await _controller.capture();
               if (image != null) {
                 await saveImage(image);
-                saveAndShare(image);
+                shareImage(image);
               }
             }
           },
           currentIndex: _currentPageIndex,
           items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.comment), label: "Comment"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.comment), label: "Comment"),
             BottomNavigationBarItem(
                 icon: Icon(Icons.auto_awesome), label: "Shlok"),
             BottomNavigationBarItem(icon: Icon(Icons.share), label: "Share"),
@@ -86,36 +88,8 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
     );
   }
 
-  IconButton speakerButtton() {
-    return IconButton(
-      onPressed: () {
-        setState(() {
-          isVolume = !isVolume;
-          soundPlay();
-        });
-      },
-      icon: Icon(isVolume ? Icons.volume_mute : Icons.volume_up),
-      iconSize: 50,
-      color: Colors.white,
-    );
-  }
-
-  Future<void> soundPlay() async {
-    if (isVolume) {
-      player = await _audioCache.play('audio/karmanya-shlok.mp3');
-      player.onPlayerCompletion.listen((event) {
-        setState(() {
-          isVolume = false;
-        });
-      });
-    } else {
-      player.stop();
-    }
-  }
-
   Future<String> saveImage(Uint8List imageBytes) async {
     await [Permission.storage].request();
-
     final time = DateTime.now()
         .toIso8601String()
         .replaceAll('', '-')
@@ -125,7 +99,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
     return result['filePath'];
   }
 
-  Future saveAndShare(Uint8List bytes) async {
+  Future shareImage(Uint8List bytes) async {
     final directory = await getApplicationDocumentsDirectory();
     final image = File('${directory.path}/flutter.png');
     image.writeAsBytesSync(bytes);

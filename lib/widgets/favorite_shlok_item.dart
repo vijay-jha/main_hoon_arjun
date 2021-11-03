@@ -47,11 +47,9 @@ class _FavoritesShlok2State extends State<FavoriteShlokItem> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              // crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // shlok numbering Lable
                 Container(
-                  // margin: const EdgeInsets.only(left: 29.7, top: 3),
                   child: CommentsButton(),
                   alignment: Alignment.center,
                 ),
@@ -61,7 +59,6 @@ class _FavoritesShlok2State extends State<FavoriteShlokItem> {
                 Container(
                   alignment: Alignment.center,
                   width: 88,
-                  // margin: const EdgeInsets.only(right: 0, top: 3),
                   padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),

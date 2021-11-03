@@ -1,5 +1,7 @@
-class MahabharatCharacters {
-  static final List<Map<String, String>> _mahabharatCharacters = [
+import 'package:flutter/material.dart';
+
+class MahabharatCharacters with ChangeNotifier {
+  final List<Map<String, String>> _mahabharatCharacters = [
     {
       'name': 'Arjun',
       'link':
@@ -47,11 +49,32 @@ class MahabharatCharacters {
     },
   ];
 
-  static String getCharacterName(int index) {
+  int _currentAvatar = 0;
+
+  List<Map<String, String>> get mahabharatCharacters {
+    return [..._mahabharatCharacters];
+  }
+
+  String getCharacterName(int index) {
     return _mahabharatCharacters[index]['name'];
   }
 
-  static String getCharacterImageLink(int index) {
+  String getCharacterImageLink(int index) {
     return _mahabharatCharacters[index]['link'];
+  }
+
+  String getChosenAvatarLink() {
+    return _mahabharatCharacters[_currentAvatar]['link'];
+  }
+
+  String getChosenAvatarName() {
+    return _mahabharatCharacters[_currentAvatar]['name'];
+  }
+
+
+
+  void currentAvatar(int index) {
+    _currentAvatar = index;
+    notifyListeners();
   }
 }

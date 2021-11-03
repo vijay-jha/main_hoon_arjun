@@ -18,7 +18,7 @@ class AdhyayOverviewScreen extends StatelessWidget {
         actions: [ProfilePicture()],
       ),
       body: PageView(
-        scrollDirection: Axis.vertical,
+        scrollDirection: Axis.horizontal,
         children: [
           Container(
             color: Colors.pink,
