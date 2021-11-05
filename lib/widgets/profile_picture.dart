@@ -17,7 +17,7 @@ class ProfilePicture extends StatelessWidget {
         padding: const EdgeInsets.all(4),
         child: CircleAvatar(
           backgroundColor: Colors.white,
-          radius: 27,
+          radius: 30,
           child: Image.network(
             // "https://pbs.twimg.com/profile_images/843401950448111617/M_vs7v5C_400x400.jpg",
             Provider.of<MahabharatCharacters>(context, listen: false)
