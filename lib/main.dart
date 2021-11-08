@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:main_hoon_arjun/providers/playing_shlok.dart';
 import 'package:provider/provider.dart';
 
 import './providers/mahabharat_characters.dart';
@@ -17,8 +18,15 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (ctx) => MahabharatCharacters(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => MahabharatCharacters(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => PlayingShlok(),
+        )
+      ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
@@ -33,9 +41,10 @@ class MyApp extends StatelessWidget {
             SettingsScreen.routeName: (ctx) => SettingsScreen(),
             AboutScreen.routeName: (ctx) => AboutScreen(),
             DesiredShlokScreen.routeName: (ctx) => DesiredShlokScreen(),
-            LanguagePreferenceScreen.routeName: (ctx) => LanguagePreferenceScreen(),
+            LanguagePreferenceScreen.routeName: (ctx) =>
+                LanguagePreferenceScreen(),
             SignOutSplashScreen.routeName: (ctx) => SignOutSplashScreen(),
-            DisplayAvatar.routeName: (ctx) =>  DisplayAvatar(),
+            DisplayAvatar.routeName: (ctx) => DisplayAvatar(),
             GeetaReadScreen.routeName: (ctx) => GeetaReadScreen(),
             FavoritesScreen.routeName: (ctx) => FavoritesScreen(),
           }),
