@@ -7,10 +7,11 @@ class SpeakerIcnBtn extends StatefulWidget {
 }
 
 class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
+  var isVolume = false;
+
   final AudioCache _audioCache = AudioCache();
   AudioPlayer player;
 
-  var isVolume = false;
   @override
   void initState() {
     super.initState();

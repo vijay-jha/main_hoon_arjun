@@ -71,8 +71,6 @@ class MahabharatCharacters with ChangeNotifier {
     return _mahabharatCharacters[_currentAvatar]['name'];
   }
 
-
-
   void currentAvatar(int index) {
     _currentAvatar = index;
     notifyListeners();
