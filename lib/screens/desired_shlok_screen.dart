@@ -57,7 +57,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
         body: ListView(
           children: [
             ShlokCard(shlok: shlok),
-            SpeakerIcnBtn(),
+            SpeakerIcnBtn("sss"),
             TranslationCard(),
           ],
         ),

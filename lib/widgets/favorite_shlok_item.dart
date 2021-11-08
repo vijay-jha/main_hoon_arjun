@@ -54,7 +54,7 @@ class _FavoritesShlok2State extends State<FavoriteShlokItem> {
                   alignment: Alignment.center,
                 ),
 
-                SpeakerIcnBtn(),
+                SpeakerIcnBtn(widget.shlok["Number"]),
 
                 Container(
                   alignment: Alignment.center,
