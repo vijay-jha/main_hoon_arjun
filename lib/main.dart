@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
           home: HomepageScreen(),
           // home: HomepageScreen(),
           routes: {
+            HomepageScreen.routeName: (ctx) => HomepageScreen(),
             SettingsScreen.routeName: (ctx) => SettingsScreen(),
             AboutScreen.routeName: (ctx) => AboutScreen(),
             DesiredShlokScreen.routeName: (ctx) => DesiredShlokScreen(),

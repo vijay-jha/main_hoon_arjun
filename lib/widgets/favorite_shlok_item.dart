@@ -34,7 +34,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
         ),
         child: Column(
           children: [
-            GestureDetector(
+            InkWell(
               onTap: _onTapShlok,
               child: Container(
                 margin:

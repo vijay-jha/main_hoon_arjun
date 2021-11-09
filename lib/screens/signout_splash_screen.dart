@@ -38,12 +38,8 @@ class _SignOutSplashScreenState extends State<SignOutSplashScreen>
                 _controller
                   ..duration = composition.duration
                   ..forward().whenComplete(
-                    () => Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomepageScreen(),
-                      ), //change the navigation here
-                    ),
+                    () => Navigator.of(context).pushNamedAndRemoveUntil(
+                        HomepageScreen.routeName, (route) => false),
                   );
               },
             ),
