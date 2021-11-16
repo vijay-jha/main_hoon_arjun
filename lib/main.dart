@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:main_hoon_arjun/providers/playing_shlok.dart';
+import 'package:main_hoon_arjun/widgets/custom_page_transition.dart';
 import 'package:provider/provider.dart';
 
+import './providers/playing_shlok.dart';
 import './providers/mahabharat_characters.dart';
 import './screens/desired_shlok_screen.dart';
 import './screens/settings_screen.dart';
@@ -28,27 +29,39 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: Colors.orange,
-            appBarTheme: const AppBarTheme(
-              foregroundColor: Colors.white,
-            ),
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.orange,
+          appBarTheme: const AppBarTheme(
+            foregroundColor: Colors.white,
           ),
-          home: HomepageScreen(),
-          // home: HomepageScreen(),
-          routes: {
-            HomepageScreen.routeName: (ctx) => HomepageScreen(),
-            SettingsScreen.routeName: (ctx) => SettingsScreen(),
-            AboutScreen.routeName: (ctx) => AboutScreen(),
-            DesiredShlokScreen.routeName: (ctx) => DesiredShlokScreen(),
-            LanguagePreferenceScreen.routeName: (ctx) =>
-                LanguagePreferenceScreen(),
-            SignOutSplashScreen.routeName: (ctx) => SignOutSplashScreen(),
-            DisplayAvatar.routeName: (ctx) => DisplayAvatar(),
-            GeetaReadScreen.routeName: (ctx) => GeetaReadScreen(),
-            FavoritesScreen.routeName: (ctx) => FavoritesScreen(),
-          }),
+        ),
+        home: HomepageScreen(),
+        onGenerateRoute: (route) => onGenerateRoute(route),
+      ),
     );
+  }
+
+  Route onGenerateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case HomepageScreen.routeName:
+        return CustomPageTransition(child: HomepageScreen());
+      case SettingsScreen.routeName:
+        return CustomPageTransition(child: SettingsScreen());
+      case AboutScreen.routeName:
+        return CustomPageTransition(child: AboutScreen());
+      case LanguagePreferenceScreen.routeName:
+        return CustomPageTransition(child: LanguagePreferenceScreen());
+      case SignOutSplashScreen.routeName:
+        return CustomPageTransition(child: SignOutSplashScreen());
+      case DisplayAvatar.routeName:
+        return CustomPageTransition(child: DisplayAvatar());
+      case GeetaReadScreen.routeName:
+        return CustomPageTransition(child: GeetaReadScreen());
+      case FavoritesScreen.routeName:
+        return CustomPageTransition(child: FavoritesScreen());
+      default:
+        return CustomPageTransition(child: HomepageScreen());
+    }
   }
 }
