@@ -4,10 +4,8 @@ import 'package:provider/provider.dart';
 
 import './providers/playing_shlok.dart';
 import './providers/mahabharat_characters.dart';
-import './screens/desired_shlok_screen.dart';
 import './screens/settings_screen.dart';
 import './screens/about_screen.dart';
-import './screens/language_preference_screen.dart';
 import './screens/homepage_screen.dart';
 import './screens/signout_splash_screen.dart';
 import './screens/choose_avatar_screen.dart';
@@ -50,8 +48,6 @@ class MyApp extends StatelessWidget {
         return CustomPageTransition(child: SettingsScreen());
       case AboutScreen.routeName:
         return CustomPageTransition(child: AboutScreen());
-      case LanguagePreferenceScreen.routeName:
-        return CustomPageTransition(child: LanguagePreferenceScreen());
       case SignOutSplashScreen.routeName:
         return CustomPageTransition(child: SignOutSplashScreen());
       case DisplayAvatar.routeName:

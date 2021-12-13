@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './about_screen.dart';
-import '../screens/language_preference_screen.dart';
 import '../screens/choose_avatar_screen.dart';
 import '../screens/signout_splash_screen.dart';
 import '../providers/mahabharat_characters.dart';
@@ -58,7 +57,6 @@ class SettingsScreen extends StatelessWidget {
           ),
           choice(context, 'Edit Profile'),
           choice(context, 'About'),
-          choice(context, 'Language'),
           const SizedBox(
             height: 50,
           ),
@@ -120,11 +118,9 @@ class SettingsScreen extends StatelessWidget {
       onTap: () {
         if (choice == "About") {
           Navigator.pushNamed(ctx, AboutScreen.routeName);
-        } else if (choice == "Edit Profile") {
-          Navigator.pushNamed(ctx, DisplayAvatar.routeName);
         } else {
-          Navigator.pushNamed(ctx, LanguagePreferenceScreen.routeName);
-        }
+          Navigator.pushNamed(ctx, DisplayAvatar.routeName);
+        } 
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
