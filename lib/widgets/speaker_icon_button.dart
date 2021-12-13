@@ -31,9 +31,9 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
 
   void stopSound() {
     if (isSoundOn &&
-        !(Provider.of<PlayingShlok>(context, listen: false)
-                .getcureenshlokplaying() ==
-            widget.shlokid)) {
+        Provider.of<PlayingShlok>(context, listen: false)
+                .getcureenshlokplaying() !=
+            widget.shlokid) {
       player.stop();
       isSoundOn = false;
       isVolume = false;
@@ -42,11 +42,12 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         setState(() {
-          stopSound();
+          stopSound(); // use for all shut
           if (isVolume) {
+            // use for self shut
             isVolume = !isVolume;
             Provider.of<PlayingShlok>(context, listen: false)
                 .setcurrentshlokplaying(null);
@@ -62,11 +63,13 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
         builder: (_, playingShlok, ch) {
           return playingShlok.getcureenshlokplaying() == widget.shlokid
               ? Icon(
+                  // for self (on taping on self)
                   isVolume ? Icons.pause_rounded : Icons.volume_up_rounded,
                   size: 25,
                   color: Colors.black87,
                 )
               : const Icon(
+                  // for others
                   Icons.volume_up_rounded,
                   size: 25,
                   color: Colors.black87,
