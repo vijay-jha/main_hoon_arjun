@@ -5,8 +5,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:main_hoon_arjun/providers/playing_shlok.dart';
 
 class SpeakerIcnBtn extends StatefulWidget {
-  SpeakerIcnBtn(this.shlokid);
-  final String shlokid;
+  SpeakerIcnBtn(this.shlokId);
+  final String shlokId;
   @override
   _SpeakerIcnBtnState createState() => _SpeakerIcnBtnState();
 }
@@ -26,14 +26,22 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
   @override
   void dispose() {
     super.dispose();
-    player.stop();
+    if (player != null) {
+      player.stop();
+    }
   }
 
   void stopSound() {
     if (isSoundOn &&
+<<<<<<< HEAD
         Provider.of<PlayingShlok>(context, listen: false)
                 .getcureenshlokplaying() !=
             widget.shlokid) {
+=======
+        !(Provider.of<PlayingShlok>(context, listen: false)
+                .getcureenshlokplaying() ==
+            widget.shlokId)) {
+>>>>>>> 856682cdd902067b22fd3eac4b4c755592ef846c
       player.stop();
       isSoundOn = false;
       isVolume = false;
@@ -54,14 +62,14 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
           } else {
             isVolume = !isVolume;
             Provider.of<PlayingShlok>(context, listen: false)
-                .setcurrentshlokplaying(widget.shlokid);
+                .setcurrentshlokplaying(widget.shlokId);
           }
           soundPlay();
         });
       },
       child: Consumer<PlayingShlok>(
         builder: (_, playingShlok, ch) {
-          return playingShlok.getcureenshlokplaying() == widget.shlokid
+          return playingShlok.getcureenshlokplaying() == widget.shlokId
               ? Icon(
                   // for self (on taping on self)
                   isVolume ? Icons.pause_rounded : Icons.volume_up_rounded,

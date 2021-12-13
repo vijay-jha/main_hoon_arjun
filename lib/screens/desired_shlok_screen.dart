@@ -35,8 +35,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
 मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥
                       """;
 
-  var _currentPageIndex = 1;
-
   @override
   void initState() {
     super.initState();
@@ -63,24 +61,21 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
         ),
         bottomNavigationBar: BottomNavigationBar(
           onTap: (int index) async {
-            setState(() {
-              _currentPageIndex = index;
-            });
-            if (_currentPageIndex == 2) {
+            if (index == 2) {
               final image = await _controller.capture();
               if (image != null) {
-                await saveImage(image);
+                // await saveImage(image);
                 shareImage(image);
               }
             }
           },
-          currentIndex: _currentPageIndex,
+          currentIndex: 1,
           items: const [
             BottomNavigationBarItem(
-                icon: Icon(Icons.comment), label: "Comment"),
+                icon: Icon(Icons.comment), label: "Comments"),
             BottomNavigationBarItem(
                 icon: Icon(Icons.auto_awesome), label: "Shlok"),
-            BottomNavigationBarItem(icon: Icon(Icons.share), label: "Share"),
+            BottomNavigationBarItem(icon: Icon(Icons.offline_share), label: "Share Shlok"),
           ],
         ),
         backgroundColor: Colors.orange.shade300,
