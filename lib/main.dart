@@ -64,6 +64,10 @@ class MyApp extends StatelessWidget {
         return CustomPageTransition(child: GeetaReadScreen());
       case FavoritesScreen.routeName:
         return CustomPageTransition(child: FavoritesScreen());
+      // case FeedScreen.routeName:
+      //   return CustomPageTransition(child: FeedScreen());
+      // case CommentScreen.routeName:
+      //   return CustomPageTransition(child: CommentScreen());
       default:
         return CustomPageTransition(child: HomepageScreen());
     }
