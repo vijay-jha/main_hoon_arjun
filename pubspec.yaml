@@ -38,6 +38,9 @@ dependencies:
   path_provider: ^2.0.5
   lottie: ^1.2.1
   provider: ^6.0.1
+  firebase_core: ^1.10.1
+  firebase_auth: ^3.3.0
+  cloud_firestore: ^3.1.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -70,6 +73,7 @@ flutter:
     - assets/lottie/bye_bye.json
     - assets/lottie/green_bye.json
     - assets/lottie/done.json
+    - assets/lottie/loading.json
     - assets/images/Geeta.jfif
     - assets/images/shrikrushnaArjun.jpg
   # - images/a_dot_burr.jpeg

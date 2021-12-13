@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import './homepage_screen.dart';
+import './auth_screen.dart';
 
 class SignOutSplashScreen extends StatefulWidget {
   @override
@@ -38,12 +38,8 @@ class _SignOutSplashScreenState extends State<SignOutSplashScreen>
                 _controller
                   ..duration = composition.duration
                   ..forward().whenComplete(
-                    () => Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomepageScreen(),
-                      ), //change the navigation here
-                    ),
+                    () => Navigator.of(context).pushNamedAndRemoveUntil(
+                        AuthScreen.routeName, (route) => false),
                   );
               },
             ),

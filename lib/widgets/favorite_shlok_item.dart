@@ -7,13 +7,11 @@ class FavoriteShlokItem extends StatefulWidget {
   final Map<String, dynamic> shlok;
   FavoriteShlokItem(this.shlok);
   @override
-  _FavoritesShlok2State createState() => _FavoritesShlok2State();
+  _FavoritesShlokState createState() => _FavoritesShlokState();
 }
 
-class _FavoritesShlok2State extends State<FavoriteShlokItem> {
-  var isVolume = false;
-
-  void _onTapOnShlok() {
+class _FavoritesShlokState extends State<FavoriteShlokItem> {
+  void _onTapShlok() {
     Navigator.of(context).pushNamed(
       DesiredShlokScreen.routeName,
     );
@@ -36,8 +34,8 @@ class _FavoritesShlok2State extends State<FavoriteShlokItem> {
         ),
         child: Column(
           children: [
-            GestureDetector(
-              onTap: _onTapOnShlok,
+            InkWell(
+              onTap: _onTapShlok,
               child: Container(
                 margin:
                     const EdgeInsets.only(left: 5, top: 5, bottom: 5, right: 5),

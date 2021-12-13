@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:main_hoon_arjun/providers/playing_shlok.dart';
+import 'package:main_hoon_arjun/widgets/custom_page_transition.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
+import './providers/playing_shlok.dart';
 import './providers/mahabharat_characters.dart';
-import './screens/desired_shlok_screen.dart';
 import './screens/settings_screen.dart';
 import './screens/about_screen.dart';
-import './screens/language_preference_screen.dart';
 import './screens/homepage_screen.dart';
 import './screens/signout_splash_screen.dart';
 import './screens/choose_avatar_screen.dart';
 import './screens/geeta_read_screen.dart';
 import './screens/favorites_screen.dart';
+import './screens/auth_screen.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -28,26 +33,39 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: Colors.orange,
-            appBarTheme: const AppBarTheme(
-              foregroundColor: Colors.white,
-            ),
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.orange,
+          appBarTheme: const AppBarTheme(
+            foregroundColor: Colors.white,
           ),
-          home: HomepageScreen(),
-          // home: HomepageScreen(),
-          routes: {
-            SettingsScreen.routeName: (ctx) => SettingsScreen(),
-            AboutScreen.routeName: (ctx) => AboutScreen(),
-            DesiredShlokScreen.routeName: (ctx) => DesiredShlokScreen(),
-            LanguagePreferenceScreen.routeName: (ctx) =>
-                LanguagePreferenceScreen(),
-            SignOutSplashScreen.routeName: (ctx) => SignOutSplashScreen(),
-            DisplayAvatar.routeName: (ctx) => DisplayAvatar(),
-            GeetaReadScreen.routeName: (ctx) => GeetaReadScreen(),
-            FavoritesScreen.routeName: (ctx) => FavoritesScreen(),
-          }),
+        ),
+        home: AuthScreen(),
+        onGenerateRoute: (route) => onGenerateRoute(route),
+      ),
     );
+  }
+
+  Route onGenerateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case AuthScreen.routeName:
+        return CustomPageTransition(child: AuthScreen());
+      case HomepageScreen.routeName:
+        return CustomPageTransition(child: HomepageScreen());
+      case SettingsScreen.routeName:
+        return CustomPageTransition(child: SettingsScreen());
+      case AboutScreen.routeName:
+        return CustomPageTransition(child: AboutScreen());
+      case SignOutSplashScreen.routeName:
+        return CustomPageTransition(child: SignOutSplashScreen());
+      case DisplayAvatar.routeName:
+        return CustomPageTransition(child: DisplayAvatar());
+      case GeetaReadScreen.routeName:
+        return CustomPageTransition(child: GeetaReadScreen());
+      case FavoritesScreen.routeName:
+        return CustomPageTransition(child: FavoritesScreen());
+      default:
+        return CustomPageTransition(child: HomepageScreen());
+    }
   }
 }

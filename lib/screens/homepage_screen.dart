@@ -8,14 +8,14 @@ import './favorites_screen.dart';
 import '../widgets/profile_picture.dart';
 
 class HomepageScreen extends StatefulWidget {
+  static const routeName = '/homepage-screen';
   @override
   State<HomepageScreen> createState() => _HomepageScreenState();
 }
 
 class _HomepageScreenState extends State<HomepageScreen>
     with TickerProviderStateMixin {
-  var _currentPageIndex = 1;
-
+      
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,23 +54,26 @@ class _HomepageScreenState extends State<HomepageScreen>
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (int index) async {
-          setState(() {
-            _currentPageIndex = index;
-          });
-
           if (index == 0) {
             Navigator.of(context).pushNamed(FavoritesScreen.routeName);
-          } else if (index == 1) {
+          } else if (index == 2) {
             Navigator.of(context).pushNamed(GeetaReadScreen.routeName);
           }
         },
-        currentIndex: _currentPageIndex,
+        currentIndex: 1,
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(Icons.favorite), label: "Favorites"),
+            icon: Icon(Icons.favorite),
+            label: "Favorites",
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.menu_book_outlined), label: "Read Geeta"),
-          BottomNavigationBarItem(icon: Icon(Icons.share), label: "Share App"),
+            icon: Icon(Icons.home),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.menu_book_outlined),
+            label: "Read Geeta",
+          ),
         ],
       ),
       backgroundColor: Colors.orange.shade300,
