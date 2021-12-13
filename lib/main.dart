@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:main_hoon_arjun/widgets/custom_page_transition.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
 import './providers/playing_shlok.dart';
@@ -11,8 +12,13 @@ import './screens/signout_splash_screen.dart';
 import './screens/choose_avatar_screen.dart';
 import './screens/geeta_read_screen.dart';
 import './screens/favorites_screen.dart';
+import './screens/auth_screen.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -34,7 +40,7 @@ class MyApp extends StatelessWidget {
             foregroundColor: Colors.white,
           ),
         ),
-        home: HomepageScreen(),
+        home: AuthScreen(),
         onGenerateRoute: (route) => onGenerateRoute(route),
       ),
     );
@@ -42,6 +48,8 @@ class MyApp extends StatelessWidget {
 
   Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case AuthScreen.routeName:
+        return CustomPageTransition(child: AuthScreen());
       case HomepageScreen.routeName:
         return CustomPageTransition(child: HomepageScreen());
       case SettingsScreen.routeName:

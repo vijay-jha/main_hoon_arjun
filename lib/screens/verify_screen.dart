@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+import './homepage_screen.dart';
 import './auth_screen.dart';
 
 class VerifyScreen extends StatefulWidget {
@@ -106,7 +108,7 @@ class _VerifyScreenState extends State<VerifyScreen>
         'password': widget.password,
       });
       timer.cancel();
-      Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
+      Navigator.of(context).pushReplacementNamed(HomepageScreen.routeName);
     }
   }
 }
