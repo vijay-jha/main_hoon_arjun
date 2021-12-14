@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PlayingShlok with ChangeNotifier {
-  String currentPlayingshlok = null;
+  String currentPlayingshlok;
 
   void setcurrentshlokplaying(String id) {
     currentPlayingshlok = id;

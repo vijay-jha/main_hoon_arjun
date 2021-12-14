@@ -5,7 +5,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:main_hoon_arjun/providers/playing_shlok.dart';
 
 class SpeakerIcnBtn extends StatefulWidget {
-  SpeakerIcnBtn(this.shlokId);
+  const SpeakerIcnBtn(this.shlokId);
   final String shlokId;
   @override
   _SpeakerIcnBtnState createState() => _SpeakerIcnBtnState();
@@ -33,15 +33,9 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
 
   void stopSound() {
     if (isSoundOn &&
-<<<<<<< HEAD
         Provider.of<PlayingShlok>(context, listen: false)
                 .getcureenshlokplaying() !=
-            widget.shlokid) {
-=======
-        !(Provider.of<PlayingShlok>(context, listen: false)
-                .getcureenshlokplaying() ==
-            widget.shlokId)) {
->>>>>>> 856682cdd902067b22fd3eac4b4c755592ef846c
+            widget.shlokId) {
       player.stop();
       isSoundOn = false;
       isVolume = false;
