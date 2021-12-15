@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:main_hoon_arjun/screens/feed_screen.dart';
 
 import './geeta_read_screen.dart';
 import './desired_shlok_screen.dart';
@@ -15,7 +16,6 @@ class HomepageScreen extends StatefulWidget {
 
 class _HomepageScreenState extends State<HomepageScreen>
     with TickerProviderStateMixin {
-      
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,30 +51,6 @@ class _HomepageScreenState extends State<HomepageScreen>
           // autofocus: true,
           style: TextStyle(fontSize: 20, color: Colors.teal),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (int index) async {
-          if (index == 0) {
-            Navigator.of(context).pushNamed(FavoritesScreen.routeName);
-          } else if (index == 2) {
-            Navigator.of(context).pushNamed(GeetaReadScreen.routeName);
-          }
-        },
-        currentIndex: 1,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: "Favorites",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu_book_outlined),
-            label: "Read Geeta",
-          ),
-        ],
       ),
       backgroundColor: Colors.orange.shade300,
     );

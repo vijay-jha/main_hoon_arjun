@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:main_hoon_arjun/navigationFile.dart';
+import 'package:main_hoon_arjun/screens/splash_screen.dart';
 import 'package:main_hoon_arjun/widgets/custom_page_transition.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +15,8 @@ import './screens/choose_avatar_screen.dart';
 import './screens/geeta_read_screen.dart';
 import './screens/favorites_screen.dart';
 import './screens/auth_screen.dart';
+import './screens/feed_screen.dart';
+import './screens/comment_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,7 +44,7 @@ class MyApp extends StatelessWidget {
             foregroundColor: Colors.white,
           ),
         ),
-        home: AuthScreen(),
+        home: SplashScreen(),
         onGenerateRoute: (route) => onGenerateRoute(route),
       ),
     );
@@ -49,7 +53,7 @@ class MyApp extends StatelessWidget {
   Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case AuthScreen.routeName:
-        return CustomPageTransition(child: AuthScreen());
+        return MaterialPageRoute(builder: (_) => AuthScreen());
       case HomepageScreen.routeName:
         return CustomPageTransition(child: HomepageScreen());
       case SettingsScreen.routeName:
@@ -57,15 +61,19 @@ class MyApp extends StatelessWidget {
       case AboutScreen.routeName:
         return CustomPageTransition(child: AboutScreen());
       case SignOutSplashScreen.routeName:
-        return CustomPageTransition(child: SignOutSplashScreen());
+        return MaterialPageRoute(builder: (_) => SignOutSplashScreen());
       case DisplayAvatar.routeName:
         return CustomPageTransition(child: DisplayAvatar());
       case GeetaReadScreen.routeName:
         return CustomPageTransition(child: GeetaReadScreen());
       case FavoritesScreen.routeName:
         return CustomPageTransition(child: FavoritesScreen());
-      default:
-        return CustomPageTransition(child: HomepageScreen());
+      case FeedScreen.routeName:
+        return CustomPageTransition(child: FeedScreen());
+      case CommentScreen.routeName:
+        return CustomPageTransition(child: CommentScreen());
+      case NavigationFile.routeName:
+        return CustomPageTransition(child: NavigationFile());    
     }
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:main_hoon_arjun/navigationFile.dart';
 
 import 'verify_screen.dart';
 import '../widgets/text_field.dart';
@@ -217,7 +218,9 @@ class _AuthScreenState extends State<AuthScreen> {
       floatingActionButton: Visibility(
         visible: !keyboardIsOpen,
         child: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed(NavigationFile.routeName);
+          },
           label: Text("Skip"),
         ),
       ),

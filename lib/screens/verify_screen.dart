@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:main_hoon_arjun/navigationFile.dart';
 
 import './homepage_screen.dart';
 import './auth_screen.dart';
@@ -108,7 +109,7 @@ class _VerifyScreenState extends State<VerifyScreen>
         'password': widget.password,
       });
       timer.cancel();
-      Navigator.of(context).pushReplacementNamed(HomepageScreen.routeName);
+      Navigator.of(context).pushReplacementNamed(NavigationFile.routeName);
     }
   }
 }
