@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:main_hoon_arjun/screens/favorites_screen.dart';
+import 'package:main_hoon_arjun/screens/geeta_read_screen.dart';
+import 'package:main_hoon_arjun/screens/homepage_screen.dart';
 
 import '../widgets/shlok_post.dart';
 import '../constants.dart';
 
 class FeedScreen extends StatelessWidget {
-  const FeedScreen({Key key}) : super(key: key);
 
   static const routeName = '/feed-screen';
   final String sample = "Feed Screen";
@@ -24,7 +26,12 @@ class FeedScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: ListView.builder(itemCount: 10,itemBuilder: (BuildContext context, int index) {return ShlokPost();}),
+      body: ListView.builder(
+        itemCount: 10,
+        itemBuilder: (BuildContext context, int index) {
+          return ShlokPost();
+        },
+      ),
     );
   }
 }

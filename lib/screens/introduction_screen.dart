@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:main_hoon_arjun/screens/auth_screen.dart';
 import './feed_screen.dart';
 // import 'package:geeta_app/screens/splash_screen.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -39,7 +40,7 @@ class IntroductionScreens extends StatelessWidget {
           ),
         ),
         onDone: () {
-          Navigator.of(context).pushReplacementNamed(FeedScreen.routeName);
+          Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
         },
         pages: getPages(),
         globalBackgroundColor: Colors.white,

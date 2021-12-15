@@ -4,7 +4,6 @@ import '../widgets/comment.dart';
 import '../constants.dart';
 
 class CommentScreen extends StatefulWidget {
-  const CommentScreen({Key key}) : super(key: key);
 
   static const routeName = '/comment-screen';
 
