@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
   Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case AuthScreen.routeName:
-        return CustomPageTransition(child: AuthScreen());
+       return MaterialPageRoute(builder: (_) => AuthScreen());
       case HomepageScreen.routeName:
         return CustomPageTransition(child: HomepageScreen());
       case SettingsScreen.routeName:
@@ -57,15 +57,13 @@ class MyApp extends StatelessWidget {
       case AboutScreen.routeName:
         return CustomPageTransition(child: AboutScreen());
       case SignOutSplashScreen.routeName:
-        return CustomPageTransition(child: SignOutSplashScreen());
+        return MaterialPageRoute(builder: (_) => SignOutSplashScreen());
       case DisplayAvatar.routeName:
         return CustomPageTransition(child: DisplayAvatar());
       case GeetaReadScreen.routeName:
         return CustomPageTransition(child: GeetaReadScreen());
       case FavoritesScreen.routeName:
         return CustomPageTransition(child: FavoritesScreen());
-      default:
-        return CustomPageTransition(child: HomepageScreen());
     }
   }
 }

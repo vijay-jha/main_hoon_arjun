@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -76,7 +78,7 @@ class _AuthScreenState extends State<AuthScreen> {
         }
         ScaffoldMessenger.of(ctx).showSnackBar(
           SnackBar(
-            content: Text(''),
+            content: Text(errorMessage),
             backgroundColor: Theme.of(ctx).errorColor,
           ),
         );

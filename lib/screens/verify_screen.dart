@@ -39,7 +39,7 @@ class _VerifyScreenState extends State<VerifyScreen>
     );
     user = _auth.currentUser;
     user.sendEmailVerification();
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(Duration(microseconds: 100), (timer) {
       checkEmailVerification();
     });
     _controller.addStatusListener((status) {
