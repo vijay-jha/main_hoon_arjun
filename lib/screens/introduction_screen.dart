@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:introduction_screen/introduction_screen.dart';
 // import 'package:geeta_app/screens/splash_screen.dart';
 import 'package:lottie/lottie.dart';
 
 import './auth_screen.dart';
-import './feed_screen.dart';
 
 class IntroductionScreens extends StatelessWidget {
   List<PageViewModel> getPages() {
@@ -21,7 +21,8 @@ class IntroductionScreens extends StatelessWidget {
         footer: const Text(""),
       ),
       PageViewModel(
-        image: Lottie.asset("assets/lottie/23693-mobile-tap-interaction-animation.json"),
+        image: Lottie.asset(
+            "assets/lottie/23693-mobile-tap-interaction-animation.json"),
         title: "Complete Geeta\nOn Your Own Mobile",
         body: "",
         footer: const Text("Click on Done to Begin"),

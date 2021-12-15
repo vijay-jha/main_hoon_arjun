@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:main_hoon_arjun/screens/favorites_screen.dart';
-import 'package:main_hoon_arjun/screens/geeta_read_screen.dart';
-import 'package:main_hoon_arjun/screens/homepage_screen.dart';
 
 import '../widgets/shlok_post.dart';
 import '../constants.dart';
 
 class FeedScreen extends StatelessWidget {
-
   static const routeName = '/feed-screen';
   final String sample = "Feed Screen";
   @override
