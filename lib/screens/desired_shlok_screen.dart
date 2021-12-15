@@ -72,10 +72,17 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
           currentIndex: 1,
           items: const [
             BottomNavigationBarItem(
-                icon: Icon(Icons.comment), label: "Comments"),
+              icon: Icon(Icons.comment),
+              label: "Comments",
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.auto_awesome), label: "Shlok"),
-            BottomNavigationBarItem(icon: Icon(Icons.offline_share), label: "Share Shlok"),
+              icon: Icon(Icons.auto_awesome),
+              label: "Shlok",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.offline_share),
+              label: "Share Shlok",
+            ),
           ],
         ),
         backgroundColor: Colors.orange.shade300,
