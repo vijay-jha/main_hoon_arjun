@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:main_hoon_arjun/navigationFile.dart';
-import 'package:main_hoon_arjun/screens/splash_screen.dart';
+import 'package:main_hoon_arjun/screens/intro_splash_screen.dart';
 import 'package:main_hoon_arjun/widgets/custom_page_transition.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
