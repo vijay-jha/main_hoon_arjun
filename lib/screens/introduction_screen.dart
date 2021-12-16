@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:main_hoon_arjun/screens/auth_screen.dart';
-import './feed_screen.dart';
-// import 'package:geeta_app/screens/splash_screen.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:lottie/lottie.dart';
+
+import './auth_screen.dart';
 
 class IntroductionScreens extends StatelessWidget {
   List<PageViewModel> getPages() {
     return [
       PageViewModel(
-        image: Lottie.asset("assets/lottie/23486-reading-a-book.json"),
+        image: Lottie.asset("assets/lottie/reading_a_book.json"),
         title: "Get ready to read Geeta in a new Experience",
         body: "",
         footer: const Text(""),
       ),
       PageViewModel(
-        image: Lottie.asset("assets/lottie/75583-book-reading.json"),
+        image: Lottie.asset("assets/lottie/book_reading.json"),
         title: "Read and Understand the meaning",
         body: "",
         footer: const Text(""),
       ),
       PageViewModel(
-        image: Lottie.asset("assets/lottie/23693-mobile-tap-interaction-animation.json"),
+        image: Lottie.asset("assets/lottie/mobile_tap.json"),
         title: "Complete Geeta\nOn Your Own Mobile",
         body: "",
         footer: const Text("Click on Done to Begin"),

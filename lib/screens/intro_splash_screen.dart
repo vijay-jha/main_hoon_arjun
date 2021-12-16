@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart'; //include this package in pubspec.yaml
+import 'package:lottie/lottie.dart'; 
 
 import './introduction_screen.dart';
 
@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen>
       body: Column(
         children: [
           Lottie.asset(
-            'assets/lottie/38989-shri-ram (1).json', //change the path here
+            'assets/lottie/shri_ram_new.json', //change the path here
             controller: _controller,
             height: MediaQuery.of(context).size.height * 1,
             animate: true,
