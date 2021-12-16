@@ -1,56 +1,50 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:main_hoon_arjun/navigationFile.dart';
 
-import 'verify_screen.dart';
-import '../widgets/text_field.dart';
+import '../constants.dart';
+import '../widgets/rounded_input.dart';
+import './verify_screen.dart';
 
 enum AuthMode { Signup, Login }
 enum Password { visibility, nonVisibility }
 
 class AuthScreen extends StatefulWidget {
+  static const routeName = '/auth-screen';
   @override
   State<AuthScreen> createState() => _AuthScreenState();
-  static const routeName = '/auth-screen';
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _AuthScreenState extends State<AuthScreen>
+    with SingleTickerProviderStateMixin {
   final _auth = FirebaseAuth.instance;
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
   String errorMessage = 'Please enter your credentials.';
   Timer timer;
 
-  AuthMode _authMode = AuthMode.Login;
-  Password _password = Password.nonVisibility;
-
-  void _submitAuthForm(BuildContext ctx) async {
-    if (_emailController.text.isNotEmpty &&
-        _passwordController.text.isNotEmpty) {
+  void _submitAuthForm(BuildContext ctx, email, password, isLogin) async {
+    if (email.isNotEmpty && password.isNotEmpty) {
       UserCredential authResult;
       try {
-        if (_authMode == AuthMode.Login) {
+        if (isLogin) {
           authResult = await _auth.signInWithEmailAndPassword(
-            email: _emailController.text,
-            password: _passwordController.text,
+            email: email,
+            password: password,
           );
         } else {
           authResult = await _auth
               .createUserWithEmailAndPassword(
-            email: _emailController.text,
-            password: _passwordController.text,
+            email: email,
+            password: password,
           )
               .then(
             (_) {
               Navigator.of(ctx).pushReplacement(
                 MaterialPageRoute(
                   builder: (ctx) => VerifyScreen(
-                    email: _emailController.text,
-                    password: _passwordController.text,
+                    email: email,
+                    password: password,
                   ),
                 ),
               );
@@ -94,136 +88,216 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-  void _switchAuthMode() {
-    if (_authMode == AuthMode.Login) {
-      setState(() {
-        _authMode = AuthMode.Signup;
-      });
-    } else {
-      setState(() {
-        _authMode = AuthMode.Login;
-      });
-    }
+  bool isLogin = true;
+  Animation<double> containerSize;
+  AnimationController animationController;
+  Duration animationDuration = Duration(milliseconds: 270);
+
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setEnabledSystemUIOverlays([]);
+
+    animationController =
+        AnimationController(vsync: this, duration: animationDuration);
   }
 
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final _deviceSize = MediaQuery.of(context).size;
-    final bool keyboardIsOpen = MediaQuery.of(context).viewInsets.bottom != 0;
+    Size size = MediaQuery.of(context).size;
+
+    double viewInset = MediaQuery.of(context)
+        .viewInsets
+        .bottom; //using this to determine whether keyboard is opened or not
+    double defaultLoginSize = size.height - (size.height * 0.2);
+    double defaultRegisterSize = size.height - (size.height * 0.1);
+
+    containerSize = Tween<double>(
+            begin: size.height * 0.1, end: defaultRegisterSize)
+        .animate(
+            CurvedAnimation(parent: animationController, curve: Curves.linear));
 
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      body: Stack(
         children: [
-          Container(
-            height: _deviceSize.height * 0.35,
-            width: _deviceSize.width * 0.8,
-            decoration: BoxDecoration(
-              color: Colors.pink.shade50,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            margin: EdgeInsets.symmetric(
-                horizontal: _deviceSize.width * 0.1, vertical: 30),
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: Form(
-              child: ListView(
-                children: [
-                  TextFieldContainer(
-                    child: TextField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        icon: Icon(
-                          Icons.person,
-                        ),
-                        hintText: "Your Email",
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  TextFieldContainer(
-                    child: TextField(
-                      controller: _passwordController,
-                      obscureText:
-                          _password == Password.nonVisibility ? true : false,
-                      decoration: InputDecoration(
-                        hintText: "Password",
-                        icon: Icon(
-                          Icons.lock,
-                        ),
-                        border: InputBorder.none,
-                        suffixIcon: InkWell(
-                          child: Icon(
-                            _password == Password.nonVisibility
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                          onTap: () {
-                            if (_password == Password.nonVisibility) {
-                              setState(() {
-                                _password = Password.visibility;
-                              });
-                            } else {
-                              setState(() {
-                                _password = Password.nonVisibility;
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Align(
-                    child: SizedBox(
-                      width: _authMode == AuthMode.Login
-                          ? _deviceSize.width * 0.2
-                          : _deviceSize.width * 0.25,
-                      child: ElevatedButton(
-                        child: Text(
-                            _authMode == AuthMode.Login ? 'Login' : 'Sign up'),
-                        onPressed: () {
-                          _submitAuthForm(context);
+          // Lets add some decorations
+
+          //right
+          Positioned(
+              top: 100,
+              right: -50,
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50), color: kPrimaryC),
+              )),
+
+          //left
+          Positioned(
+              top: -50,
+              left: -50,
+              child: Container(
+                width: 180,
+                height: 180,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100), color: kPrimaryC),
+              )),
+
+          //cancel button
+          AnimatedOpacity(
+            opacity: isLogin ? 0.0 : 1.0,
+            duration: animationDuration,
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                width: size.width,
+                height: size.height * 0.1,
+                alignment: Alignment.bottomCenter,
+                child: IconButton(
+                  onPressed: isLogin
+                      ? null
+                      : () {
+                          setState(() {
+                            animationController.reverse();
+                            isLogin = !isLogin;
+                          });
                         },
-                        style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                  icon: Icon(Icons.close),
+                ),
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                _authMode == AuthMode.Login
-                    ? "Don't have an account?"
-                    : "Already have an account?",
+
+          //login form
+          AnimatedOpacity(
+            opacity: isLogin ? 1.0 : 0.0,
+            duration: animationDuration * 4,
+            child: Align(
+              alignment: Alignment.center,
+              child: SingleChildScrollView(
+                child: Container(
+                  // margin: EdgeInsets.only(top: 70),
+                  width: size.width,
+                  height: defaultLoginSize,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        "assets/images/Book.png",
+                        width: 200,
+                        height: 200,
+                      ),
+                      SizedBox(
+                        height: 60,
+                      ),
+                      RoundedInput(
+                        iconColor: kPrimaryC,
+                        submit: _submitAuthForm,
+                        isLogin: true,
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              TextButton(
-                onPressed: _switchAuthMode,
-                child: Text(_authMode == AuthMode.Login ? 'Sign up' : 'Login'),
+            ),
+          ),
+
+          //Register Container & Keyboard Controller
+          AnimatedBuilder(
+            animation: animationController,
+            builder: (context, child) {
+              if (viewInset == 0 && isLogin) {
+                return buildRegisterContainer();
+              } else if (!isLogin) {
+                return buildRegisterContainer();
+              }
+
+              //returning empty container to hide this widget
+              return Container();
+            },
+          ),
+
+          //SignUp Form
+          AnimatedOpacity(
+            opacity: isLogin ? 0.0 : 1.0,
+            duration: animationDuration * 5,
+            child: Visibility(
+              visible: !isLogin,
+              child: Align(
+                alignment: Alignment.center,
+                child: SingleChildScrollView(
+                  child: Container(
+                    width: size.width,
+                    height: defaultLoginSize,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Image.asset(
+                          "assets/images/Book.png",
+                          width: 200,
+                          height: 200,
+                        ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        RoundedInput(
+                          iconColor: secondaryC,
+                          submit: _submitAuthForm,
+                          isLogin: false,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ],
+            ),
           )
         ],
       ),
-      floatingActionButton: Visibility(
-        visible: !keyboardIsOpen,
-        child: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.of(context).pushReplacementNamed(NavigationFile.routeName);
-          },
-          label: Text("Skip"),
+    );
+  }
+
+  Widget buildRegisterContainer() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        width: double.infinity,
+        height: containerSize.value,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(100),
+            topRight: Radius.circular(100),
+          ),
+          color: kBackgroundC,
+        ),
+        alignment: Alignment.center,
+        child: GestureDetector(
+          onTap: !isLogin
+              ? null
+              : () {
+                  animationController.forward();
+                  setState(() {
+                    isLogin = !isLogin;
+                  });
+                },
+          child: isLogin
+              ? Text(
+                  "Don't have an account ? Sign Up",
+                  style: TextStyle(color: secondaryC, fontSize: 18),
+                )
+              : null,
         ),
       ),
     );

@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:main_hoon_arjun/navigationFile.dart';
 
-import './homepage_screen.dart';
-import './auth_screen.dart';
+import 'auth_screen.dart';
 
 class VerifyScreen extends StatefulWidget {
   @override
@@ -40,7 +39,7 @@ class _VerifyScreenState extends State<VerifyScreen>
     );
     user = _auth.currentUser;
     user.sendEmailVerification();
-    timer = Timer.periodic(Duration(microseconds: 100), (timer) {
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
       checkEmailVerification();
     });
     _controller.addStatusListener((status) {
