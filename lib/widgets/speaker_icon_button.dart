@@ -67,13 +67,13 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
               ? Icon(
                   // for self (on taping on self)
                   isVolume ? Icons.pause_rounded : Icons.volume_up_rounded,
-                  size: 25,
+                  size: 28,
                   color: Colors.black87,
                 )
               : const Icon(
                   // for others
                   Icons.volume_up_rounded,
-                  size: 25,
+                  size: 28,
                   color: Colors.black87,
                 );
         },

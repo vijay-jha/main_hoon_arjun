@@ -27,7 +27,7 @@ class FavoritesScreen extends StatelessWidget {
 ते प्राप्नुवन्ति मामेव सर्वभूतहिते रताः ॥
                       """,
       "Audio": "",
-      "Number": "अ.१२, श्लोक.४"
+      "Number": "Ch.12, Sh.4"
     },
     {
       "Shlok": """
@@ -58,32 +58,35 @@ class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            backgroundColor: Colors.orange.shade400,
-            expandedHeight: 250,
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              // centerTitle: true,
-              title: const Text(
-                "Favorites",
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-              background: Image.asset(
-                "assets/images/shrikrushnaArjun.jpg",
-                fit: BoxFit.cover,
+      body: Container(
+        color: Colors.orange.shade200,
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              backgroundColor: Colors.orange.shade600,
+              expandedHeight: 250,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                // centerTitle: true,
+                title: const Text(
+                  "Favorites",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+                background: Image.asset(
+                  "assets/images/shrikrushnaArjun.jpg",
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          // FavoritesShlok(),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              ...shlok.map((shlok) => FavoriteShlokItem(shlok)).toList(),
-            ]),
-          ),
-        ],
+            // FavoritesShlok(),
+            SliverList(
+              delegate: SliverChildListDelegate([
+                ...shlok.map((shlok) => FavoriteShlokItem(shlok)).toList(),
+              ]),
+            ),
+          ],
+        ),
       ),
     );
   }
