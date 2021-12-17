@@ -86,8 +86,6 @@ class SettingsScreen extends StatelessWidget {
                     OutlinedButton(
                         onPressed: () async {
                           await Future.delayed(Duration(milliseconds: 200));
-                          // Navigator.pushNamed(
-                          //     context, HomepageScreen.routeName);
                           Navigator.pushNamed(
                               context, SignOutSplashScreen.routeName);
                         },
