@@ -71,7 +71,7 @@ class FavoritesScreen extends StatelessWidget {
                 title: const Text(
                   "Favorites",
                   style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+                      color: Colors.white,),
                 ),
                 background: Image.asset(
                   "assets/images/shrikrushnaArjun.jpg",

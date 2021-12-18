@@ -31,7 +31,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
       ),
       elevation: 3,
       child: Container(
-        height: 245,
+        height: 266,
         width: double.infinity,
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(25)),
@@ -39,16 +39,35 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
         child: Column(
           children: [
             Container(
-              alignment: Alignment.centerLeft,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
+              margin: const EdgeInsets.only(top: 10, bottom: 0),
+              padding: const EdgeInsets.only(
+                left: 23,
+                right: 18,
               ),
-              child: Text(
-                widget.shlok["Number"],
-                style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black87,
-                    fontWeight: FontWeight.w500),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Text(
+                      widget.shlok["Number"],
+                      style: const TextStyle(
+                          fontSize: 17,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: const Icon(
+                      Icons.more_vert,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
               ),
             ),
             InkWell(
@@ -56,20 +75,22 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
               child: Container(
                 margin: const EdgeInsets.only(
                   left: 10,
-                  top: 10,
+                  top: 5,
                   right: 10,
+                  bottom: 5,
                 ),
                 child: ShlokCard(shlok: widget.shlok["Shlok"]),
                 width: double.infinity,
               ),
             ),
             Container(
-              margin: const EdgeInsets.symmetric(
-                horizontal: 15,
-                vertical: 5,
+              margin: const EdgeInsets.only(
+                left: 55,
+                right: 55,
+                bottom: 5,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // shlok numbering Lable
                   Container(
@@ -107,20 +128,18 @@ class ShlokCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25),
-      ),
+      elevation: 3,
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 23,
         ),
-        height: 168,
+        height: 165,
         alignment: Alignment.center,
         child: Text(
           shlok.trim(),
           style: TextStyle(
             fontSize: 26,
-            color: Colors.orange.shade800,
+            color: Colors.orange.shade700,
           ),
           textAlign: TextAlign.center,
           overflow: TextOverflow.fade,
@@ -133,12 +152,22 @@ class ShlokCard extends StatelessWidget {
 class CommentsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () {},
-      icon: const Icon(
-        Icons.comment_rounded,
-        color: Colors.black87,
-        size: 25,
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        alignment: Alignment.bottomCenter,
+        padding: const EdgeInsets.only(top: 8, right: 8, left: 8, bottom: 5),
+        decoration: const BoxDecoration(
+          color: Colors.amber,
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+        child: const Icon(
+          Icons.comment_rounded,
+          color: Colors.black87,
+          size: 28,
+        ),
       ),
     );
   }

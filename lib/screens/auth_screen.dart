@@ -195,7 +195,7 @@ class _AuthScreenState extends State<AuthScreen>
                         width: 200,
                         height: 200,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 60,
                       ),
                       RoundedInput(
