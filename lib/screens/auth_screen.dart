@@ -7,9 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../constants.dart';
+import '../navigationFile.dart';
 import '../widgets/rounded_input.dart';
 import './verify_screen.dart';
-import './homepage_screen.dart';
 
 enum AuthMode { Signup, Login }
 enum Password { visibility, nonVisibility }
@@ -38,10 +38,8 @@ class _AuthScreenState extends State<AuthScreen>
             password: password,
           )
               .then((_) {
-            Navigator.of(ctx).pushReplacement(
-              MaterialPageRoute(
-                builder: (ctx) => HomepageScreen(),
-              ),
+            Navigator.of(ctx).pushReplacementNamed(
+              NavigationFile.routeName,
             );
             return null;
           });
