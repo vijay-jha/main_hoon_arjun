@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
@@ -65,15 +67,28 @@ class _RoundedInputState extends State<RoundedInput> {
               hintText: "Email",
               hintStyle: TextStyle(color: widget.textColor),
               border: InputBorder.none,
+              suffixIcon: _emailController.text.isNotEmpty
+                  ? InkWell(
+                      child: Icon(Icons.clear_rounded),
+                      onTap: () {
+                        setState(() {
+                          _emailController.text = "";
+                        });
+                      },
+                    )
+                  : null,
             ),
             style: TextStyle(color: widget.textColor),
+            onChanged: (_) {
+              setState(() {});
+            },
           ),
         ),
         InputContainer(
           child: TextField(
             controller: _passwordController,
             cursorColor: widget.textColor,
-            obscureText: true,
+            obscureText: _password == Password.nonVisibility ? true : false,
             decoration: InputDecoration(
               icon: Icon(
                 Icons.lock,
@@ -108,14 +123,14 @@ class _RoundedInputState extends State<RoundedInput> {
         ),
         InkWell(
           onTap: () {
+            FocusScope.of(context).unfocus();
             widget.submit(
               context,
               _emailController.text,
-              _passwordController.text,      
-              widget.isLogin,      
+              _passwordController.text,
+              widget.isLogin,
             );
           },
-          borderRadius: BorderRadius.circular(30),
           child: Container(
             width: size.width * 0.8,
             decoration: BoxDecoration(
