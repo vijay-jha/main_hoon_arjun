@@ -62,7 +62,7 @@ class _VerifyScreenState extends State<VerifyScreen>
 
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(minutes: 1), () async {
+    Timer(Duration(minutes: 2), () async {
       await user.reload();
       if (!user.emailVerified) {
         await user.delete();

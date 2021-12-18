@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../constants.dart';
 import '../widgets/rounded_input.dart';
 import './verify_screen.dart';
+import './homepage_screen.dart';
 
 enum AuthMode { Signup, Login }
 enum Password { visibility, nonVisibility }
@@ -24,14 +27,24 @@ class _AuthScreenState extends State<AuthScreen>
   Timer timer;
 
   void _submitAuthForm(BuildContext ctx, email, password, isLogin) async {
+    // await SystemChannels.textInput.invokeMethod('TextInput.hide');
     if (email.isNotEmpty && password.isNotEmpty) {
       UserCredential authResult;
       try {
         if (isLogin) {
-          authResult = await _auth.signInWithEmailAndPassword(
+          authResult = await _auth
+              .signInWithEmailAndPassword(
             email: email,
             password: password,
-          );
+          )
+              .then((_) {
+            Navigator.of(ctx).pushReplacement(
+              MaterialPageRoute(
+                builder: (ctx) => HomepageScreen(),
+              ),
+            );
+            return null;
+          });
         } else {
           authResult = await _auth
               .createUserWithEmailAndPassword(
@@ -48,7 +61,6 @@ class _AuthScreenState extends State<AuthScreen>
                   ),
                 ),
               );
-
               return null;
             },
           );
@@ -111,7 +123,6 @@ class _AuthScreenState extends State<AuthScreen>
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     double viewInset = MediaQuery.of(context)
         .viewInsets
         .bottom; //using this to determine whether keyboard is opened or not
@@ -124,11 +135,9 @@ class _AuthScreenState extends State<AuthScreen>
             CurvedAnimation(parent: animationController, curve: Curves.linear));
 
     return Scaffold(
+      // resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
-          // Lets add some decorations
-
-          //right
           Positioned(
               top: 100,
               right: -50,
@@ -136,7 +145,9 @@ class _AuthScreenState extends State<AuthScreen>
                 width: 100,
                 height: 100,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50), color: kPrimaryC),
+                  borderRadius: BorderRadius.circular(50),
+                  color: kPrimaryC,
+                ),
               )),
 
           //left
@@ -147,7 +158,9 @@ class _AuthScreenState extends State<AuthScreen>
                 width: 180,
                 height: 180,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100), color: kPrimaryC),
+                  borderRadius: BorderRadius.circular(100),
+                  color: kPrimaryC,
+                ),
               )),
 
           //cancel button
@@ -165,6 +178,7 @@ class _AuthScreenState extends State<AuthScreen>
                       ? null
                       : () {
                           setState(() {
+                            FocusScope.of(context).unfocus();
                             animationController.reverse();
                             isLogin = !isLogin;
                           });
@@ -183,7 +197,6 @@ class _AuthScreenState extends State<AuthScreen>
               alignment: Alignment.center,
               child: SingleChildScrollView(
                 child: Container(
-                  // margin: EdgeInsets.only(top: 70),
                   width: size.width,
                   height: defaultLoginSize,
                   child: Column(
@@ -202,6 +215,7 @@ class _AuthScreenState extends State<AuthScreen>
                         iconColor: kPrimaryC,
                         submit: _submitAuthForm,
                         isLogin: true,
+                        textColor: null,
                       ),
                     ],
                   ),
@@ -219,7 +233,6 @@ class _AuthScreenState extends State<AuthScreen>
               } else if (!isLogin) {
                 return buildRegisterContainer();
               }
-
               //returning empty container to hide this widget
               return Container();
             },
@@ -256,6 +269,7 @@ class _AuthScreenState extends State<AuthScreen>
                           iconColor: secondaryC,
                           submit: _submitAuthForm,
                           isLogin: false,
+                          textColor: secondaryC,
                         ),
                       ],
                     ),
@@ -272,26 +286,26 @@ class _AuthScreenState extends State<AuthScreen>
   Widget buildRegisterContainer() {
     return Align(
       alignment: Alignment.bottomCenter,
-      child: Container(
-        width: double.infinity,
-        height: containerSize.value,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(100),
-            topRight: Radius.circular(100),
+      child: InkWell(
+        onTap: !isLogin
+            ? null
+            : () {
+                animationController.forward();
+                setState(() {
+                  isLogin = !isLogin;
+                });
+              },
+        child: Container(
+          width: double.infinity,
+          height: containerSize.value,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(100),
+              topRight: Radius.circular(100),
+            ),
+            color: kBackgroundC,
           ),
-          color: kBackgroundC,
-        ),
-        alignment: Alignment.center,
-        child: GestureDetector(
-          onTap: !isLogin
-              ? null
-              : () {
-                  animationController.forward();
-                  setState(() {
-                    isLogin = !isLogin;
-                  });
-                },
+          alignment: Alignment.center,
           child: isLogin
               ? Text(
                   "Don't have an account ? Sign Up",
