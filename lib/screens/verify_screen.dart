@@ -45,7 +45,7 @@ class _VerifyScreenState extends State<VerifyScreen>
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         count++;
-        if (count < 38) {
+        if (count < 114) {
           _controller.reset();
           _controller.forward();
         }
@@ -62,14 +62,13 @@ class _VerifyScreenState extends State<VerifyScreen>
 
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(minutes: 2), () async {
+    Timer(Duration(minutes: 1), () async {
       await user.reload();
       if (!user.emailVerified) {
-        await user.delete();
         timer.cancel();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("You didn't verify the email on time. Try again."),
+            content: Text("You didn't verify the email. Try again."),
             backgroundColor: Theme.of(context).errorColor,
           ),
         );
@@ -85,7 +84,7 @@ class _VerifyScreenState extends State<VerifyScreen>
           Lottie.asset(
             'assets/lottie/loading.json', //change the path here
             controller: _controller,
-            height: MediaQuery.of(context).size.height * 1,
+            // height: MediaQuery.of(context).size.height * 1,
             animate: true,
             repeat: true,
             onLoaded: (composition) {
@@ -93,6 +92,20 @@ class _VerifyScreenState extends State<VerifyScreen>
                 ..duration = composition.duration
                 ..forward();
             },
+          ),
+          Container(
+            padding: const EdgeInsets.all(15),
+            alignment: Alignment.center,
+            margin: const EdgeInsets.symmetric(horizontal: 40),
+            child: Text(
+              "We have sent you an email. Please verify it.",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+              ),
+              textAlign: TextAlign.center,
+            ),
           ),
         ],
       ),

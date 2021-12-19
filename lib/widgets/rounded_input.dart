@@ -89,6 +89,7 @@ class _RoundedInputState extends State<RoundedInput> {
             controller: _passwordController,
             cursorColor: widget.textColor,
             obscureText: _password == Password.nonVisibility ? true : false,
+            style: TextStyle(color: widget.textColor),
             decoration: InputDecoration(
               icon: Icon(
                 Icons.lock,
