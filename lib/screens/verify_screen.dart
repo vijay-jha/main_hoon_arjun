@@ -25,11 +25,15 @@ class VerifyScreen extends StatefulWidget {
 
 class _VerifyScreenState extends State<VerifyScreen>
     with TickerProviderStateMixin {
-  AnimationController _controller;
-  Timer timer;
+   AnimationController _controller;
+   AnimationController _controllerEmailVerified;
+   Timer timer;
+  bool isVerified = false;
   final _auth = FirebaseAuth.instance;
-  User user;
+   User user;
   int count = 0;
+
+  
 
   @override
   void initState() {
@@ -37,6 +41,16 @@ class _VerifyScreenState extends State<VerifyScreen>
     _controller = AnimationController(
       vsync: this,
     );
+
+    _controllerEmailVerified = AnimationController(
+      vsync: this,
+    );
+
+    _controllerEmailVerified.addStatusListener((status) {
+      if(status == AnimationStatus.completed){
+         Navigator.of(context).pushReplacementNamed(NavigationFile.routeName);
+      }
+    });
     user = _auth.currentUser;
     user.sendEmailVerification();
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -59,10 +73,10 @@ class _VerifyScreenState extends State<VerifyScreen>
     timer.cancel();
     super.dispose();
   }
-
+ 
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(minutes: 2), () async {
+         Timer(Duration(minutes: 2), () async {
       await user.reload();
       if (!user.emailVerified) {
         await user.delete();
@@ -78,28 +92,99 @@ class _VerifyScreenState extends State<VerifyScreen>
     });
 
     return Scaffold(
-      backgroundColor: Colors.orange,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Lottie.asset(
-            'assets/lottie/loading.json', //change the path here
-            controller: _controller,
-            height: MediaQuery.of(context).size.height * 1,
-            animate: true,
-            repeat: true,
-            onLoaded: (composition) {
-              _controller
-                ..duration = composition.duration
-                ..forward();
-            },
-          ),
-        ],
-      ),
+      backgroundColor: Colors.white,
+      body: Stack(children: [
+        Positioned(
+            top: -50,
+            left: -50,
+            child: Container(
+              width: 180,
+              height: 180,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                color: Color(0xFFFF521B),
+              ),
+            )),
+        Positioned(
+            top: 100,
+            right: -50,
+            child: Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                color: Color(0xFFFF521B),
+              ),
+            )),
+             Positioned(
+            bottom: -240,
+            right: 0,
+            child: Container(
+              width: 400,
+              height: 360,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(200),
+                color: Color(0xFFFF521B),
+              ),
+            )),
+        Stack(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.33),
+              // decoration: BoxDecoration(border: Border.all(width: 1)),
+              padding:
+                  !isVerified ? null : EdgeInsets.symmetric(horizontal: 80),
+              child: !isVerified
+                  ? Lottie.asset(
+                      'assets/lottie/loading.json', //change the path here
+                      controller: _controller,
+                      height: MediaQuery.of(context).size.height * 0.33,
+                      animate: true,
+                      repeat: true,
+                      onLoaded: (composition) {
+                        _controller
+                          ..duration = composition.duration
+                          ..forward();
+                      },
+                    )
+                  : Lottie.asset(
+                      'assets/lottie/EmailVerified.json',
+                      height: MediaQuery.of(context).size.height * 0.35,
+                      controller: _controllerEmailVerified,
+                      animate: true,
+                      onLoaded: (composition) {
+                        _controllerEmailVerified
+                          ..duration = composition.duration
+                          ..forward();
+                      },
+                    ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(
+                  left: 24,
+                  right: 24,
+                  top: MediaQuery.of(context).size.height * 0.47,
+                  ),
+              child: Text(
+                !isVerified
+                    ? 'We have sent you a email. Please verify it'
+                    : "Verified Successfully !",
+                style: TextStyle(
+                    color: Color(0xFFFF521B),
+                    fontSize: 29,
+                    fontWeight: FontWeight.w600),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+      ]),
     );
-  }
-
-  Future<void> checkEmailVerification() async {
+   }
+   Future<void> checkEmailVerification() async {
     user = _auth.currentUser;
     await user.reload();
     if (user.emailVerified) {
@@ -107,8 +192,10 @@ class _VerifyScreenState extends State<VerifyScreen>
         'email': widget.email,
         'password': widget.password,
       });
-      timer.cancel();
-      Navigator.of(context).pushReplacementNamed(NavigationFile.routeName);
-    }
+     setState(() {
+      isVerified = true;
+    });
+    timer.cancel();
+  }
   }
 }
