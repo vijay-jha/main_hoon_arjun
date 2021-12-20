@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:main_hoon_arjun/screens/login_splash_screen.dart';
 
 import '../constants.dart';
 import '../navigationFile.dart';
@@ -42,8 +43,10 @@ class _AuthScreenState extends State<AuthScreen>
               .then((_) {
             _user.reload();
             if (_user.emailVerified) {
-              Navigator.of(ctx).pushReplacementNamed(
-                NavigationFile.routeName,
+              Navigator.of(ctx).pushReplacement(
+               MaterialPageRoute(
+                  builder: (ctx) => LoginSplash(),
+                ),
               );
             } else {
               showDialog(
