@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../constants.dart';
 import './input_container.dart';
@@ -89,6 +90,7 @@ class _RoundedInputState extends State<RoundedInput> {
             controller: _passwordController,
             cursorColor: widget.textColor,
             obscureText: _password == Password.nonVisibility ? true : false,
+            style: TextStyle(color: widget.textColor),
             decoration: InputDecoration(
               icon: Icon(
                 Icons.lock,
@@ -118,8 +120,84 @@ class _RoundedInputState extends State<RoundedInput> {
             ),
           ),
         ),
-        const SizedBox(
-          height: 20,
+        if (widget.isLogin)
+          Container(
+            margin: EdgeInsets.only(right: 40),
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: () async {
+                FocusScope.of(context).unfocus();
+                final _user = FirebaseAuth.instance;
+                if (_emailController.text.isNotEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text("Reset Your Password"),
+                          Divider(
+                            thickness: 1,
+                          ),
+                        ],
+                      ),
+                      content: Text("An Email has been Sent to you."),
+                      actions: [
+                        OutlinedButton(
+                            onPressed: () async {
+                              await Future.delayed(Duration(milliseconds: 200));
+                              Navigator.of(context).pop();
+                            },
+                            child: Text("Cancel")),
+                        OutlinedButton(
+                          onPressed: () async {
+                            await Future.delayed(Duration(milliseconds: 200));
+                            try {
+                              await _user.sendPasswordResetEmail(
+                                email: _emailController.text,
+                              );
+                            } on FirebaseAuthException catch (error) {
+                              String errorMessage = "";
+
+                              switch (error.code) {
+                                case "user-not-found":
+                                  errorMessage =
+                                      "User with this email doesn't exist.";
+                                  break;
+                                case "invalid-email":
+                                  errorMessage =
+                                      "Please enter a valid email address.";
+                                  break;
+                              }
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(errorMessage),
+                                  backgroundColor: Theme.of(context).errorColor,
+                                ),
+                              );
+                            }
+
+                            Navigator.of(context).pop();
+                          },
+                          child: Text("Okay"),
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Enter an Email address."),
+                      backgroundColor: Theme.of(context).errorColor,
+                    ),
+                  );
+                }
+              },
+              child: Text("Forgot Password?"),
+            ),
+          ),
+        SizedBox(
+          height: widget.isLogin ? 10 : 20,
         ),
         InkWell(
           onTap: () {

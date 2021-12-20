@@ -68,21 +68,19 @@ class _VerifyScreenState extends State<VerifyScreen>
   @override
   void dispose() {
     _controller.dispose();
-    _controllerEmailVerified.dispose();
     timer.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(minutes: 2), () async {
+    Timer(Duration(minutes: 1), () async {
       await user.reload();
       if (!user.emailVerified) {
-        await user.delete();
         timer.cancel();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("You didn't verify the email on time. Try again."),
+            content: Text("You didn't verify the email. Try again."),
             backgroundColor: Theme.of(context).errorColor,
           ),
         );
@@ -192,10 +190,9 @@ class _VerifyScreenState extends State<VerifyScreen>
         'email': widget.email,
         'password': widget.password,
       });
-      setState(() {
-        isVerified = true;
-      });
+
       timer.cancel();
+      Navigator.of(context).pushReplacementNamed(NavigationFile.routeName);
     }
   }
 }

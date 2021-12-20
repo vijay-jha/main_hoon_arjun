@@ -9,7 +9,7 @@ import 'package:main_hoon_arjun/screens/login_splash_screen.dart';
 
 import '../constants.dart';
 import '../navigationFile.dart';
-import '../widgets/rounded_input.dart';
+import '../widgets/auth_input.dart';
 import './verify_screen.dart';
 
 enum AuthMode { Signup, Login }
@@ -33,17 +33,40 @@ class _AuthScreenState extends State<AuthScreen>
       UserCredential authResult;
       try {
         if (isLogin) {
+          final _user = FirebaseAuth.instance.currentUser;
+
           authResult = await _auth
               .signInWithEmailAndPassword(
             email: email,
             password: password,
           )
               .then((_) {
-            Navigator.of(ctx).pushReplacement(
-                MaterialPageRoute(
+            _user.reload();
+            if (_user.emailVerified) {
+              Navigator.of(ctx).pushReplacement(
+               MaterialPageRoute(
                   builder: (ctx) => LoginSplash(),
                 ),
-            );
+              );
+            } else {
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  content: Text("Please verify the email."),
+                  actions: [
+                    OutlinedButton(
+                      onPressed: () async {
+                        await Future.delayed(Duration(milliseconds: 200));
+                        _user.sendEmailVerification();
+                        Navigator.of(context)
+                            .pushReplacementNamed(AuthScreen.routeName);
+                      },
+                      child: Text("Okay"),
+                    ),
+                  ],
+                ),
+              );
+            }
             return null;
           });
         } else {
@@ -83,6 +106,9 @@ class _AuthScreenState extends State<AuthScreen>
           case "too-many-requests":
             errorMessage = "Too many requests. Try again later.";
             break;
+          case "email-already-in-use":
+            errorMessage = "Already have an account. Try Login";
+            break;
         }
         ScaffoldMessenger.of(ctx).showSnackBar(
           SnackBar(
@@ -109,7 +135,7 @@ class _AuthScreenState extends State<AuthScreen>
   @override
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 
     animationController =
         AnimationController(vsync: this, duration: animationDuration);
@@ -209,7 +235,7 @@ class _AuthScreenState extends State<AuthScreen>
                         width: 200,
                         height: 200,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 60,
                       ),
                       RoundedInput(

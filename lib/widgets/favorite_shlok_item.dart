@@ -2,75 +2,127 @@ import 'package:flutter/material.dart';
 
 import './speaker_icon_button.dart';
 import '../screens/desired_shlok_screen.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class FavoriteShlokItem extends StatefulWidget {
   final Map<String, dynamic> shlok;
-  FavoriteShlokItem(this.shlok);
+  final int shlokIndex;
+  FavoriteShlokItem(this.shlok, this.shlokIndex);
   @override
   _FavoritesShlokState createState() => _FavoritesShlokState();
 }
 
 class _FavoritesShlokState extends State<FavoriteShlokItem> {
-  void _onTapShlok() {
-    Navigator.of(context).pushNamed(
-      DesiredShlokScreen.routeName,
-    );
+  String s;
+  @override
+  void initState() {
+    super.initState();
+    s = "Chap" +
+        widget.shlok["Chapter"].toString().substring(7) +
+        '_' +
+        widget.shlok["hlok"].toString() +
+        '.mp3';
+  }
+
+  Future<String> getshlokUrl() async {
+    return (await FirebaseStorage.instance
+        .ref()
+        .child('Shlok Audio Files')
+        .child(widget.shlok["Chapter"])
+        .child(s)
+        .getDownloadURL());
+  }
+
+  void _onTapShlok() async {
+    print("chapterrrrrrrrr " + widget.shlok["Chapter"]);
+    print("Chapterrrrrrrr->>>>>>> " + s);
+    print(await getshlokUrl());
   }
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      margin: const EdgeInsets.only(
+        top: 5,
+        bottom: 10,
+        left: 10,
+        right: 10,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(25),
       ),
       elevation: 3,
       child: Container(
-        height: 160, // Previou : 140
+        height: 267,
         width: double.infinity,
         decoration: const BoxDecoration(
-          color: Color(0xFFFFF8E1),
           borderRadius: BorderRadius.all(Radius.circular(25)),
         ),
         child: Column(
           children: [
+            Container(
+              margin: const EdgeInsets.only(top: 10, bottom: 0),
+              padding: const EdgeInsets.only(
+                left: 23,
+                right: 18,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Text(
+                      widget.shlok["Number"],
+                      style: const TextStyle(
+                          fontSize: 17,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: const Icon(
+                      Icons.more_vert,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             InkWell(
               onTap: _onTapShlok,
               child: Container(
-                margin:
-                    const EdgeInsets.only(left: 5, top: 5, bottom: 5, right: 5),
+                margin: const EdgeInsets.only(
+                  left: 10,
+                  top: 5,
+                  right: 10,
+                  bottom: 5,
+                ),
                 child: ShlokCard(shlok: widget.shlok["Shlok"]),
                 width: double.infinity,
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                // shlok numbering Lable
-                Container(
-                  child: CommentsButton(),
-                  alignment: Alignment.center,
-                ),
-
-                SpeakerIcnBtn(widget.shlok["Number"]),
-
-                Container(
-                  alignment: Alignment.center,
-                  width: 88,
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    color: Colors.orange.shade100,
+            Container(
+              margin: const EdgeInsets.only(
+                left: 55,
+                right: 55,
+                bottom: 6,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // shlok numbering Lable
+                  Container(
+                    child: CommentsButton(),
+                    alignment: Alignment.center,
                   ),
-                  child: Text(
-                    widget.shlok["Number"],
-                    style: const TextStyle(
-                        fontSize: 13,
-                        color: Colors.black87,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-              ],
+
+                  SpeakerIcnBtn(getshlokUrl(), widget.shlokIndex),
+                ],
+              ),
             ),
           ],
         ),
@@ -89,25 +141,21 @@ class ShlokCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3,
+      elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(15),
       ),
       child: Container(
-        margin: const EdgeInsets.only(
-          left: 8,
-          top: 8,
-          bottom: 8,
-          right: 8,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 23,
         ),
-        height: 75,
+        height: 165,
         alignment: Alignment.center,
         child: Text(
           shlok.trim(),
           style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.orange.shade800,
+            fontSize: 26,
+            color: Colors.orange.shade700,
           ),
           textAlign: TextAlign.center,
           overflow: TextOverflow.fade,
@@ -120,31 +168,24 @@ class ShlokCard extends StatelessWidget {
 class CommentsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return TextButton.icon(
-      style: ButtonStyle(
-        overlayColor: MaterialStateProperty.resolveWith<Color>(
-          (Set<MaterialState> states) {
-            if (states.contains(MaterialState.hovered)) {
-              return Colors.orange.withOpacity(0.2);
-            }
-            if (states.contains(MaterialState.focused) ||
-                states.contains(MaterialState.pressed)) {
-              return Colors.orange.withOpacity(0.2);
-            }
-            return null; // Defer to the widget's default.
-          },
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        alignment: Alignment.bottomCenter,
+        padding: const EdgeInsets.only(top: 8, right: 8, left: 8, bottom: 5),
+        decoration: const BoxDecoration(
+          color: Colors.amber,
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
         ),
-      ),
-      onPressed: () {},
-      icon: const Icon(
-        Icons.comment_rounded,
-        color: Colors.black87,
-        size: 20,
-      ),
-      label: const Text(
-        "Comments",
-        style: TextStyle(color: Colors.black87, fontSize: 12),
+        child: const Icon(
+          Icons.comment_rounded,
+          color: Colors.black87,
+          size: 28,
+        ),
       ),
     );
   }
 }
+//  1. playing different from firestore

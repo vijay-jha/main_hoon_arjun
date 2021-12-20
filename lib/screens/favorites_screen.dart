@@ -4,14 +4,18 @@ import '../widgets/favorite_shlok_item.dart';
 class FavoritesScreen extends StatelessWidget {
   static const String routeName = "/favorites-screen";
 
+  @override
+  void initState() {}
   List<Map<String, dynamic>> shlok = [
     {
       "Shlok": """
-कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।
-मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥
+क्लैब्यं मा स्म गमः पार्थ नैतत्त्वय्युपपद्यते।
+क्षुद्रं हृदयदौर्बल्यं त्यक्त्वोत्तिष्ठ परन्तप।।
                       """,
       "Audio": "",
-      "Number": "अ.१, श्लोक.१"
+      "Number": "अ.१, श्लोक.१",
+      "Chapter": "Chapter02",
+      "hlok": "Shlok03",
     },
     {
       "Shlok": """
@@ -19,7 +23,9 @@ class FavoritesScreen extends StatelessWidget {
 सर्वत्रगमचिन्त्यं च कूटस्थमचलं ध्रुवम्‌ ॥
                       """,
       "Audio": "",
-      "Number": "अ.१२, श्लोक.३"
+      "Number": "अ.02, श्लोक.14",
+      "Chapter": "Chapter02",
+      "hlok": "Shlok14",
     },
     {
       "Shlok": """
@@ -27,7 +33,9 @@ class FavoritesScreen extends StatelessWidget {
 ते प्राप्नुवन्ति मामेव सर्वभूतहिते रताः ॥
                       """,
       "Audio": "",
-      "Number": "अ.१२, श्लोक.४"
+      "Number": "अ.02, श्लोक.20",
+      "Chapter": "Chapter02",
+      "hlok": "Shlok20",
     },
     {
       "Shlok": """
@@ -35,55 +43,45 @@ class FavoritesScreen extends StatelessWidget {
 अव्यक्ता हि गतिर्दुःखं देहवद्भिरवाप्यते ॥
                       """,
       "Audio": "",
-      "Number": "अ.१२, श्लोक.५"
-    },
-    {
-      "Shlok": """
-ये तु सर्वाणि कर्माणि मयि सन्नयस्य मत्पराः ।
-अनन्येनैव योगेन मां ध्यायन्त उपासते ॥
-                      """,
-      "Audio": "",
-      "Number": "अ.१२, श्लोक ६"
-    },
-    {
-      "Shlok": """
-तेषामहं समुद्धर्ता मृत्युसंसारसागरात्‌ ।
-भवामि नचिरात्पार्थ मय्यावेशितचेतसाम्‌ ॥
-                      """,
-      "Audio": "",
-      "Number": "अ.१२, श्लोक ७"
+      "Number": "अ.02, श्लोक.31",
+      "Chapter": "Chapter02",
+      "hlok": "Shlok31",
     },
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            backgroundColor: Colors.orange.shade400,
-            expandedHeight: 250,
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              // centerTitle: true,
-              title: const Text(
-                "Favorites",
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-              background: Image.asset(
-                "assets/images/shrikrushnaArjun.jpg",
-                fit: BoxFit.cover,
+      body: Container(
+        color: Colors.orange.shade200,
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              backgroundColor: Colors.orange.shade600,
+              expandedHeight: 240,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                // centerTitle: true,
+                title: const Text(
+                  "Favorites",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                background: Image.asset(
+                  "assets/images/shrikrushnaArjun.jpg",
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          // FavoritesShlok(),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              ...shlok.map((shlok) => FavoriteShlokItem(shlok)).toList(),
-            ]),
-          ),
-        ],
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => FavoriteShlokItem(shlok[index], index),
+                childCount: shlok.length,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
