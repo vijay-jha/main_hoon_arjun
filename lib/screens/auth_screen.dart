@@ -8,7 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../constants.dart';
 import '../navigationFile.dart';
-import '../widgets/rounded_input.dart';
+import '../widgets/auth_input.dart';
 import './verify_screen.dart';
 
 enum AuthMode { Signup, Login }
@@ -232,7 +232,7 @@ class _AuthScreenState extends State<AuthScreen>
                         width: 200,
                         height: 200,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 60,
                       ),
                       RoundedInput(

@@ -15,6 +15,7 @@ import '../widgets/translation_card.dart';
 import '../widgets/profile_picture.dart';
 import '../widgets/shlok_card.dart';
 import '../widgets/speaker_icon_button.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class DesiredShlokScreen extends StatefulWidget {
   static const routeName = '/desiredShlok-screen';
@@ -26,6 +27,7 @@ class DesiredShlokScreen extends StatefulWidget {
 class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   final AudioCache _audioCache = AudioCache();
   final _controller = ScreenshotController();
+  String _audioUrl;
 
   AudioPlayer player;
 
@@ -34,11 +36,23 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                     कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।
 मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥
                       """;
-
+  var chapter = "Chap02";
+  var shlokNo = "Shlok03";
   @override
-  void initState() {
+  void initState() async {
     super.initState();
-    _audioCache.load('audio/karmanya-shlok.mp3');
+    // _audioCache.load('audio/karmanya-shlok.mp3');
+  }
+
+  getshlokUrl() async {
+    var url = await FirebaseStorage.instance
+        .ref()
+        .child('Shlok Audio Files')
+        .child(chapter)
+        .child(shlok)
+        .getDownloadURL();
+
+    return url;
   }
 
   @override
@@ -55,7 +69,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
         body: ListView(
           children: [
             ShlokCard(shlok: shlok),
-            SpeakerIcnBtn("null"),
+            SpeakerIcnBtn(null, getshlokUrl()),
             TranslationCard(),
           ],
         ),

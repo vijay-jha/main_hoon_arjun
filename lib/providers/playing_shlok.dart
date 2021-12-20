@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 
 class PlayingShlok with ChangeNotifier {
-  String currentPlayingshlok = null;
+  int currentPlayingshlok = -1;
 
-  void setcurrentshlokplaying(String id) {
+  void setcurrentshlokplaying(int id) {
     currentPlayingshlok = id;
     notifyListeners();
   }
 
-  String getcureenshlokplaying() {
+  int getcureenshlokplaying() {
     return currentPlayingshlok;
+  }
+
+  bool isSefPlaying(int id) {
+    if (currentPlayingshlok == id) {
+      return true;
+    }
+    return false;
   }
 }
