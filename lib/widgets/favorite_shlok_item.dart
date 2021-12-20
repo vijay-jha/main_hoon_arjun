@@ -2,27 +2,49 @@ import 'package:flutter/material.dart';
 
 import './speaker_icon_button.dart';
 import '../screens/desired_shlok_screen.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class FavoriteShlokItem extends StatefulWidget {
   final Map<String, dynamic> shlok;
-  FavoriteShlokItem(this.shlok);
+  final int shlokIndex;
+  FavoriteShlokItem(this.shlok, this.shlokIndex);
   @override
   _FavoritesShlokState createState() => _FavoritesShlokState();
 }
 
 class _FavoritesShlokState extends State<FavoriteShlokItem> {
-  void _onTapShlok() {
-    Navigator.of(context).pushNamed(
-      DesiredShlokScreen.routeName,
-    );
+  String s;
+  @override
+  void initState() {
+    super.initState();
+    s = "Chap" +
+        widget.shlok["Chapter"].toString().substring(7) +
+        '_' +
+        widget.shlok["hlok"].toString() +
+        '.mp3';
+  }
+
+  Future<String> getshlokUrl() async {
+    return (await FirebaseStorage.instance
+        .ref()
+        .child('Shlok Audio Files')
+        .child(widget.shlok["Chapter"])
+        .child(s)
+        .getDownloadURL());
+  }
+
+  void _onTapShlok() async {
+    print("chapterrrrrrrrr " + widget.shlok["Chapter"]);
+    print("Chapterrrrrrrr->>>>>>> " + s);
+    print(await getshlokUrl());
   }
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.only(
-        top: 15,
-        bottom: 5,
+        top: 5,
+        bottom: 10,
         left: 10,
         right: 10,
       ),
@@ -31,7 +53,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
       ),
       elevation: 3,
       child: Container(
-        height: 266,
+        height: 267,
         width: double.infinity,
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(25)),
@@ -87,7 +109,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
               margin: const EdgeInsets.only(
                 left: 55,
                 right: 55,
-                bottom: 5,
+                bottom: 6,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,16 +120,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
                     alignment: Alignment.center,
                   ),
 
-                  Container(
-                    padding: EdgeInsets.all(8),
-                    decoration: const BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.all(Radius.circular(25)),
-                    ),
-                    child: SpeakerIcnBtn(
-                      widget.shlok["Number"],
-                    ),
-                  ),
+                  SpeakerIcnBtn(getshlokUrl(), widget.shlokIndex),
                 ],
               ),
             ),
@@ -128,7 +141,10 @@ class ShlokCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3,
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 23,
@@ -172,3 +188,4 @@ class CommentsButton extends StatelessWidget {
     );
   }
 }
+//  1. playing different from firestore

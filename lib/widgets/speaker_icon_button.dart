@@ -3,42 +3,40 @@ import 'package:provider/provider.dart';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:main_hoon_arjun/providers/playing_shlok.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class SpeakerIcnBtn extends StatefulWidget {
-  const SpeakerIcnBtn(this.shlokId);
-  final String shlokId;
+  const SpeakerIcnBtn(this.audioUrl, this.shlokIndex);
+  final int shlokIndex;
+  final Future<String> audioUrl;
+
   @override
   _SpeakerIcnBtnState createState() => _SpeakerIcnBtnState();
 }
 
-class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
-  final AudioCache _audioCache = AudioCache();
-  static AudioPlayer player;
-  static bool isSoundOn = false;
-  var isVolume = false;
+class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> with Exception {
+  // final AudioCache _audioCache = AudioCache();
+  static AudioPlayer player = AudioPlayer(mode: PlayerMode.MEDIA_PLAYER);
 
   @override
   void initState() {
     super.initState();
-    _audioCache.load('audio/karmanya-shlok.mp3');
+
+    // _audioUrl = await audioRef.getDownloadURL();
+    // _audioCache.load("audio/karmanya-shlok.mp3");
   }
 
   @override
   void dispose() {
     super.dispose();
     if (player != null) {
+      // if (Provider.of<PlayingShlok>(context, listen: false)
+      //         .getcureenshlokplaying() ==
+      //     widget.shlokIndex) {
+      //   Provider.of<PlayingShlok>(context, listen: false)
+      //       .setcurrentshlokplaying(-1);
       player.stop();
-    }
-  }
-
-  void stopSound() {
-    if (isSoundOn &&
-        Provider.of<PlayingShlok>(context, listen: false)
-                .getcureenshlokplaying() !=
-            widget.shlokId) {
-      player.stop();
-      isSoundOn = false;
-      isVolume = false;
+      // }
     }
   }
 
@@ -46,55 +44,63 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        setState(() {
-          stopSound(); // use for all shut
-          if (isVolume) {
-            // use for self shut
-            isVolume = !isVolume;
-            Provider.of<PlayingShlok>(context, listen: false)
-                .setcurrentshlokplaying(null);
-          } else {
-            isVolume = !isVolume;
-            Provider.of<PlayingShlok>(context, listen: false)
-                .setcurrentshlokplaying(widget.shlokId);
-          }
+        if (Provider.of<PlayingShlok>(context, listen: false)
+                .getcureenshlokplaying() !=
+            widget.shlokIndex) {
+          Provider.of<PlayingShlok>(context, listen: false)
+              .setcurrentshlokplaying(widget.shlokIndex);
+          player.stop();
           soundPlay();
-        });
+        } else {
+          Provider.of<PlayingShlok>(context, listen: false)
+              .setcurrentshlokplaying(-1);
+          player.stop();
+        }
       },
       child: Consumer<PlayingShlok>(
         builder: (_, playingShlok, ch) {
-          return playingShlok.getcureenshlokplaying() == widget.shlokId
-              ? Icon(
-                  // for self (on taping on self)
-                  isVolume ? Icons.pause_rounded : Icons.volume_up_rounded,
-                  size: 28,
-                  color: Colors.black87,
-                )
-              : const Icon(
-                  // for others
-                  Icons.volume_up_rounded,
-                  size: 28,
-                  color: Colors.black87,
-                );
+          return Container(
+            padding: EdgeInsets.all(8),
+            decoration: const BoxDecoration(
+              color: Colors.amber,
+              borderRadius: BorderRadius.all(Radius.circular(25)),
+            ),
+            child: Provider.of<PlayingShlok>(
+                      context,
+                      listen: true,
+                    ).getcureenshlokplaying() ==
+                    widget.shlokIndex
+                ? const Icon(
+                    Icons.pause_rounded,
+                    size: 28,
+                    color: Colors.black87,
+                  )
+                : const Icon(
+                    Icons.volume_up_rounded,
+                    size: 28,
+                    color: Colors.black87,
+                  ),
+          );
         },
       ),
     );
   }
 
   Future<void> soundPlay() async {
-    if (isVolume) {
-      isSoundOn = true;
-      player = await _audioCache.play('audio/karmanya-shlok.mp3');
+    int result;
+    Exception exception;
+    String url = await widget.audioUrl;
+
+    result = await player.play(
+      url,
+    );
+
+    if (result == 1) {
       player.onPlayerCompletion.listen((event) {
-        setState(() {
-          isVolume = false;
-          isSoundOn = false;
-        });
+        Provider.of<PlayingShlok>(context, listen: false)
+            .setcurrentshlokplaying(-1);
+        player.stop();
       });
-    } else {
-      player.stop();
-      isSoundOn = false;
-      isVolume = false;
     }
   }
 }
