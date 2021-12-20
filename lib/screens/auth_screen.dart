@@ -8,7 +8,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:main_hoon_arjun/screens/login_splash_screen.dart';
 
 import '../constants.dart';
-import '../navigationFile.dart';
 import '../widgets/auth_input.dart';
 import './verify_screen.dart';
 
