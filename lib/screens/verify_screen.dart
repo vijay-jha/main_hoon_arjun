@@ -25,15 +25,13 @@ class VerifyScreen extends StatefulWidget {
 
 class _VerifyScreenState extends State<VerifyScreen>
     with TickerProviderStateMixin {
-   AnimationController _controller;
-   AnimationController _controllerEmailVerified;
-   Timer timer;
+  AnimationController _controller;
+  AnimationController _controllerEmailVerified;
+  Timer timer;
   bool isVerified = false;
   final _auth = FirebaseAuth.instance;
-   User user;
+  User user;
   int count = 0;
-
-  
 
   @override
   void initState() {
@@ -47,8 +45,8 @@ class _VerifyScreenState extends State<VerifyScreen>
     );
 
     _controllerEmailVerified.addStatusListener((status) {
-      if(status == AnimationStatus.completed){
-         Navigator.of(context).pushReplacementNamed(NavigationFile.routeName);
+      if (status == AnimationStatus.completed) {
+        Navigator.of(context).pushReplacementNamed(NavigationFile.routeName);
       }
     });
     user = _auth.currentUser;
@@ -70,13 +68,14 @@ class _VerifyScreenState extends State<VerifyScreen>
   @override
   void dispose() {
     _controller.dispose();
+    _controllerEmailVerified.dispose();
     timer.cancel();
     super.dispose();
   }
- 
+
   @override
   Widget build(BuildContext context) {
-         Timer(Duration(minutes: 2), () async {
+    Timer(Duration(minutes: 2), () async {
       await user.reload();
       if (!user.emailVerified) {
         await user.delete();
@@ -116,7 +115,7 @@ class _VerifyScreenState extends State<VerifyScreen>
                 color: Color(0xFFFF521B),
               ),
             )),
-             Positioned(
+        Positioned(
             bottom: -240,
             right: 0,
             child: Container(
@@ -164,10 +163,10 @@ class _VerifyScreenState extends State<VerifyScreen>
             Container(
               alignment: Alignment.center,
               margin: EdgeInsets.only(
-                  left: 24,
-                  right: 24,
-                  top: MediaQuery.of(context).size.height * 0.47,
-                  ),
+                left: 24,
+                right: 24,
+                top: MediaQuery.of(context).size.height * 0.47,
+              ),
               child: Text(
                 !isVerified
                     ? 'We have sent you a email. Please verify it'
@@ -183,8 +182,9 @@ class _VerifyScreenState extends State<VerifyScreen>
         ),
       ]),
     );
-   }
-   Future<void> checkEmailVerification() async {
+  }
+
+  Future<void> checkEmailVerification() async {
     user = _auth.currentUser;
     await user.reload();
     if (user.emailVerified) {
@@ -192,10 +192,10 @@ class _VerifyScreenState extends State<VerifyScreen>
         'email': widget.email,
         'password': widget.password,
       });
-     setState(() {
-      isVerified = true;
-    });
-    timer.cancel();
-  }
+      setState(() {
+        isVerified = true;
+      });
+      timer.cancel();
+    }
   }
 }
