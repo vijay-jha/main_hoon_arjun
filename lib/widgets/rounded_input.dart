@@ -129,58 +129,61 @@ class _RoundedInputState extends State<RoundedInput> {
                 FocusScope.of(context).unfocus();
                 final _user = FirebaseAuth.instance;
                 if (_emailController.text.isNotEmpty) {
-                  try {
-                    showDialog(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text("Reset Your Password"),
-                            Divider(
-                              thickness: 1,
-                            ),
-                          ],
-                        ),
-                        content: Text("An Email has been Sent to you."),
-                        actions: [
-                          OutlinedButton(
-                              onPressed: () async {
-                                await Future.delayed(
-                                    Duration(milliseconds: 200));
-                                Navigator.of(context).pop();
-                              },
-                              child: Text("Cancel")),
-                          OutlinedButton(
-                            onPressed: () async {
-                              await Future.delayed(Duration(milliseconds: 200));
-                              await _user.sendPasswordResetEmail(
-                                email: _emailController.text,
-                              );
-                              Navigator.of(context).pop();
-                            },
-                            child: Text("Okay"),
+                  showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text("Reset Your Password"),
+                          Divider(
+                            thickness: 1,
                           ),
                         ],
                       ),
-                    );
-                  } on FirebaseAuthException catch (error) {
-                    String errorMessage = "";
-                    switch (error.code) {
-                      case "user-not-found":
-                        errorMessage = "User with this email doesn't exist.";
-                        break;
-                      case "invalid-email":
-                        errorMessage = "Please enter a valid email address.";
-                        break;
-                    }
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(errorMessage),
-                        backgroundColor: Theme.of(context).errorColor,
-                      ),
-                    );
-                  }
+                      content: Text("An Email has been Sent to you."),
+                      actions: [
+                        OutlinedButton(
+                            onPressed: () async {
+                              await Future.delayed(Duration(milliseconds: 200));
+                              Navigator.of(context).pop();
+                            },
+                            child: Text("Cancel")),
+                        OutlinedButton(
+                          onPressed: () async {
+                            await Future.delayed(Duration(milliseconds: 200));
+                            try {
+                              await _user.sendPasswordResetEmail(
+                                email: _emailController.text,
+                              );
+                            } on FirebaseAuthException catch (error) {
+                              String errorMessage = "";
+
+                              switch (error.code) {
+                                case "user-not-found":
+                                  errorMessage =
+                                      "User with this email doesn't exist.";
+                                  break;
+                                case "invalid-email":
+                                  errorMessage =
+                                      "Please enter a valid email address.";
+                                  break;
+                              }
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(errorMessage),
+                                  backgroundColor: Theme.of(context).errorColor,
+                                ),
+                              );
+                            }
+
+                            Navigator.of(context).pop();
+                          },
+                          child: Text("Okay"),
+                        ),
+                      ],
+                    ),
+                  );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
