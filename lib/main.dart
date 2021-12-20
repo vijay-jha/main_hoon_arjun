@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:main_hoon_arjun/navigationFile.dart';
 import 'package:main_hoon_arjun/screens/auth_screen.dart';
+import 'package:main_hoon_arjun/screens/desired_shlok_screen.dart';
 import 'package:main_hoon_arjun/screens/intro_splash_screen.dart';
 import 'package:main_hoon_arjun/widgets/custom_page_transition.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -74,6 +75,8 @@ class MyApp extends StatelessWidget {
         return CustomPageTransition(child: CommentScreen());
       case NavigationFile.routeName:
         return CustomPageTransition(child: NavigationFile());
+      case DesiredShlokScreen.routeName:
+        return CustomPageTransition(child: DesiredShlokScreen());
     }
   }
 }
