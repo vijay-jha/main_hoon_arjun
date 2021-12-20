@@ -130,16 +130,33 @@ class _RoundedInputState extends State<RoundedInput> {
                 final _user = FirebaseAuth.instance;
                 if (_emailController.text.isNotEmpty) {
                   try {
-                    await _user.sendPasswordResetEmail(
-                        email: _emailController.text);
                     showDialog(
                       context: context,
                       builder: (_) => AlertDialog(
-                        content: Text("An Email has been sent to you. RESET YOUR PASSWORD"),
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text("Reset Your Password"),
+                            Divider(
+                              thickness: 1,
+                            ),
+                          ],
+                        ),
+                        content: Text("An Email has been Sent to you."),
                         actions: [
+                          OutlinedButton(
+                              onPressed: () async {
+                                await Future.delayed(
+                                    Duration(milliseconds: 200));
+                                Navigator.of(context).pop();
+                              },
+                              child: Text("Cancel")),
                           OutlinedButton(
                             onPressed: () async {
                               await Future.delayed(Duration(milliseconds: 200));
+                              await _user.sendPasswordResetEmail(
+                                email: _emailController.text,
+                              );
                               Navigator.of(context).pop();
                             },
                             child: Text("Okay"),
