@@ -167,7 +167,7 @@ class _VerifyScreenState extends State<VerifyScreen>
               ),
               child: Text(
                 !isVerified
-                    ? 'We have sent you a email. Please verify it'
+                    ? 'We have sent you an email. Please verify it'
                     : "Verified Successfully !",
                 style: TextStyle(
                     color: Color(0xFFFF521B),
@@ -190,7 +190,6 @@ class _VerifyScreenState extends State<VerifyScreen>
         'email': widget.email,
         'password': widget.password,
       });
-
       timer.cancel();
       Navigator.of(context).pushReplacementNamed(NavigationFile.routeName);
     }
