@@ -190,8 +190,10 @@ class _VerifyScreenState extends State<VerifyScreen>
         'email': widget.email,
         'password': widget.password,
       });
+      setState(() {
+        isVerified = true;
+      });
       timer.cancel();
-      Navigator.of(context).pushReplacementNamed(NavigationFile.routeName);
     }
   }
 }
