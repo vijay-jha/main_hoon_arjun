@@ -33,9 +33,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => MahabharatCharacters(),
         ),
-        ChangeNotifierProvider(
-          create: (ctx) => PlayingShlok(),
-        )
+        // ChangeNotifierProvider(
+        //   create: (ctx) => PlayingShlok(),
+        // )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

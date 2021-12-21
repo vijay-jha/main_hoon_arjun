@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import './speaker_icon_button.dart';
-import '../screens/desired_shlok_screen.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import '../screens/desired_shlok_screen.dart';
+import 'package:provider/provider.dart';
+import '../providers/playing_shlok.dart';
 
 class FavoriteShlokItem extends StatefulWidget {
   final Map<String, dynamic> shlok;
@@ -33,10 +35,11 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
         .getDownloadURL());
   }
 
-  void _onTapShlok() async {
-    print("chapterrrrrrrrr " + widget.shlok["Chapter"]);
-    print("Chapterrrrrrrr->>>>>>> " + s);
-    print(await getshlokUrl());
+  void _onTapShlok() {
+    SpeakerIcnBtn.player.stop();
+    Provider.of<PlayingShlok>(context, listen: false)
+        .setcurrentshlokplaying(-1);
+    Navigator.of(context).pushNamed(DesiredShlokScreen.routeName);
   }
 
   @override
@@ -120,7 +123,10 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
                     alignment: Alignment.center,
                   ),
 
-                  SpeakerIcnBtn(getshlokUrl(), widget.shlokIndex),
+                  SpeakerIcnBtn(
+                    audioUrl: getshlokUrl(),
+                    shlokIndex: widget.shlokIndex,
+                  ),
                 ],
               ),
             ),

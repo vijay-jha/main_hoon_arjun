@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -16,6 +17,7 @@ import '../widgets/profile_picture.dart';
 import '../widgets/shlok_card.dart';
 import '../widgets/speaker_icon_button.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import '../providers/playing_shlok.dart';
 
 class DesiredShlokScreen extends StatefulWidget {
   static const routeName = '/desiredShlok-screen';
@@ -39,20 +41,25 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   var chapter = "Chap02";
   var shlokNo = "Shlok03";
   @override
-  void initState() async {
-    super.initState();
-    // _audioCache.load('audio/karmanya-shlok.mp3');
-  }
+  // void initState() async {
+  //   super.initState();
+  // }
 
-  getshlokUrl() async {
-    var url = await FirebaseStorage.instance
+  // statically playimg Chap02_Shlok03.mp3
+  Future<String> getshlokUrl() async {
+    return (await FirebaseStorage.instance
         .ref()
         .child('Shlok Audio Files')
-        .child(chapter)
-        .child(shlok)
-        .getDownloadURL();
+        .child('Chapter02')
+        .child('Chap02_Shlok03.mp3')
+        .getDownloadURL());
+  }
 
-    return url;
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    SpeakerIcnBtn.player.stop();
   }
 
   @override
@@ -69,7 +76,9 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
         body: ListView(
           children: [
             ShlokCard(shlok: shlok),
-            SpeakerIcnBtn(null, getshlokUrl()),
+            ChangeNotifierProvider(
+                create: (ctx) => PlayingShlok(),
+                child: SpeakerIcnBtn(audioUrl: getshlokUrl(), shlokIndex: 0)),
             TranslationCard(),
           ],
         ),

@@ -6,38 +6,26 @@ import 'package:main_hoon_arjun/providers/playing_shlok.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class SpeakerIcnBtn extends StatefulWidget {
-  const SpeakerIcnBtn(this.audioUrl, this.shlokIndex);
+  const SpeakerIcnBtn({
+    Key key,
+    this.audioUrl,
+    this.shlokIndex,
+  }) : super(key: key);
+
   final int shlokIndex;
   final Future<String> audioUrl;
+  static AudioPlayer player = AudioPlayer(mode: PlayerMode.MEDIA_PLAYER);
 
   @override
   _SpeakerIcnBtnState createState() => _SpeakerIcnBtnState();
 }
 
 class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> with Exception {
-  // final AudioCache _audioCache = AudioCache();
-  static AudioPlayer player = AudioPlayer(mode: PlayerMode.MEDIA_PLAYER);
-
   @override
   void initState() {
     super.initState();
-
     // _audioUrl = await audioRef.getDownloadURL();
     // _audioCache.load("audio/karmanya-shlok.mp3");
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    if (player != null) {
-      // if (Provider.of<PlayingShlok>(context, listen: false)
-      //         .getcureenshlokplaying() ==
-      //     widget.shlokIndex) {
-      //   Provider.of<PlayingShlok>(context, listen: false)
-      //       .setcurrentshlokplaying(-1);
-      player.stop();
-      // }
-    }
   }
 
   @override
@@ -49,18 +37,19 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> with Exception {
             widget.shlokIndex) {
           Provider.of<PlayingShlok>(context, listen: false)
               .setcurrentshlokplaying(widget.shlokIndex);
-          player.stop();
+
+          SpeakerIcnBtn.player.stop();
           soundPlay();
         } else {
           Provider.of<PlayingShlok>(context, listen: false)
               .setcurrentshlokplaying(-1);
-          player.stop();
+          SpeakerIcnBtn.player.stop();
         }
       },
       child: Consumer<PlayingShlok>(
         builder: (_, playingShlok, ch) {
           return Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             decoration: const BoxDecoration(
               color: Colors.amber,
               borderRadius: BorderRadius.all(Radius.circular(25)),
@@ -88,18 +77,17 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> with Exception {
 
   Future<void> soundPlay() async {
     int result;
-    Exception exception;
     String url = await widget.audioUrl;
 
-    result = await player.play(
+    result = await SpeakerIcnBtn.player.play(
       url,
     );
 
     if (result == 1) {
-      player.onPlayerCompletion.listen((event) {
+      SpeakerIcnBtn.player.onPlayerCompletion.listen((event) {
         Provider.of<PlayingShlok>(context, listen: false)
             .setcurrentshlokplaying(-1);
-        player.stop();
+        SpeakerIcnBtn.player.stop();
       });
     }
   }
