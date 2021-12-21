@@ -12,10 +12,7 @@ class PlayingShlok with ChangeNotifier {
     return currentPlayingshlok;
   }
 
-  bool isSefPlaying(int id) {
-    if (currentPlayingshlok == id) {
-      return true;
-    }
-    return false;
+  void noOnePlaying() {
+    currentPlayingshlok = -1;
   }
 }
