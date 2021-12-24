@@ -68,6 +68,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
     return Screenshot(
       controller: _controller,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text("Shlok"),
           actions: [

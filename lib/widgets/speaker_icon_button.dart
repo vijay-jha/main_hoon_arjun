@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:audioplayers/audioplayers.dart';
-import 'package:main_hoon_arjun/providers/playing_shlok.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+
+import '../providers/playing_shlok.dart';
 
 class SpeakerIcnBtn extends StatefulWidget {
   const SpeakerIcnBtn({

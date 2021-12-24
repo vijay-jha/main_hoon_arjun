@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../constants.dart';
 import './input_container.dart';
+import '../constants.dart';
 
 enum Password { visibility, nonVisibility }
 
@@ -141,7 +141,7 @@ class _RoundedInputState extends State<RoundedInput> {
                           ),
                         ],
                       ),
-                      content: Text("An Email has been Sent to you."),
+                      content: Text("We will send you an email."),
                       actions: [
                         OutlinedButton(
                             onPressed: () async {
