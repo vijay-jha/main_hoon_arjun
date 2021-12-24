@@ -16,6 +16,8 @@ class _ShlokCardState extends State<ShlokCard> {
 
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
+
     return Stack(
       children: [
         Card(
@@ -23,13 +25,16 @@ class _ShlokCardState extends State<ShlokCard> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          margin:
-              const EdgeInsets.only(top: 50, left: 30, right: 30, bottom: 10),
-          child: shlokCard(),
+          margin: EdgeInsets.only(
+            top: _deviceSize.height * 0.07,
+            left: _deviceSize.width * 0.09,
+            right: _deviceSize.width * 0.09,
+          ),
+          child: shlokCard(_deviceSize),
         ),
         Positioned(
-          top: 30,
-          right: 15,
+          top: _deviceSize.height * 0.04,
+          right: _deviceSize.width * 0.04,
           child: CircleAvatar(
             backgroundColor: Colors.white,
             child: IconButton(
@@ -47,7 +52,7 @@ class _ShlokCardState extends State<ShlokCard> {
     );
   }
 
-  Container shlokCard() {
+  Container shlokCard(Size _deviceSize) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.orange.shade100,
@@ -61,17 +66,18 @@ class _ShlokCardState extends State<ShlokCard> {
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(15),
         ),
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(17),
         alignment: Alignment.center,
-        margin: const EdgeInsets.symmetric(
-          vertical: 30,
-          horizontal: 30,
+        margin: EdgeInsets.symmetric(
+          vertical: _deviceSize.height * 0.05,
+          horizontal: _deviceSize.width * 0.09,
         ),
         child: Text(
           widget.shlok.trim(),
           style: TextStyle(
             color: Colors.orange.shade900,
             fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
           textAlign: TextAlign.center,
           softWrap: true,

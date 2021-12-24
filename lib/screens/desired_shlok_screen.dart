@@ -11,12 +11,12 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../widgets/translation_card.dart';
 import '../widgets/profile_picture.dart';
 import '../widgets/shlok_card.dart';
 import '../widgets/speaker_icon_button.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import '../providers/playing_shlok.dart';
 
 class DesiredShlokScreen extends StatefulWidget {
@@ -57,16 +57,18 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     SpeakerIcnBtn.player.stop();
   }
 
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
+
     return Screenshot(
       controller: _controller,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text("Shlok"),
           actions: [
@@ -76,9 +78,16 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
         body: ListView(
           children: [
             ShlokCard(shlok: shlok),
+            SizedBox(
+              height: _deviceSize.height * 0.05,
+            ),
             ChangeNotifierProvider(
-                create: (ctx) => PlayingShlok(),
-                child: SpeakerIcnBtn(audioUrl: getshlokUrl(), shlokIndex: 0)),
+              create: (ctx) => PlayingShlok(),
+              child: SpeakerIcnBtn(audioUrl: getshlokUrl(), shlokIndex: 0),
+            ),
+            SizedBox(
+              height: _deviceSize.height * 0.05,
+            ),
             TranslationCard(),
           ],
         ),

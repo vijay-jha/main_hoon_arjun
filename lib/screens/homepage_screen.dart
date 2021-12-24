@@ -1,11 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:main_hoon_arjun/screens/feed_screen.dart';
 
-import './geeta_read_screen.dart';
 import './desired_shlok_screen.dart';
-import './favorites_screen.dart';
 import '../widgets/profile_picture.dart';
 
 class HomepageScreen extends StatefulWidget {

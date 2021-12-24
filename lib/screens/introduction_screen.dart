@@ -1,10 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:main_hoon_arjun/screens/favorites_screen.dart';
-import './homepage_screen.dart';
 import 'package:lottie/lottie.dart';
 
-import 'auth_screen.dart';
+import './auth_screen.dart';
 
 class IntroductionScreens extends StatelessWidget {
   List<PageViewModel> getPages() {
