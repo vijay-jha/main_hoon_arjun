@@ -5,13 +5,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:main_hoon_arjun/screens/login_splash_screen.dart';
 
+import './login_splash_screen.dart';
+import './verify_screen.dart';
 import '../constants.dart';
 import '../widgets/auth_input.dart';
-import './verify_screen.dart';
 
-enum AuthMode { Signup, Login }
 enum Password { visibility, nonVisibility }
 
 class AuthScreen extends StatefulWidget {
@@ -27,13 +26,11 @@ class _AuthScreenState extends State<AuthScreen>
   Timer timer;
 
   void _submitAuthForm(BuildContext ctx, email, password, isLogin) async {
-    // await SystemChannels.textInput.invokeMethod('TextInput.hide');
     if (email.isNotEmpty && password.isNotEmpty) {
       UserCredential authResult;
       try {
         if (isLogin) {
           final _user = FirebaseAuth.instance.currentUser;
-
           authResult = await _auth
               .signInWithEmailAndPassword(
             email: email,

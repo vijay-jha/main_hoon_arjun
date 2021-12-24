@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 import './about_screen.dart';
@@ -86,6 +87,7 @@ class SettingsScreen extends StatelessWidget {
                     OutlinedButton(
                         onPressed: () async {
                           await Future.delayed(Duration(milliseconds: 200));
+                          FirebaseAuth.instance.signOut();
                           Navigator.pushNamed(
                               context, SignOutSplashScreen.routeName);
                         },

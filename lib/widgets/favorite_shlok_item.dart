@@ -1,9 +1,10 @@
+
 import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:provider/provider.dart';
 
 import './speaker_icon_button.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import '../screens/desired_shlok_screen.dart';
-import 'package:provider/provider.dart';
 import '../providers/playing_shlok.dart';
 
 class FavoriteShlokItem extends StatefulWidget {

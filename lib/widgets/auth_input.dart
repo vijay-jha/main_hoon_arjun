@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../constants.dart';
 import './input_container.dart';
+import '../constants.dart';
 
 enum Password { visibility, nonVisibility }
 
