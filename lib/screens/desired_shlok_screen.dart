@@ -40,10 +40,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                       """;
   var chapter = "Chap02";
   var shlokNo = "Shlok03";
-  @override
-  // void initState() async {
-  //   super.initState();
-  // }
 
   // statically playimg Chap02_Shlok03.mp3
   Future<String> getshlokUrl() async {
@@ -68,7 +64,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
     return Screenshot(
       controller: _controller,
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text("Shlok"),
           actions: [
