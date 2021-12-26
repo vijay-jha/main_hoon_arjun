@@ -29,8 +29,7 @@ class DesiredShlokScreen extends StatefulWidget {
 class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   final _controller = ScreenshotController();
 
-  var shlok =
-      """
+  var shlok = """
                     कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।
 मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥
                       """;
@@ -63,67 +62,57 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
 
     return Screenshot(
       controller: _controller,
-      child: ChangeNotifierProvider(
-        create: (ctx) => PlayingShlok(),
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text("Shlok"),
-            actions: [
-              ProfilePicture(),
-            ],
-          ),
-          body: ListView(
-            children: [
-              ShlokCard(shlok: shlok),
-              SizedBox(
-                height: _deviceSize.height * 0.05,
-              ),
-              // ChangeNotifierProvider(
-              //   create: (ctx) => PlayingShlok(),
-              //   child:
-              Container(
-                margin:
-                    EdgeInsets.symmetric(horizontal: _deviceSize.width * 0.41),
-                child: SpeakerIcnBtn(
-                  audioUrl: getshlokUrl(),
-                  shlokIndex: 0,
-                ),
-              ),
-              // ),
-              SizedBox(
-                height: _deviceSize.height * 0.05,
-              ),
-              TranslationCard(),
-            ],
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            onTap: (int index) async {
-              if (index == 2) {
-                final image = await _controller.capture();
-                if (image != null) {
-                  // await saveImage(image);
-                  shareImage(image);
-                }
-              }
-            },
-            currentIndex: 1,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.comment),
-                label: "Comments",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.auto_awesome),
-                label: "Shlok",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.offline_share),
-                label: "Share Shlok",
-              ),
-            ],
-          ),
-          backgroundColor: Colors.orange.shade300,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Text("Shlok"),
+          actions: [
+            ProfilePicture(),
+          ],
         ),
+        body: ListView(
+          children: [
+            ShlokCard(shlok: shlok),
+            SizedBox(
+              height: _deviceSize.height * 0.05,
+            ),
+            ChangeNotifierProvider(
+              create: (ctx) => PlayingShlok(),
+              child: SpeakerIcnBtn(audioUrl: getshlokUrl(), shlokIndex: 0),
+            ),
+            SizedBox(
+              height: _deviceSize.height * 0.05,
+            ),
+            TranslationCard(),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: (int index) async {
+            if (index == 2) {
+              final image = await _controller.capture();
+              if (image != null) {
+                // await saveImage(image);
+                shareImage(image);
+              }
+            }
+          },
+          currentIndex: 1,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.comment),
+              label: "Comments",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.auto_awesome),
+              label: "Shlok",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.offline_share),
+              label: "Share Shlok",
+            ),
+          ],
+        ),
+        backgroundColor: Colors.orange.shade300,
       ),
     );
   }

@@ -44,19 +44,20 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
 
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
     return Card(
-      margin: const EdgeInsets.only(
-        top: 5,
-        bottom: 10,
-        left: 10,
-        right: 10,
+      margin: EdgeInsets.only(
+        top: _deviceSize.height * 0.008, //5,
+        bottom: _deviceSize.height * 0.008, // 10
+        left: _deviceSize.width * 0.025, // 10
+        right: _deviceSize.width * 0.025, // 10
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(25),
       ),
       elevation: 3,
       child: Container(
-        height: 267,
+        height: _deviceSize.height * 0.307, //240
         width: double.infinity,
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(25)),
@@ -64,10 +65,13 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
         child: Column(
           children: [
             Container(
-              margin: const EdgeInsets.only(top: 10, bottom: 0),
-              padding: const EdgeInsets.only(
-                left: 23,
-                right: 18,
+              margin: EdgeInsets.only(
+                top: _deviceSize.height * 0.011, // 10
+                bottom: 0,
+              ),
+              padding: EdgeInsets.only(
+                left: _deviceSize.width * 0.063, // 25
+                right: _deviceSize.width * 0.040, // 18
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,10 +83,10 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
                     ),
                     child: Text(
                       widget.shlok["Number"],
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 17,
-                          color: Colors.black87,
-                          fontWeight: FontWeight.w700),
+                          color: Colors.orange.shade300,
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                   InkWell(
@@ -98,28 +102,31 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
             InkWell(
               onTap: _onTapShlok,
               child: Container(
-                margin: const EdgeInsets.only(
-                  left: 14,
-                  top: 5,
-                  right: 14,
-                  bottom: 5,
+                margin: EdgeInsets.only(
+                  left: _deviceSize.width * 0.035, //14
+                  top: _deviceSize.height * 0.005, //5,
+                  right: _deviceSize.width * 0.035, //14
+                  bottom: _deviceSize.height * 0.005, //5,
                 ),
-                child: ShlokCard(shlok: widget.shlok["Shlok"]),
+                child: ShlokCard(
+                  shlok: widget.shlok["Shlok"],
+                  deviceSize: _deviceSize,
+                ),
                 width: double.infinity,
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(
-                left: 55,
-                right: 55,
-                bottom: 6,
+              margin: EdgeInsets.only(
+                left: _deviceSize.width * 0.140, // 55
+                right: _deviceSize.width * 0.140, // 55
+                bottom: _deviceSize.height * 0.0029, //6,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // shlok numbering Lable
                   Container(
-                    child: CommentsButton(),
+                    child: CommentsButton(deviceSize: _deviceSize),
                     alignment: Alignment.center,
                   ),
 
@@ -138,11 +145,10 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
 }
 
 class ShlokCard extends StatelessWidget {
-  ShlokCard({
-    @required this.shlok,
-  });
+  ShlokCard({@required this.shlok, this.deviceSize});
 
   final String shlok;
+  final deviceSize;
 
   @override
   Widget build(BuildContext context) {
@@ -152,16 +158,16 @@ class ShlokCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 19,
+        padding: EdgeInsets.symmetric(
+          horizontal: deviceSize.width * 0.048, //19,
         ),
-        height: 165,
+        height: deviceSize.height * 0.185, // 165
         alignment: Alignment.center,
         child: Text(
           shlok.trim(),
           style: TextStyle(
             fontSize: 26,
-            color: Colors.orange.shade700,
+            color: Colors.orange.shade800,
           ),
           textAlign: TextAlign.center,
           overflow: TextOverflow.fade,
@@ -172,14 +178,22 @@ class ShlokCard extends StatelessWidget {
 }
 
 class CommentsButton extends StatelessWidget {
+  CommentsButton({this.deviceSize});
+  final deviceSize;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {},
       child: Container(
-        width: 55,
+        width: deviceSize.width * 0.140, // 55
         alignment: Alignment.bottomCenter,
-        padding: const EdgeInsets.only(top: 8, right: 8, left: 8, bottom: 5),
+        padding: EdgeInsets.only(
+          top: deviceSize.height * 0.009, // 8
+          right: deviceSize.width * 0.020, //8,
+          left: deviceSize.width * 0.020, //8,
+          bottom: deviceSize.height * 0.005, //5,
+        ),
         decoration: const BoxDecoration(
           color: Colors.amber,
           borderRadius: BorderRadius.all(
@@ -195,4 +209,3 @@ class CommentsButton extends StatelessWidget {
     );
   }
 }
-//  1. playing different from firestore

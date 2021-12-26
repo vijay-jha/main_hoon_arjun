@@ -1,12 +1,13 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:main_hoon_arjun/constants.dart';
-import 'package:main_hoon_arjun/screens/favorites_screen.dart';
-import 'package:main_hoon_arjun/screens/feed_screen.dart';
-import 'package:main_hoon_arjun/screens/geeta_read_screen.dart';
-import 'package:main_hoon_arjun/screens/homepage_screen.dart';
-import 'package:main_hoon_arjun/screens/settings_screen.dart';
+
+import './constants.dart';
+import './screens/favorites_screen.dart';
+import './screens/feed_screen.dart';
+import './screens/geeta_read_screen.dart';
+import './screens/homepage_screen.dart';
+import './screens/settings_screen.dart';
 
 class NavigationFile extends StatefulWidget {
   static const routeName = '/navigation-file';

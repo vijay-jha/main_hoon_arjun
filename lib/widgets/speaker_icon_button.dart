@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:audioplayers/audioplayers.dart';
-import 'package:main_hoon_arjun/providers/playing_shlok.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+
+import '../providers/playing_shlok.dart';
 
 class SpeakerIcnBtn extends StatefulWidget {
   const SpeakerIcnBtn({
@@ -20,14 +19,7 @@ class SpeakerIcnBtn extends StatefulWidget {
   _SpeakerIcnBtnState createState() => _SpeakerIcnBtnState();
 }
 
-class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> with Exception {
-  @override
-  void initState() {
-    super.initState();
-    // _audioUrl = await audioRef.getDownloadURL();
-    // _audioCache.load("audio/karmanya-shlok.mp3");
-  }
-
+class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
   @override
   Widget build(BuildContext context) {
     return InkWell(

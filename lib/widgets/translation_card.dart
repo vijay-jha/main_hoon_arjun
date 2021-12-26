@@ -30,7 +30,7 @@ class _TranslationCardState extends State<TranslationCard> {
           ),
           padding: EdgeInsets.all(30),
           width: double.infinity,
-          height: 230,
+          height: _deviceSize.height * 0.3,
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(10),
@@ -41,6 +41,7 @@ class _TranslationCardState extends State<TranslationCard> {
             style: TextStyle(
               color: Colors.orange.shade900,
               fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,
             softWrap: true,

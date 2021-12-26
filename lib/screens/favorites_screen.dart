@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '../widgets/favorite_shlok.dart';
 import '../widgets/speaker_icon_button.dart';
 import '../providers/playing_shlok.dart';
-import 'package:provider/provider.dart';
 import '../widgets/profile_picture.dart';
 
 class FavoritesScreen extends StatelessWidget {
@@ -86,6 +87,7 @@ class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _deviceSize = MediaQuery.of(context).size;
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -94,15 +96,12 @@ class FavoritesScreen extends StatelessWidget {
       ],
       child: Scaffold(
         body: Container(
-          color: Colors.orange.shade200,
+          color: Colors.orange.shade300,
           child: CustomScrollView(
             slivers: [
               SliverAppBar(
-                actions: [
-                  ProfilePicture(),
-                ],
                 backgroundColor: Colors.orange.shade600,
-                expandedHeight: 240,
+                expandedHeight: _deviceSize.height * 0.29,
                 pinned: true,
                 flexibleSpace: FlexibleSpaceBar(
                   // centerTitle: true,
