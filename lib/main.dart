@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:main_hoon_arjun/widgets/speaker_icon_button.dart';
 import 'package:provider/provider.dart';
 
 import './providers/mahabharat_characters.dart';
@@ -23,6 +24,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
+  WidgetsBinding.instance.addObserver(new _Handler());
 }
 
 class MyApp extends StatelessWidget {
@@ -86,6 +88,18 @@ class MyApp extends StatelessWidget {
         return CustomPageTransition(child: NavigationFile());
       case DesiredShlokScreen.routeName:
         return CustomPageTransition(child: DesiredShlokScreen());
+    }
+  }
+}
+
+class _Handler extends WidgetsBindingObserver {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      SpeakerIcnBtn.player
+          .resume(); // Audio player is a custom class with resume and pause static methods
+    } else {
+      SpeakerIcnBtn.player.pause();
     }
   }
 }
