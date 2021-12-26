@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/favorite_shlok_item.dart';
+import '../widgets/favorite_shlok.dart';
 import '../widgets/speaker_icon_button.dart';
 import '../providers/playing_shlok.dart';
 import 'package:provider/provider.dart';
@@ -7,16 +7,6 @@ import '../widgets/profile_picture.dart';
 
 class FavoritesScreen extends StatelessWidget {
   static const String routeName = "/favorites-screen";
-
-  // @override
-  // void dispose() {
-  //   super.dispose();
-
-  //   SpeakerIcnBtn.player.stop();
-
-  //   Provider.of<PlayingShlok>(context, listen: false).noOnePlaying();
-  //   // }
-  // }
 
   List<Map<String, dynamic>> shlok = [
     {
@@ -95,6 +85,7 @@ class FavoritesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(

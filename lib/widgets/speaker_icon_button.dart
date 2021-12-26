@@ -49,7 +49,8 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> with Exception {
       child: Consumer<PlayingShlok>(
         builder: (_, playingShlok, ch) {
           return Container(
-            padding: const EdgeInsets.all(8),
+            width: 55,
+            padding: EdgeInsets.all(8),
             decoration: const BoxDecoration(
               color: Colors.amber,
               borderRadius: BorderRadius.all(Radius.circular(25)),

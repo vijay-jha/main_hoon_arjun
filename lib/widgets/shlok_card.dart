@@ -16,6 +16,8 @@ class _ShlokCardState extends State<ShlokCard> {
 
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
+
     return Stack(
       children: [
         Card(
@@ -23,12 +25,15 @@ class _ShlokCardState extends State<ShlokCard> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          margin:
-              const EdgeInsets.only(top: 50, left: 30, right: 30, bottom: 10),
+          margin: EdgeInsets.only(
+            top: _deviceSize.height * 0.07,
+            left: _deviceSize.width * 0.09,
+            right: _deviceSize.width * 0.09,
+          ),
           child: shlokCard(),
         ),
         Positioned(
-          top: 30,
+          top: _deviceSize.height * 0.04,
           right: 15,
           child: CircleAvatar(
             backgroundColor: Colors.white,

@@ -34,6 +34,7 @@ class _NavigationFileState extends State<NavigationFile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.orange.shade300,
       body: _children[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: primaryTextC,

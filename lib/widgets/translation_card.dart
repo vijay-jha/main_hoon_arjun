@@ -19,14 +19,18 @@ class _TranslationCardState extends State<TranslationCard> {
 
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
+
     return Stack(
       children: [
         Container(
-          margin:
-              const EdgeInsets.only(top: 20, left: 30, right: 30, bottom: 10),
+          margin: EdgeInsets.only(
+            left: _deviceSize.width * 0.09,
+            right: _deviceSize.width * 0.09,
+          ),
           padding: EdgeInsets.all(30),
           width: double.infinity,
-          height: 250,
+          height: 230,
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(10),
@@ -43,8 +47,8 @@ class _TranslationCardState extends State<TranslationCard> {
           ),
         ),
         Positioned(
-          bottom: 10,
-          right: 30,
+          bottom: _deviceSize.height * 0.01,
+          right: _deviceSize.width * 0.09,
           child: Container(
             decoration: BoxDecoration(
               shape: BoxShape.rectangle,

@@ -11,12 +11,12 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../widgets/translation_card.dart';
 import '../widgets/profile_picture.dart';
 import '../widgets/shlok_card.dart';
 import '../widgets/speaker_icon_button.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import '../providers/playing_shlok.dart';
 
 class DesiredShlokScreen extends StatefulWidget {
@@ -27,14 +27,10 @@ class DesiredShlokScreen extends StatefulWidget {
 }
 
 class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
-  final AudioCache _audioCache = AudioCache();
   final _controller = ScreenshotController();
-  String _audioUrl;
 
-  AudioPlayer player;
-
-  var isVolume = false;
-  var shlok = """
+  var shlok =
+      """
                     कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।
 मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥
                       """;
@@ -57,58 +53,77 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     SpeakerIcnBtn.player.stop();
   }
 
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
+
     return Screenshot(
       controller: _controller,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("Shlok"),
-          actions: [
-            ProfilePicture(),
-          ],
-        ),
-        body: ListView(
-          children: [
-            ShlokCard(shlok: shlok),
-            ChangeNotifierProvider(
-                create: (ctx) => PlayingShlok(),
-                child: SpeakerIcnBtn(audioUrl: getshlokUrl(), shlokIndex: 0)),
-            TranslationCard(),
-          ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: (int index) async {
-            if (index == 2) {
-              final image = await _controller.capture();
-              if (image != null) {
-                // await saveImage(image);
-                shareImage(image);
+      child: ChangeNotifierProvider(
+        create: (ctx) => PlayingShlok(),
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text("Shlok"),
+            actions: [
+              ProfilePicture(),
+            ],
+          ),
+          body: ListView(
+            children: [
+              ShlokCard(shlok: shlok),
+              SizedBox(
+                height: _deviceSize.height * 0.05,
+              ),
+              // ChangeNotifierProvider(
+              //   create: (ctx) => PlayingShlok(),
+              //   child:
+              Container(
+                margin:
+                    EdgeInsets.symmetric(horizontal: _deviceSize.width * 0.41),
+                child: SpeakerIcnBtn(
+                  audioUrl: getshlokUrl(),
+                  shlokIndex: 0,
+                ),
+              ),
+              // ),
+              SizedBox(
+                height: _deviceSize.height * 0.05,
+              ),
+              TranslationCard(),
+            ],
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            onTap: (int index) async {
+              if (index == 2) {
+                final image = await _controller.capture();
+                if (image != null) {
+                  // await saveImage(image);
+                  shareImage(image);
+                }
               }
-            }
-          },
-          currentIndex: 1,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.comment),
-              label: "Comments",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.auto_awesome),
-              label: "Shlok",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.offline_share),
-              label: "Share Shlok",
-            ),
-          ],
+            },
+            currentIndex: 1,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.comment),
+                label: "Comments",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.auto_awesome),
+                label: "Shlok",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.offline_share),
+                label: "Share Shlok",
+              ),
+            ],
+          ),
+          backgroundColor: Colors.orange.shade300,
         ),
-        backgroundColor: Colors.orange.shade300,
       ),
     );
   }
