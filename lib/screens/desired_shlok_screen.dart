@@ -27,13 +27,8 @@ class DesiredShlokScreen extends StatefulWidget {
 }
 
 class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
-  final AudioCache _audioCache = AudioCache();
   final _controller = ScreenshotController();
-  String _audioUrl;
 
-  AudioPlayer player;
-
-  var isVolume = false;
   var shlok = """
                     कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।
 मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥

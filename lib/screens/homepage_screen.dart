@@ -13,6 +13,12 @@ class HomepageScreen extends StatefulWidget {
 
 class _HomepageScreenState extends State<HomepageScreen>
     with TickerProviderStateMixin {
+  FocusNode inputNode = FocusNode();
+
+  void openKeyboard() {
+    FocusScope.of(context).requestFocus(inputNode);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +39,7 @@ class _HomepageScreenState extends State<HomepageScreen>
               Navigator.pushNamed(context, DesiredShlokScreen.routeName);
             }
           },
+          focusNode: inputNode,
           decoration: InputDecoration(
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blue, width: 2.0),
@@ -49,7 +56,7 @@ class _HomepageScreenState extends State<HomepageScreen>
           style: TextStyle(fontSize: 20, color: Colors.teal),
         ),
       ),
-      backgroundColor: Colors.orange.shade300,
+      backgroundColor: Colors.transparent,
     );
   }
 }
