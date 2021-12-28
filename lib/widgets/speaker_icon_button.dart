@@ -22,6 +22,7 @@ class SpeakerIcnBtn extends StatefulWidget {
 class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
     return InkWell(
       onTap: () {
         if (Provider.of<PlayingShlok>(context, listen: false)
@@ -42,7 +43,9 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
         builder: (_, playingShlok, ch) {
           return Container(
             width: 55,
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.symmetric(
+                vertical: _deviceSize.height * 0.0089,
+                horizontal: _deviceSize.width * 0.020),
             decoration: const BoxDecoration(
               color: Colors.amber,
               borderRadius: BorderRadius.all(Radius.circular(25)),

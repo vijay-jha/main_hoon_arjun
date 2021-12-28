@@ -30,17 +30,16 @@ class _AuthScreenState extends State<AuthScreen>
       UserCredential authResult;
       try {
         if (isLogin) {
-          final _user = FirebaseAuth.instance.currentUser;
           authResult = await _auth
               .signInWithEmailAndPassword(
             email: email,
             password: password,
           )
               .then((_) {
-            _user.reload();
+            final _user = FirebaseAuth.instance.currentUser;
             if (_user.emailVerified) {
               Navigator.of(ctx).pushReplacement(
-               MaterialPageRoute(
+                MaterialPageRoute(
                   builder: (ctx) => LoginSplash(),
                 ),
               );
