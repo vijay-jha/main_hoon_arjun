@@ -19,16 +19,10 @@ class SpeakerIcnBtn extends StatefulWidget {
   _SpeakerIcnBtnState createState() => _SpeakerIcnBtnState();
 }
 
-class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> with Exception {
-  @override
-  void initState() {
-    super.initState();
-    // _audioUrl = await audioRef.getDownloadURL();
-    // _audioCache.load("audio/karmanya-shlok.mp3");
-  }
-
+class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
     return InkWell(
       onTap: () {
         if (Provider.of<PlayingShlok>(context, listen: false)
@@ -48,7 +42,10 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> with Exception {
       child: Consumer<PlayingShlok>(
         builder: (_, playingShlok, ch) {
           return Container(
-            padding: const EdgeInsets.all(8),
+            width: 55,
+            padding: EdgeInsets.symmetric(
+                vertical: _deviceSize.height * 0.0089,
+                horizontal: _deviceSize.width * 0.020),
             decoration: const BoxDecoration(
               color: Colors.amber,
               borderRadius: BorderRadius.all(Radius.circular(25)),
