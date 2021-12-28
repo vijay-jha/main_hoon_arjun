@@ -47,8 +47,8 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
     final _deviceSize = MediaQuery.of(context).size;
     return Card(
       margin: EdgeInsets.only(
-        top: _deviceSize.height * 0.008, //5,
-        bottom: _deviceSize.height * 0.008, // 10
+        top: _deviceSize.height * 0.02, //7.5,
+        bottom: _deviceSize.height * 0.008, // 7.5
         left: _deviceSize.width * 0.025, // 10
         right: _deviceSize.width * 0.025, // 10
       ),
@@ -57,16 +57,18 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
       ),
       elevation: 3,
       child: Container(
-        height: _deviceSize.height * 0.307, //240
+        // height: _deviceSize.height * 0.300, //240
         width: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(25)),
+          border: Border.all(width: 0.2),
         ),
         child: Column(
           children: [
             Container(
+              decoration: BoxDecoration(),
               margin: EdgeInsets.only(
-                top: _deviceSize.height * 0.011, // 10
+                top: _deviceSize.height * 0.009, // 10
                 bottom: 0,
               ),
               padding: EdgeInsets.only(
@@ -78,9 +80,6 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
                 children: [
                   Container(
                     alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
                     child: Text(
                       widget.shlok["Number"],
                       style: TextStyle(
@@ -119,7 +118,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
               margin: EdgeInsets.only(
                 left: _deviceSize.width * 0.140, // 55
                 right: _deviceSize.width * 0.140, // 55
-                bottom: _deviceSize.height * 0.0029, //6,
+                bottom: _deviceSize.height * 0.009, //6
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -161,12 +160,12 @@ class ShlokCard extends StatelessWidget {
         padding: EdgeInsets.symmetric(
           horizontal: deviceSize.width * 0.048, //19,
         ),
-        height: deviceSize.height * 0.185, // 165
+        height: deviceSize.height * 0.180, // 165
         alignment: Alignment.center,
         child: Text(
           shlok.trim(),
           style: TextStyle(
-            fontSize: 26,
+            fontSize: deviceSize.height * 0.029,
             color: Colors.orange.shade800,
           ),
           textAlign: TextAlign.center,

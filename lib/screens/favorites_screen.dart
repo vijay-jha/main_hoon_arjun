@@ -101,7 +101,7 @@ class FavoritesScreen extends StatelessWidget {
             slivers: [
               SliverAppBar(
                 backgroundColor: Colors.orange.shade600,
-                expandedHeight: _deviceSize.height * 0.29,
+                expandedHeight: 240,
                 pinned: true,
                 flexibleSpace: FlexibleSpaceBar(
                   // centerTitle: true,
