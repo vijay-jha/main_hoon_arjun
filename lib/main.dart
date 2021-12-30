@@ -9,7 +9,6 @@ import './widgets/custom_page_transition.dart';
 import './navigationFile.dart';
 import './screens/auth_screen.dart';
 import './screens/desired_shlok_screen.dart';
-import './screens/intro_splash_screen.dart';
 import './screens/settings_screen.dart';
 import './screens/about_screen.dart';
 import './screens/homepage_screen.dart';
@@ -19,6 +18,7 @@ import './screens/geeta_read_screen.dart';
 import './screens/favorites_screen.dart';
 import './screens/feed_screen.dart';
 import './screens/comment_screen.dart';
+import './screens/introduction_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,13 +48,9 @@ class MyApp extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (ctx, userSnapShot) {
             if (userSnapShot.hasData) {
-              return SplashScreen(
-                isLogin: true,
-              );
+              return NavigationFile();
             }
-            return SplashScreen(
-              isLogin: false,
-            );
+            return IntroductionScreens();
           },
         ),
         onGenerateRoute: (route) => onGenerateRoute(route),
