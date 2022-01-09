@@ -28,8 +28,8 @@ class RoundedInput extends StatefulWidget {
 
 class _RoundedInputState extends State<RoundedInput> {
   final _emailController = TextEditingController();
-  final _nameController = TextEditingController();
   final _passwordController = TextEditingController();
+  // final _usernameController = TextEditingController();
   Password _password = Password.nonVisibility;
 
   @override
@@ -37,24 +37,24 @@ class _RoundedInputState extends State<RoundedInput> {
     Size size = MediaQuery.of(context).size;
     return Column(
       children: [
-        if (!widget.isLogin)
-          InputContainer(
-            child: TextField(
-              controller: _nameController,
-              cursorColor: primaryTextC,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                icon: Icon(
-                  Icons.person,
-                  color: widget.iconColor,
-                ),
-                hintText: "Name",
-                hintStyle: TextStyle(color: widget.textColor),
-                border: InputBorder.none,
-              ),
-              style: TextStyle(color: widget.textColor),
-            ),
-          ),
+        // if (!widget.isLogin)
+          // InputContainer(
+          //   child: TextField(
+          //     controller: _usernameController,
+          //     cursorColor: primaryTextC,
+          //     keyboardType: TextInputType.emailAddress,
+          //     decoration: InputDecoration(
+          //       icon: Icon(
+          //         Icons.person,
+          //         color: widget.iconColor,
+          //       ),
+          //       hintText: "Name",
+          //       hintStyle: TextStyle(color: widget.textColor),
+          //       border: InputBorder.none,
+          //     ),
+          //     style: TextStyle(color: widget.textColor),
+          //   ),
+          // ),
         InputContainer(
           child: TextField(
             controller: _emailController,

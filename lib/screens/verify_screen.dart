@@ -15,10 +15,9 @@ class VerifyScreen extends StatefulWidget {
   _VerifyScreenState createState() => _VerifyScreenState();
 
   final String email;
-  final String password;
+
   VerifyScreen({
     this.email,
-    this.password,
   });
 
   static const routeName = '/verify-screen';
@@ -189,7 +188,7 @@ class _VerifyScreenState extends State<VerifyScreen>
     if (user.emailVerified) {
       await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
         'email': widget.email,
-        'password': widget.password,
+        'username': 'Arjun',
       });
       setState(() {
         isVerified = true;

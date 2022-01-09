@@ -37,6 +37,8 @@ class _DisplayAvatarState extends State<DisplayAvatar> {
 
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Avatar"),
@@ -44,21 +46,23 @@ class _DisplayAvatarState extends State<DisplayAvatar> {
       body: Column(
         children: [
           SizedBox(
-            height: 20,
+            height: _deviceSize.height * 0.085,
           ),
           Text(
             Provider.of<MahabharatCharacters>(context, listen: false)
                 .getChosenAvatarName(),
             style: TextStyle(
               color: Colors.orange,
-              fontSize: 50,
+              fontSize: 30,
               fontWeight: FontWeight.bold,
             ),
           ),
           Center(
             child: Container(
-              margin: EdgeInsets.symmetric(vertical: 5),
-              height: 500,
+              margin: EdgeInsets.only(
+                top: _deviceSize.height * 0.0015,
+              ),
+              height: _deviceSize.height * 0.65,
               child: Image.network(
                 Provider.of<MahabharatCharacters>(context, listen: false)
                     .getChosenAvatarLink(),
@@ -66,9 +70,12 @@ class _DisplayAvatarState extends State<DisplayAvatar> {
               ),
             ),
           ),
+          SizedBox(
+            height: _deviceSize.height * 0.05,
+          ),
           TextButton(
             style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.orange),
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
             ),
             onPressed: _onTapAvatar,
             child: Text(
@@ -122,13 +129,13 @@ class _AvatarState extends State<Avatar> {
           Align(
             alignment: Alignment.topCenter,
             child: Container(
-              margin: EdgeInsets.symmetric(vertical: 25),
+              margin: EdgeInsets.symmetric(vertical: 35),
               child: Text(
                 Provider.of<MahabharatCharacters>(context, listen: false)
                     .getCharacterName(currentPageIndex),
                 style: const TextStyle(
                   color: Colors.orange,
-                  fontSize: 50,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
               ),

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -38,16 +37,17 @@ class _LoginSplashState extends State<LoginSplash>
       backgroundColor: Colors.white,
       body: Stack(children: [
         Positioned(
-            top: -50,
-            left: -50,
-            child: Container(
-              width: 180,
-              height: 180,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: const Color(0xFFFF521B),
-              ),
-            )),
+          top: -50,
+          left: -50,
+          child: Container(
+            width: 180,
+            height: 180,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              color: const Color(0xFFFF521B),
+            ),
+          ),
+        ),
         Positioned(
             top: 100,
             right: -50,
@@ -76,7 +76,7 @@ class _LoginSplashState extends State<LoginSplash>
             Container(
               margin: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.33),
-               padding: const EdgeInsets.symmetric(horizontal: 80),
+              padding: const EdgeInsets.symmetric(horizontal: 80),
               // decoration: BoxDecoration(border: Border.all(width: 1)),
               child: Lottie.asset(
                 'assets/lottie/EmailVerified.json',
@@ -89,7 +89,8 @@ class _LoginSplashState extends State<LoginSplash>
                     ..forward();
                 },
               ),
-            ),  Container(
+            ),
+            Container(
               alignment: Alignment.center,
               margin: EdgeInsets.only(
                 left: 24,
