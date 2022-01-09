@@ -6,7 +6,7 @@ import '../constants.dart';
 import '../screens/comment_screen.dart';
 
 class ShlokPost extends StatelessWidget {
-  String sample = "User69";
+  String sample = "User";
   String shlok =
       "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।\nमा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥";
   @override
