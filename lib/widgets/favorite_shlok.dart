@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-import './speaker_icon_button.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import '../screens/desired_shlok_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+
+import './speaker_icon_button.dart';
+import '../screens/desired_shlok_screen.dart';
 import '../providers/playing_shlok.dart';
 
 class FavoriteShlokItem extends StatefulWidget {
@@ -15,6 +17,7 @@ class FavoriteShlokItem extends StatefulWidget {
 }
 
 class _FavoritesShlokState extends State<FavoriteShlokItem> {
+  var firestore = FirebaseFirestore.instance;
   String s;
   @override
   void initState() {
@@ -35,7 +38,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
         .getDownloadURL());
   }
 
-  void _onTapShlok() {
+  void _onTapShlok() async {
     SpeakerIcnBtn.player.stop();
     Provider.of<PlayingShlok>(context, listen: false)
         .setcurrentshlokplaying(-1);

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../widgets/favorite_shlok.dart';
 import '../widgets/speaker_icon_button.dart';
 import '../providers/playing_shlok.dart';
-import '../widgets/profile_picture.dart';
 
 class FavoritesScreen extends StatelessWidget {
   static const String routeName = "/favorites-screen";
