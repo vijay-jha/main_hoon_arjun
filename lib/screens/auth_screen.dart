@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -35,9 +36,22 @@ class _AuthScreenState extends State<AuthScreen>
             email: email,
             password: password,
           )
-              .then((_) {
+              .then((_) async {
             final _user = FirebaseAuth.instance.currentUser;
             if (_user.emailVerified) {
+              var doc = await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(_user.uid)
+                  .get();
+              if (!doc.exists) {
+                await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(_user.uid)
+                    .set({
+                  'email': email,
+                  'username': 'Arjun',
+                });
+              }
               Navigator.of(ctx).pushReplacement(
                 MaterialPageRoute(
                   builder: (ctx) => LoginSplash(),
@@ -76,7 +90,6 @@ class _AuthScreenState extends State<AuthScreen>
                 MaterialPageRoute(
                   builder: (ctx) => VerifyScreen(
                     email: email,
-                    password: password,
                   ),
                 ),
               );
