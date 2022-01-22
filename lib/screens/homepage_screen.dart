@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import './desired_shlok_screen.dart';
 import '../widgets/profile_picture.dart';
-import '../widgets/geeta.dart';
 
 class HomepageScreen extends StatefulWidget {
   static const routeName = '/homepage-screen';
@@ -21,29 +20,18 @@ class _HomepageScreenState extends State<HomepageScreen>
     FocusScope.of(context).requestFocus(inputNode);
   }
 
-  void _onDoubleTapShlok() async {
-    for (int i = 0; i < geeta.length; i++) {
-      await FirebaseFirestore.instance
-          .collection('Geeta')
-          .doc('Chapter${geeta[i]["chapter"]}')
-          .update({
-        'Shlok${geeta[i]["shlok"]}': {
-          'chapter': geeta[i]["chapter"],
-          'shlok': geeta[i]["shlok"],
-          'text': geeta[i]["text"],
-          'translation': {
-            'english': geeta[i]["translation-eng"],
-            'hindi': geeta[i]["translation-hin"],
-          },
-          'meaning': {
-            'english': geeta[i]["meaning-eng"],
-            'hindi': geeta[i]["meaning-hin"],
-          }
-        }
-      });
-      print("iiiiiiiiiiiiiiii = " + i.toString());
-    }
-  }
+  // void onRetrive() async {
+  //   final snap = await FirebaseFirestore.instance
+  //       .collection("Geeta")
+  //       .snapshots()
+  //       .listen((event) {
+  //     (event.docs.forEach((element) {
+  //       print("iiiiiiiiiiiii");
+  //       var e = element.data();
+  //       print(e['Shlok01']['translation']['hindi']);
+  //     }));
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -81,19 +69,6 @@ class _HomepageScreenState extends State<HomepageScreen>
             ),
             // autofocus: true,
             style: TextStyle(fontSize: 20, color: Colors.teal),
-          ),
-        ),
-        InkWell(
-          onDoubleTap: _onDoubleTapShlok,
-          child: Container(
-            alignment: Alignment.center,
-            width: 120,
-            height: 35,
-            child: Text(
-              "Upload Geeta",
-              style: TextStyle(color: Colors.white),
-            ),
-            color: Colors.red[800],
           ),
         )
       ]),
