@@ -19,12 +19,13 @@ import './screens/favorites_screen.dart';
 import './screens/feed_screen.dart';
 import './screens/comment_screen.dart';
 import './screens/introduction_screen.dart';
+import './screens/one_time_intro_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
-  WidgetsBinding.instance.addObserver(new _Handler());
+  WidgetsBinding.instance.addObserver(_Handler());
 }
 
 class MyApp extends StatelessWidget {
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
             if (userSnapShot.hasData) {
               return NavigationFile();
             }
-            return IntroductionScreens();
+            return OneTimeIntro();
           },
         ),
         onGenerateRoute: (route) => onGenerateRoute(route),
@@ -84,6 +85,8 @@ class MyApp extends StatelessWidget {
         return CustomPageTransition(child: NavigationFile());
       case DesiredShlokScreen.routeName:
         return CustomPageTransition(child: DesiredShlokScreen());
+      case IntroductionScreens.routeName:
+        return MaterialPageRoute(builder: (_) => IntroductionScreens());
     }
   }
 }
