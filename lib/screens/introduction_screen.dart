@@ -1,11 +1,16 @@
-
 import 'package:flutter/material.dart';
-import 'package:introduction_screen/introduction_screen.dart';
 import 'package:lottie/lottie.dart';
+import 'package:introduction_screen/introduction_screen.dart';
 
 import './auth_screen.dart';
 
-class IntroductionScreens extends StatelessWidget {
+class IntroductionScreens extends StatefulWidget {
+  static const routeName = '/introduction-screen';
+  @override
+  State<IntroductionScreens> createState() => _IntroductionScreensState();
+}
+
+class _IntroductionScreensState extends State<IntroductionScreens> {
   List<PageViewModel> getPages() {
     return [
       PageViewModel(
