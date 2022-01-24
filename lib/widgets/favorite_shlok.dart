@@ -23,9 +23,9 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
   void initState() {
     super.initState();
     s = "Chap" +
-        widget.shlok["Chapter"].toString().substring(7) +
+        widget.shlok["Chapter"].substring(7) +
         '_' +
-        widget.shlok["hlok"].toString() +
+        widget.shlok["ShlokNo"] +
         '.mp3';
   }
 

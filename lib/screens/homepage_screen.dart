@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,17 +29,13 @@ class _HomepageScreenState extends State<HomepageScreen>
     FocusScope.of(context).requestFocus(inputNode);
   }
 
-  // void onRetrive() async {
-  //   final snap = await FirebaseFirestore.instance
-  //       .collection("Geeta")
-  //       .snapshots()
-  //       .listen((event) {
-  //     (event.docs.forEach((element) {
-  //       print("iiiiiiiiiiiii");
-  //       var e = element.data();
-  //       print(e['Shlok01']['translation']['hindi']);
-  //     }));
-  //   });
+  // Future<void> onRetrive() async {
+  //   var allShloksFromChapter = await FirebaseFirestore.instance
+  //       .collection('Geeta')
+  //       .doc('Chapter01')
+  //       .get();
+  //   var data = allShloksFromChapter.data();
+  //   data1 = data['Shlok01']['meaning']['hindi'];
   // }
 
   @override

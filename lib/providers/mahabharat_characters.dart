@@ -25,7 +25,12 @@ class MahabharatCharacters with ChangeNotifier {
     },
     {
       'name': 'Karn',
+<<<<<<< HEAD
       'link': 'assets/images/Karn.png',
+=======
+      'link':
+          'https://cdni.iconscout.com/illustration/premium/thumb/karna-removing-his-crown-3220949-2694481.png',
+>>>>>>> efb86b8f7d14e78b438478624fa2ec5b14ffe213
     },
     {
       'name': 'Duryodhan',

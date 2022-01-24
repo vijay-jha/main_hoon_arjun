@@ -50,12 +50,19 @@ class _DisplayAvatarState extends State<DisplayAvatar> {
             child: Container(
               margin: EdgeInsets.symmetric(vertical: _deviceSize.height * 0.035),
               child: Text(
+<<<<<<< HEAD
                 Provider.of<MahabharatCharacters>(context, listen: true)
+=======
+                Provider.of<MahabharatCharacters>(context, listen: false)
+>>>>>>> efb86b8f7d14e78b438478624fa2ec5b14ffe213
                     .getChosenAvatarName(),
                 style: const TextStyle(
                   color: Colors.orange,
                   fontSize: 30,
+<<<<<<< HEAD
                   
+=======
+>>>>>>> efb86b8f7d14e78b438478624fa2ec5b14ffe213
                   fontWeight: FontWeight.bold,
                 ),
               ),
