@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ShlokCard extends StatefulWidget {
@@ -12,7 +14,71 @@ class ShlokCard extends StatefulWidget {
 }
 
 class _ShlokCardState extends State<ShlokCard> {
-  var isFavorite = false;
+  /*
+  void _onDoubleTapShlok() async {
+    for (int i = 0; i < geeta.length; i++) {
+      await FirebaseFirestore.instance
+          .collection('Geeta')
+          .doc('Chapter${geeta[i]["chapter"]}')
+          .update({
+        'Shlok${geeta[i]["shlok"]}': {
+          'chapter': geeta[i]["chapter"],
+          'shlok': geeta[i]["shlok"],
+          'text': geeta[i]["text"],
+          'translation': {
+            'english': geeta[i]["translation-eng"],
+            'hindi': geeta[i]["translation-hin"],
+          },
+          'meaning': {
+            'english': geeta[i]["meaning-eng"],
+            'hindi': geeta[i]["meaning-hin"],
+          }
+        }
+      });
+      print("iiiiiiiiiiiiiiii = " + i.toString());
+    }
+  }
+  */
+  bool isFavorite = false;
+
+  @override
+  Future<void> dispose() async {
+    super.dispose();
+    final _user = FirebaseAuth.instance.currentUser;
+    String currentShlok = 'chapter02_shlok03';
+
+    var doc = await FirebaseFirestore.instance
+        .collection('user_favorites')
+        .doc(_user.uid)
+        .get();
+
+    if (!doc.exists) {
+      await FirebaseFirestore.instance
+          .collection('user_favorites')
+          .doc(_user.uid)
+          .set({
+        'fav_sholks': [currentShlok]
+      });
+    } else {
+      var data = doc.data();
+      var favoriteShloks = data['fav_sholks'];
+      if (isFavorite) {
+        if (!favoriteShloks.contains(currentShlok)) {
+          favoriteShloks.add(currentShlok);
+          await FirebaseFirestore.instance
+              .collection('user_favorites')
+              .doc(_user.uid)
+              .set({'fav_sholks': favoriteShloks});
+        }
+      } else {
+        favoriteShloks.remove(currentShlok);
+        await FirebaseFirestore.instance
+            .collection('user_favorites')
+            .doc(_user.uid)
+            .set({'fav_sholks': favoriteShloks});
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
