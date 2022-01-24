@@ -16,11 +16,10 @@ class ProfilePicture extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(4),
         child: CircleAvatar(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.orange.shade50,
           radius: 30,
-          child: Image.network(
-            // "https://pbs.twimg.com/profile_images/843401950448111617/M_vs7v5C_400x400.jpg",
-            Provider.of<MahabharatCharacters>(context, listen: false)
+          child: Image.asset(
+            Provider.of<MahabharatCharacters>(context, listen: true)
                 .getChosenAvatarLink(),
             fit: BoxFit.cover,
           ),

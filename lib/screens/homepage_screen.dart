@@ -2,9 +2,11 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import './desired_shlok_screen.dart';
 import '../widgets/profile_picture.dart';
+import '../providers/mahabharat_characters.dart';
 
 class HomepageScreen extends StatefulWidget {
   static const routeName = '/homepage-screen';
@@ -15,7 +17,14 @@ class HomepageScreen extends StatefulWidget {
 class _HomepageScreenState extends State<HomepageScreen>
     with TickerProviderStateMixin {
   FocusNode inputNode = FocusNode();
-
+   
+   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //  Provider.of<MahabharatCharacters>(context, listen: false)
+    //       .getIndexFromLocal();
+  }
   void openKeyboard() {
     FocusScope.of(context).requestFocus(inputNode);
   }
@@ -40,6 +49,7 @@ class _HomepageScreenState extends State<HomepageScreen>
         title: const Text("Main Hoon Arjun"),
         actions: [ProfilePicture()],
       ),
+      
       body: Column(children: [
         Container(
           decoration: BoxDecoration(

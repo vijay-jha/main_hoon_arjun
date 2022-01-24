@@ -6,11 +6,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 import './login_splash_screen.dart';
 import './verify_screen.dart';
 import '../constants.dart';
 import '../widgets/auth_input.dart';
+import '../providers/mahabharat_characters.dart';
 
 enum Password { visibility, nonVisibility }
 
@@ -50,8 +52,12 @@ class _AuthScreenState extends State<AuthScreen>
                     .set({
                   'email': email,
                   'username': 'Arjun',
+                  'avatarIndex': 0,
                 });
               }
+                Provider.of<MahabharatCharacters>(context, listen: false)
+                  .saveAvatarTolocal();
+              
               Navigator.of(ctx).pushReplacement(
                 MaterialPageRoute(
                   builder: (ctx) => LoginSplash(),

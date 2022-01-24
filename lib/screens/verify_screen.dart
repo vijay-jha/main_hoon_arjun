@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 import './auth_screen.dart';
 import '../navigationFile.dart';
+import '../providers/mahabharat_characters.dart';
 
 class VerifyScreen extends StatefulWidget {
   @override
@@ -189,7 +191,11 @@ class _VerifyScreenState extends State<VerifyScreen>
       await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
         'email': widget.email,
         'username': 'Arjun',
+        'avatarIndex': 0,
       });
+      Provider.of<MahabharatCharacters>(context, listen: false)
+          .saveAvatarTolocal();
+          
       setState(() {
         isVerified = true;
       });

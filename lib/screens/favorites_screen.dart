@@ -94,8 +94,9 @@ class FavoritesScreen extends StatelessWidget {
         )
       ],
       child: Scaffold(
+        
         body: Container(
-          color: Colors.orange.shade300,
+          color: Colors.orange.shade50,
           child: CustomScrollView(
             slivers: [
               SliverAppBar(

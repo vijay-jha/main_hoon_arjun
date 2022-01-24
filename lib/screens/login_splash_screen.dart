@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 import '../navigationFile.dart';
+import '../providers/mahabharat_characters.dart';
 
 class LoginSplash extends StatefulWidget {
   @override
@@ -20,6 +22,8 @@ class _LoginSplashState extends State<LoginSplash>
     );
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
+        Provider.of<MahabharatCharacters>(context, listen: false)
+          .getIndexFromLocal();
         Navigator.of(context).pushReplacementNamed(NavigationFile.routeName);
       }
     });

@@ -1,55 +1,51 @@
-import 'package:flutter/material.dart'; 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:main_hoon_arjun/helper/db_helper.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MahabharatCharacters with ChangeNotifier {
   final List<Map<String, String>> _mahabharatCharacters = [
     {
       'name': 'Arjun',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/arjun-standing-in-welcome-pose-3247069-2706135.png',
+      'link': 'assets/images/Arjun.png',
     },
     {
       'name': 'Draupadi',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/draupadi-holding-worship-plate-3220909-2703406.png',
+      'link': 'assets/images/Draupadi.png',
     },
     {
       'name': 'Bhishma',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/bhishma-pitamaha-3247112-2706051.png',
+      'link': 'assets/images/Bhishma.png',
     },
     {
       'name': 'Dhritarashtra',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/king-dhritarashtra-3247180-2706118.png',
+      'link': 'assets/images/Dhritarashtra.png',
     },
     {
-      'name': 'Karan',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/karna-removing-his-crown-3220949-2694481.png',
+      'name': 'Karn',
+      'link': 'assets/images/Karn.png',
     },
     {
       'name': 'Duryodhan',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/angry-duryodhana-3220998-2694531.png',
+      'link': 'assets/images/Duryodhan.png',
     },
     {
       'name': 'Bheem',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/bheem-standing-in-welcome-pose-3247133-2706072.png',
+      'link': 'assets/images/Bheem.png',
     },
     {
       'name': 'Dronacharya',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/dronacharya-standing-in-namaste-pose-3220920-2703417.png',
+      'link': 'assets/images/Dronacharya.png',
     },
     {
       'name': 'Shakuni',
-      'link':
-          'https://cdni.iconscout.com/illustration/premium/thumb/shakuni-standing-in-welcome-pose-3260304-2726033.png',
+      'link': 'assets/images/Shakuni.png',
     },
   ];
 
-  int _currentAvatar = 0;
+  static int _currentAvatar = 0;
 
   List<Map<String, String>> get mahabharatCharacters {
     return [..._mahabharatCharacters];
@@ -71,8 +67,43 @@ class MahabharatCharacters with ChangeNotifier {
     return _mahabharatCharacters[_currentAvatar]['name'];
   }
 
-  void currentAvatar(int index) {
+  void currentAvatar(int index) async {
     _currentAvatar = index;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .update({'avatarIndex': _currentAvatar});
+
     notifyListeners();
+    DBHelper.update(
+        'avatar_index', {'id': 1, 'ind': _currentAvatar}, 'id = ?', 1);
+  }
+
+  Future<void> fetchAvatarIndex() async {
+    var dataSnapShot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get();
+
+    var data = dataSnapShot.data();
+    _currentAvatar = data['avatarIndex'];
+    notifyListeners();
+  }
+
+  void saveAvatarTolocal() {
+    fetchAvatarIndex().then((_) {
+      DBHelper.insert('avatar_index', {'id': 1, 'ind': _currentAvatar});
+    });
+  }
+
+  Future<void> getIndexFromLocal() async {
+    final avatarIndex = await DBHelper.getData('avatar_index');
+    List<dynamic> gg = avatarIndex.map((e) => e['ind']).toList();
+    _currentAvatar = gg[0];
+    notifyListeners();
+  }
+
+  void deleteIndexFromLocal() {
+    DBHelper.delete('avatar_index', 'id = ?', 1);
   }
 }

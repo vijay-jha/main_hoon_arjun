@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/mahabharat_characters.dart';
 
 import './auth_screen.dart';
 
@@ -22,8 +25,11 @@ class _SignOutSplashScreenState extends State<SignOutSplashScreen>
     );
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
+        Provider.of<MahabharatCharacters>(context, listen: false)
+          .deleteIndexFromLocal();
         Navigator.of(context).popUntil((route) => route.isFirst);
         Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
+        
       }
     });
   }
@@ -32,6 +38,7 @@ class _SignOutSplashScreenState extends State<SignOutSplashScreen>
   void dispose() {
     _controller.dispose();
     super.dispose();
+   
   }
 
   @override

@@ -45,16 +45,20 @@ class _DisplayAvatarState extends State<DisplayAvatar> {
       ),
       body: Column(
         children: [
-          SizedBox(
-            height: _deviceSize.height * 0.085,
-          ),
-          Text(
-            Provider.of<MahabharatCharacters>(context, listen: false)
-                .getChosenAvatarName(),
-            style: TextStyle(
-              color: Colors.orange,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: _deviceSize.height * 0.035),
+              child: Text(
+                Provider.of<MahabharatCharacters>(context, listen: true)
+                    .getChosenAvatarName(),
+                style: const TextStyle(
+                  color: Colors.orange,
+                  fontSize: 30,
+                  
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
           Center(
@@ -63,8 +67,8 @@ class _DisplayAvatarState extends State<DisplayAvatar> {
                 top: _deviceSize.height * 0.0015,
               ),
               height: _deviceSize.height * 0.65,
-              child: Image.network(
-                Provider.of<MahabharatCharacters>(context, listen: false)
+              child: Image.asset(
+                Provider.of<MahabharatCharacters>(context, listen: true)
                     .getChosenAvatarLink(),
                 fit: BoxFit.none,
               ),
@@ -103,7 +107,7 @@ class _AvatarState extends State<Avatar> {
   // final mahabharatAvatars = MahabharatCharacters();
 
   final _filterCharacters = ValueNotifier<String>(
-    'https://cdni.iconscout.com/illustration/premium/thumb/arjun-standing-in-welcome-pose-3247069-2706135.png',
+    'assets/images/Arjun.png',
   );
 
   int currentPageIndex = 0;
@@ -157,7 +161,7 @@ class _AvatarState extends State<Avatar> {
     return ValueListenableBuilder(
       valueListenable: _filterCharacters,
       builder: (context, value, child) {
-        return Image.network(
+        return Image.asset(
           value as String,
           fit: BoxFit.none,
         );
@@ -440,7 +444,7 @@ class FilterItem extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ClipOval(
-            child: Image.network(
+            child: Image.asset(
               imageurl,
               fit: BoxFit.fitHeight,
             ),
