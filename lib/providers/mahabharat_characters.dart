@@ -23,7 +23,7 @@ class MahabharatCharacters with ChangeNotifier {
           'https://cdni.iconscout.com/illustration/premium/thumb/king-dhritarashtra-3247180-2706118.png',
     },
     {
-      'name': 'Karan',
+      'name': 'Karn',
       'link':
           'https://cdni.iconscout.com/illustration/premium/thumb/karna-removing-his-crown-3220949-2694481.png',
     },

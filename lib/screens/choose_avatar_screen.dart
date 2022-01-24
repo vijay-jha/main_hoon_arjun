@@ -45,16 +45,19 @@ class _DisplayAvatarState extends State<DisplayAvatar> {
       ),
       body: Column(
         children: [
-          SizedBox(
-            height: _deviceSize.height * 0.085,
-          ),
-          Text(
-            Provider.of<MahabharatCharacters>(context, listen: false)
-                .getChosenAvatarName(),
-            style: TextStyle(
-              color: Colors.orange,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: _deviceSize.height * 0.035),
+              child: Text(
+                Provider.of<MahabharatCharacters>(context, listen: false)
+                    .getChosenAvatarName(),
+                style: const TextStyle(
+                  color: Colors.orange,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
           Center(
