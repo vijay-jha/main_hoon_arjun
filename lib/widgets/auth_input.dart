@@ -1,5 +1,4 @@
-// ignore_for_file: prefer_const_constructors
-
+// ignore_for_file: prefer_const_constructors, unrelated_type_equality_checks
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -26,11 +25,31 @@ class RoundedInput extends StatefulWidget {
   State<RoundedInput> createState() => _RoundedInputState();
 }
 
-class _RoundedInputState extends State<RoundedInput> {
+class _RoundedInputState extends State<RoundedInput>
+    with TickerProviderStateMixin {
+  AnimationController _loginButtonController;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   // final _usernameController = TextEditingController();
   Password _password = Password.nonVisibility;
+  bool isLoading = false;
+  String errorMessage = "";
+
+  Future<void> _playAnimation() async {
+    try {
+      await _loginButtonController.forward();
+      await _loginButtonController.reverse();
+    }
+    // ignore: empty_catches
+    on TickerCanceled {}
+  }
+
+  @override
+  void initState() {
+    _loginButtonController = AnimationController(
+        duration: Duration(milliseconds: 3000), vsync: this);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,23 +57,23 @@ class _RoundedInputState extends State<RoundedInput> {
     return Column(
       children: [
         // if (!widget.isLogin)
-          // InputContainer(
-          //   child: TextField(
-          //     controller: _usernameController,
-          //     cursorColor: primaryTextC,
-          //     keyboardType: TextInputType.emailAddress,
-          //     decoration: InputDecoration(
-          //       icon: Icon(
-          //         Icons.person,
-          //         color: widget.iconColor,
-          //       ),
-          //       hintText: "Name",
-          //       hintStyle: TextStyle(color: widget.textColor),
-          //       border: InputBorder.none,
-          //     ),
-          //     style: TextStyle(color: widget.textColor),
-          //   ),
-          // ),
+        // InputContainer(
+        //   child: TextField(
+        //     controller: _usernameController,
+        //     cursorColor: primaryTextC,
+        //     keyboardType: TextInputType.emailAddress,
+        //     decoration: InputDecoration(
+        //       icon: Icon(
+        //         Icons.person,
+        //         color: widget.iconColor,
+        //       ),
+        //       hintText: "Name",
+        //       hintStyle: TextStyle(color: widget.textColor),
+        //       border: InputBorder.none,
+        //     ),
+        //     style: TextStyle(color: widget.textColor),
+        //   ),
+        // ),
         InputContainer(
           child: TextField(
             controller: _emailController,
@@ -157,16 +176,14 @@ class _RoundedInputState extends State<RoundedInput> {
                                 email: _emailController.text,
                               );
                             } on FirebaseAuthException catch (error) {
-                              String errorMessage = "";
-
-                              switch (error.code) {
+                            switch (error.code) {
                                 case "user-not-found":
                                   errorMessage =
-                                      "User with this email doesn't exist.";
+                                      "User with this email doesn't exist.";  
                                   break;
-                                case "invalid-email":
-                                  errorMessage =
-                                      "Please enter a valid email address.";
+                                case "invalid-email":   
+                                errorMessage =
+                                      "Please enter a valid email address."; 
                                   break;
                               }
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -176,7 +193,6 @@ class _RoundedInputState extends State<RoundedInput> {
                                 ),
                               );
                             }
-
                             Navigator.of(context).pop();
                           },
                           child: Text("Okay"),
@@ -200,14 +216,25 @@ class _RoundedInputState extends State<RoundedInput> {
           height: widget.isLogin ? 10 : 20,
         ),
         InkWell(
-          onTap: () {
+          onTap: () async {
+            _playAnimation();
             FocusScope.of(context).unfocus();
+            if (isLoading) return;
+            if (_emailController.text != "" && _passwordController.text != "") {
+              setState(() {
+                isLoading = true;
+              });
+            }
             widget.submit(
               context,
               _emailController.text,
               _passwordController.text,
               widget.isLogin,
             );
+            await Future.delayed(Duration(milliseconds: 2000)); 
+            setState(() {
+              isLoading = false;
+            });
           },
           child: Container(
             width: size.width * 0.8,
@@ -217,10 +244,12 @@ class _RoundedInputState extends State<RoundedInput> {
             ),
             padding: EdgeInsets.symmetric(vertical: 20),
             alignment: Alignment.center,
-            child: Text(
-              widget.isLogin ? "LOGIN" : "SIGN UP",
-              style: TextStyle(color: Colors.white, fontSize: 18),
-            ),
+            child: isLoading
+                ? CircularProgressIndicator(color: Colors.white)
+                : Text(
+                    widget.isLogin ? "LOGIN" : "SIGN UP",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
           ),
         )
       ],
