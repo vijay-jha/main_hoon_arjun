@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -40,18 +42,33 @@ class _ShlokCardState extends State<ShlokCard> {
   }
   */
   bool isFavorite = false;
+  var _user;
+  String currentShlok = 'Chapter02_Shlok03';
+  var doc;
+
+  @override
+  void initState() {
+    super.initState();
+
+    () async {
+      _user = FirebaseAuth.instance.currentUser;
+      doc = await FirebaseFirestore.instance
+          .collection('user_favorites')
+          .doc(_user.uid)
+          .get();
+      var data = doc.data();
+      var favoriteShloks = data['fav_sholks'];
+      if (favoriteShloks.contains(currentShlok)) {
+        setState(() {
+          isFavorite = !isFavorite;
+        });
+      }
+    }();
+  }
 
   @override
   Future<void> dispose() async {
     super.dispose();
-    final _user = FirebaseAuth.instance.currentUser;
-    String currentShlok = 'chapter02_shlok03';
-
-    var doc = await FirebaseFirestore.instance
-        .collection('user_favorites')
-        .doc(_user.uid)
-        .get();
-
     if (!doc.exists) {
       await FirebaseFirestore.instance
           .collection('user_favorites')
