@@ -65,6 +65,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
             ProfilePicture(),
           ],
         ),
+        backgroundColor: Colors.orange.shade50,
         body: ListView(
           children: [
             ShlokCard(shlok: shlok),
@@ -107,7 +108,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
             ),
           ],
         ),
-        backgroundColor: Colors.orange.shade300,
       ),
     );
   }

@@ -55,6 +55,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
         left: _deviceSize.width * 0.025, // 10
         right: _deviceSize.width * 0.025, // 10
       ),
+      color: Colors.orange.shade100,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(25),
       ),
@@ -62,9 +63,8 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
       child: Container(
         // height: _deviceSize.height * 0.300, //240
         width: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(25)),
-          border: Border.all(width: 0.2),
         ),
         child: Column(
           children: [
@@ -87,7 +87,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
                       widget.shlok["Number"],
                       style: TextStyle(
                           fontSize: 17,
-                          color: Colors.orange.shade300,
+                          color: Colors.orange.shade800,
                           fontWeight: FontWeight.w600),
                     ),
                   ),

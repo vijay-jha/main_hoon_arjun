@@ -138,6 +138,35 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         )
       ],
       child: Scaffold(
+<<<<<<< HEAD
+        
+        body: Container(
+          color: Colors.orange.shade50,
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                backgroundColor: Colors.orange.shade600,
+                expandedHeight: 240,
+                pinned: true,
+                flexibleSpace: FlexibleSpaceBar(
+                  // centerTitle: true,
+                  title: const Text(
+                    "Favorites",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  background: Image.asset(
+                    "assets/images/shrikrushnaArjun.jpg",
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              FavoritesItemList(shlok: shlok),
+            ],
+          ),
+        ),
+=======
         body: FutureBuilder(
             future: fetchUserFavorites(),
             builder: (context, snapshot) {
@@ -173,6 +202,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       ),
                     );
             }),
+>>>>>>> efb86b8f7d14e78b438478624fa2ec5b14ffe213
       ),
     );
   }

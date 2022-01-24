@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import './constants.dart';
@@ -8,15 +9,26 @@ import './screens/feed_screen.dart';
 import './screens/geeta_read_screen.dart';
 import './screens/homepage_screen.dart';
 import './screens/settings_screen.dart';
+import './providers/mahabharat_characters.dart';
 
 class NavigationFile extends StatefulWidget {
   static const routeName = '/navigation-file';
+
   @override
   _NavigationFileState createState() => _NavigationFileState();
 }
 
 class _NavigationFileState extends State<NavigationFile> {
   int _selectedIndex = 2;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Provider.of<MahabharatCharacters>(context, listen: false)
+        .getIndexFromLocal();
+  }
+
   void _navigateBottomBar(int index) {
     setState(() {
       _selectedIndex = index;
@@ -35,7 +47,7 @@ class _NavigationFileState extends State<NavigationFile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange.shade300,
+      backgroundColor: Colors.orange.shade50,
       body: _children[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: primaryTextC,

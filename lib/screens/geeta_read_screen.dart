@@ -14,6 +14,7 @@ class GeetaReadScreen extends StatelessWidget {
         title: const Text("Read Geeta"),
         actions: [ProfilePicture()],
       ),
+      backgroundColor: Colors.orange.shade50,
       body: GridView(
         clipBehavior: Clip.none,
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(

@@ -28,6 +28,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           'Settings',
         ),
       ),
+      
       body: FutureBuilder(
           future: FirebaseFirestore.instance
               .collection("users")
@@ -50,7 +51,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           radius: 70,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(70),
-                            child: Image.network(
+                            child: Image.asset(
                               Provider.of<MahabharatCharacters>(context)
                                   .getChosenAvatarLink(),
                               fit: BoxFit.cover,
