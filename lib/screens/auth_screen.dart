@@ -176,6 +176,7 @@ class _AuthScreenState extends State<AuthScreen>
             CurvedAnimation(parent: animationController, curve: Curves.linear));
 
     return Scaffold(
+      backgroundColor: Colors.orange.shade50,
       // resizeToAvoidBottomInset: false,
       body: Stack(
         children: [

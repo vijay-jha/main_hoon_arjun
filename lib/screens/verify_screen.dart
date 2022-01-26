@@ -91,7 +91,7 @@ class _VerifyScreenState extends State<VerifyScreen>
     });
 
     return Scaffold(
-      backgroundColor: Colors.white,
+backgroundColor: Colors.orange.shade50,
       body: Stack(children: [
         Positioned(
             top: -50,

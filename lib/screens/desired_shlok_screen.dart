@@ -4,7 +4,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
@@ -12,6 +11,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../widgets/translation_card.dart';
 import '../widgets/profile_picture.dart';
@@ -27,16 +28,39 @@ class DesiredShlokScreen extends StatefulWidget {
 }
 
 class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool isFavorite = false;
+  var _user, doc;
+  String currentShlok = 'Chapter02_Shlok03';
+
   final _controller = ScreenshotController();
 
   var shlok = """
                     कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।
 मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥
                       """;
-  var chapter = "Chap02";
-  var shlokNo = "Shlok03";
 
-  // statically playimg Chap02_Shlok03.mp3
+  @override
+  void initState() {
+    super.initState();
+
+    () async {
+      _user = FirebaseAuth.instance.currentUser;
+      doc = await FirebaseFirestore.instance
+          .collection('user_favorites')
+          .doc(_user.uid)
+          .get();
+
+      var data = doc.data();
+      var favoriteShloks = data['fav_sholks'];
+      if (favoriteShloks.contains(currentShlok)) {
+        setState(() {
+          isFavorite = true;
+        });
+      }
+    }();
+  }
+
   Future<String> getshlokUrl() async {
     return (await FirebaseStorage.instance
         .ref()
@@ -47,9 +71,40 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   }
 
   @override
-  void dispose() {
+  Future<void> dispose() async {
     super.dispose();
     SpeakerIcnBtn.player.stop();
+
+    if (!doc.exists) {
+      await FirebaseFirestore.instance
+          .collection('user_favorites')
+          .doc(_user.uid)
+          .set({
+        'fav_sholks': [currentShlok]
+      });
+    } else {
+      var data = doc.data();
+      var favoriteShloks = data['fav_sholks'];
+      if (isFavorite) {
+        if (!favoriteShloks.contains(currentShlok)) {
+          favoriteShloks.add(currentShlok);
+          await FirebaseFirestore.instance
+              .collection('user_favorites')
+              .doc(_user.uid)
+              .set({'fav_sholks': favoriteShloks});
+        }
+      } else {
+        favoriteShloks.remove(currentShlok);
+        await FirebaseFirestore.instance
+            .collection('user_favorites')
+            .doc(_user.uid)
+            .set({'fav_sholks': favoriteShloks});
+      }
+    }
+  }
+
+  void toggleFavShlok() {
+    isFavorite = !isFavorite;
   }
 
   @override
@@ -59,6 +114,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
     return Screenshot(
       controller: _controller,
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text("Shlok"),
           actions: [
@@ -68,7 +124,11 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
         backgroundColor: Colors.orange.shade50,
         body: ListView(
           children: [
-            ShlokCard(shlok: shlok),
+            ShlokCard(
+              shlok: shlok,
+              isFavorite: isFavorite,
+              toggleFavorite: toggleFavShlok,
+            ),
             SizedBox(
               height: _deviceSize.height * 0.05,
             ),

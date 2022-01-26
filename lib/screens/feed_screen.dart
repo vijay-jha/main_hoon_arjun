@@ -10,9 +10,9 @@ class FeedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundC,
+      backgroundColor:Colors.orange.shade50,
       appBar: AppBar(
-        backgroundColor: backgroundC,
+        backgroundColor: Colors.orange.shade50,
         elevation: 0,
         title: TextBox(),
         leading: GestureDetector(
@@ -38,7 +38,7 @@ class TextBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.centerLeft,
-      color: backgroundC,
+      color: Colors.orange.shade50,
       child: const TextField(
         decoration:
             InputDecoration(border: InputBorder.none, hintText: 'Search'),

@@ -24,7 +24,7 @@ class Adhyay extends StatelessWidget {
             const EdgeInsets.only(left: 11, top: 10, bottom: 10, right: 11),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Colors.orange.shade100,
             borderRadius: BorderRadius.circular(12),
             boxShadow: const [
               BoxShadow(
