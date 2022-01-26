@@ -28,7 +28,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           'Settings',
         ),
       ),
-      
+      backgroundColor: Colors.orange.shade50,
       body: FutureBuilder(
           future: FirebaseFirestore.instance
               .collection("users")

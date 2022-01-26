@@ -44,7 +44,7 @@ class _SignOutSplashScreenState extends State<SignOutSplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.orange.shade50,
       body: Stack(children: [
         Positioned(
           top: -50,

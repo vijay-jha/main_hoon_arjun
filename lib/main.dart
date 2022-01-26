@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:main_hoon_arjun/providers/favorite.dart';
 import 'package:main_hoon_arjun/widgets/speaker_icon_button.dart';
 import 'package:provider/provider.dart';
 
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (ctx) => MahabharatCharacters(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => FavoritesShlok(),
         ),
       ],
       child: MaterialApp(

@@ -24,6 +24,7 @@ class _LoginSplashState extends State<LoginSplash>
       if (status == AnimationStatus.completed) {
         Provider.of<MahabharatCharacters>(context, listen: false)
           .getIndexFromLocal();
+          Navigator.of(context).popUntil((route)=> route.isFirst);
         Navigator.of(context).pushReplacementNamed(NavigationFile.routeName);
       }
     });
@@ -38,7 +39,7 @@ class _LoginSplashState extends State<LoginSplash>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+backgroundColor: Colors.orange.shade50,
       body: Stack(children: [
         Positioned(
           top: -50,
