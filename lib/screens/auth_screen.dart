@@ -55,9 +55,9 @@ class _AuthScreenState extends State<AuthScreen>
                   'avatarIndex': 0,
                 });
               }
-                Provider.of<MahabharatCharacters>(context, listen: false)
+              Provider.of<MahabharatCharacters>(context, listen: false)
                   .saveAvatarTolocal();
-              
+
               Navigator.of(ctx).pushReplacement(
                 MaterialPageRoute(
                   builder: (ctx) => LoginSplash(),
@@ -85,7 +85,9 @@ class _AuthScreenState extends State<AuthScreen>
             return null;
           });
         } else {
-          authResult = await _auth
+          print(email);
+          print("-----------------------------------");
+           _auth
               .createUserWithEmailAndPassword(
             email: email,
             password: password,
@@ -105,23 +107,23 @@ class _AuthScreenState extends State<AuthScreen>
         }
       } on FirebaseAuthException catch (error) {
         switch (error.code) {
+          case "email-already-in-use":
+            errorMessage = "Already have an account. Try Login";
+            break;
           case "weak-password":
             errorMessage = "Please enter a strong password.";
             break;
-          case "invalid-email":
-            errorMessage = "Please enter a valid email address.";
-            break;
           case "wrong-password":
             errorMessage = "Your password is wrong.";
+            break;
+          case "invalid-email":
+            errorMessage = "Please enter a valid email address..............";
             break;
           case "user-not-found":
             errorMessage = "User with this email doesn't exist.";
             break;
           case "too-many-requests":
             errorMessage = "Too many requests. Try again later.";
-            break;
-          case "email-already-in-use":
-            errorMessage = "Already have an account. Try Login";
             break;
         }
         ScaffoldMessenger.of(ctx).showSnackBar(

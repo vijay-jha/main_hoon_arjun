@@ -12,23 +12,23 @@ class LoginSplash extends StatefulWidget {
 
 class _LoginSplashState extends State<LoginSplash>
     with TickerProviderStateMixin {
-  AnimationController _controller;
+AnimationController _controller;
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-    );
-    _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        Provider.of<MahabharatCharacters>(context, listen: false)
-          .getIndexFromLocal();
-          Navigator.of(context).popUntil((route)=> route.isFirst);
-        Navigator.of(context).pushReplacementNamed(NavigationFile.routeName);
-      }
-    });
-  }
+@override
+void initState() {
+  super.initState();
+  _controller = AnimationController(
+    vsync: this,
+  );
+  _controller.addStatusListener((status) {
+    if (status == AnimationStatus.completed) {
+      Provider.of<MahabharatCharacters>(context, listen: false)
+        .getIndexFromLocal();
+        Navigator.of(context).popUntil((route)=> route.isFirst);
+      Navigator.of(context).pushReplacementNamed(NavigationFile.routeName);
+    }
+  });
+}
 
   @override
   void dispose() {

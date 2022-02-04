@@ -227,7 +227,7 @@ class _RoundedInputState extends State<RoundedInput>
             }
             widget.submit(
               context,
-              _emailController.text,
+              _emailController.text.trim(),
               _passwordController.text,
               widget.isLogin,
             );
