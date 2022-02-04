@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/favorite_shlok.dart';
@@ -69,8 +70,8 @@ class _FavoritesBodyState extends State<FavoritesBody> {
     return SliverToBoxAdapter(
       child: Container(
         alignment: Alignment.center,
-        margin: EdgeInsets.only(top: _deviceSize.height * 0.30),
-        child: const CircularProgressIndicator(),
+        margin: EdgeInsets.only(top: _deviceSize.height * 0.27),
+        child: const LoadingSpinner(),
       ),
     );
   }
@@ -80,18 +81,21 @@ class _FavoritesBodyState extends State<FavoritesBody> {
       child: Container(
         alignment: Alignment.center,
         margin: EdgeInsets.only(
-          top: _deviceSize.height * 0.30,
+          top: _deviceSize.height * 0.12,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: const [
+            EmptyList(),
             Text(
-              " No Favorite Shlok",
+              " Add Some !",
               textAlign: TextAlign.center,
-            ),
-            Text(
-              " Add Some!",
-              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.orange,
+                fontWeight: FontWeight.w700,
+
+              ),
             ),
           ],
         ),
@@ -158,6 +162,99 @@ class _FavoritesItemListState extends State<FavoritesItemList> {
       delegate: SliverChildBuilderDelegate(
         (context, index) => FavoriteShlokItem(widget.shlok[index], index),
         childCount: widget.shlok.length,
+      ),
+    );
+  }
+}
+
+class EmptyList extends StatefulWidget {
+  const EmptyList();
+
+  @override
+  _EmptyListState createState() => _EmptyListState();
+}
+
+class _EmptyListState extends State<EmptyList> with TickerProviderStateMixin {
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 80),
+      child: Lottie.asset(
+        'assets/lottie/empty_list.json',
+        height: MediaQuery.of(context).size.height * 0.30,
+        controller: _controller,
+        animate: true,
+        onLoaded: (composition) {
+          _controller
+            ..duration = composition.duration
+            ..forward();
+        },
+      ),
+    );
+  }
+}
+
+class LoadingSpinner extends StatefulWidget {
+  const LoadingSpinner();
+
+  @override
+  _LoadingSpinnerState createState() => _LoadingSpinnerState();
+}
+
+class _LoadingSpinnerState extends State<LoadingSpinner> with TickerProviderStateMixin{
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+    );
+    _controller.addStatusListener((status) {
+    if (status == AnimationStatus.completed) {
+      _controller.repeat();
+    }
+  });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.33),
+      padding: const EdgeInsets.symmetric(horizontal: 80),
+      // decoration: BoxDecoration(border: Border.all(width: 1)),
+      child: Lottie.asset(
+        'assets/lottie/loading_orange.json',
+        height: MediaQuery.of(context).size.height * 0.10,
+        controller: _controller,
+        animate: true,
+        onLoaded: (composition) {
+          _controller
+            ..duration = composition.duration
+            ..forward();
+        },
       ),
     );
   }

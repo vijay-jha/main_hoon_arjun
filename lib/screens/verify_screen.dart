@@ -137,7 +137,7 @@ backgroundColor: Colors.orange.shade50,
                   !isVerified ? null : EdgeInsets.symmetric(horizontal: 80),
               child: !isVerified
                   ? Lottie.asset(
-                      'assets/lottie/loading.json', //change the path here
+                      'assets/lottie/verify_loading.json', //change the path here
                       controller: _controller,
                       height: MediaQuery.of(context).size.height * 0.33,
                       animate: true,
