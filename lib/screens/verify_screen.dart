@@ -91,7 +91,7 @@ class _VerifyScreenState extends State<VerifyScreen>
     });
 
     return Scaffold(
-      backgroundColor: Colors.white,
+backgroundColor: Colors.orange.shade50,
       body: Stack(children: [
         Positioned(
             top: -50,
@@ -137,7 +137,7 @@ class _VerifyScreenState extends State<VerifyScreen>
                   !isVerified ? null : EdgeInsets.symmetric(horizontal: 80),
               child: !isVerified
                   ? Lottie.asset(
-                      'assets/lottie/loading.json', //change the path here
+                      'assets/lottie/verify_loading.json', //change the path here
                       controller: _controller,
                       height: MediaQuery.of(context).size.height * 0.33,
                       animate: true,

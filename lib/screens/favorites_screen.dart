@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/favorite_shlok.dart';
 import '../widgets/speaker_icon_button.dart';
 import '../providers/playing_shlok.dart';
+import '../providers/favorite.dart';
 
 class FavoritesScreen extends StatefulWidget {
   static const String routeName = "/favorites-screen";
@@ -15,28 +17,13 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-//   List<Map<String, dynamic>> shlok = [
-//     {
-//       "Shlok": """
-// क्लैब्यं मा स्म गमः पार्थ नैतत्त्वय्युपपद्यते।
-// क्षुद्रं हृदयदौर्बल्यं त्यक्त्वोत्तिष्ठ परन्तप।।
-//                       """,
-//       "Audio": "",
-//       "Number": "अ.१, श्लोक.१",
-//       "Chapter": "Chapter02",
-//       "hlok": "Shlok03",
-//     },
-//   ];
-
   @override
   Widget build(BuildContext context) {
-    final _deviceSize = MediaQuery.of(context).size;
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (ctx) => PlayingShlok(),
-        )
+        ),
       ],
       child: Scaffold(
         backgroundColor: Colors.orange.shade50,
@@ -62,7 +49,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   ),
                 ),
               ),
-             const FavoritesBody(),
+              const FavoritesBody(),
             ],
           ),
         ),
@@ -79,84 +66,73 @@ class FavoritesBody extends StatefulWidget {
 }
 
 class _FavoritesBodyState extends State<FavoritesBody> {
-  List<Map<String, dynamic>> shlok = [];
-  var data1;
-  bool isLoading = true;
+  Widget loading(var _deviceSize) {
+    return SliverToBoxAdapter(
+      child: Container(
+        alignment: Alignment.center,
+        margin: EdgeInsets.only(top: _deviceSize.height * 0.27),
+        child: const LoadingSpinner(),
+      ),
+    );
+  }
 
-  Future<void> fetchUserFavorites() async {
-    final _user = FirebaseAuth.instance.currentUser;
+  Widget noFavorites(var _deviceSize) {
+    return SliverToBoxAdapter(
+      child: Container(
+        alignment: Alignment.center,
+        margin: EdgeInsets.only(
+          top: _deviceSize.height * 0.12,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: const [
+            EmptyList(),
+            Text(
+              " Add Some !",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.orange,
+                fontWeight: FontWeight.w700,
 
-    var userFavorite = await FirebaseFirestore.instance
-        .collection('user_favorites')
-        .doc(_user.uid)
-        .get();
-
-    if (userFavorite.exists) {
-      var data = userFavorite.data();
-      var favoriteShloks = data['fav_sholks'];
-
-      for (int i = 0; i < favoriteShloks.length; i++) {
-        var favorite = favoriteShloks[i];
-        var chapterAndShlok = favorite.split('_');
-        var allShloksFromChapter = await FirebaseFirestore.instance
-            .collection('Geeta')
-            .doc(chapterAndShlok[0])
-            .get();
-
-        print('-----------------------');
-        var data = allShloksFromChapter.data();
-        data1 = data['Shlok01']['meaning']['hindi'];
-        print('-----------------------');
-        var particularShlok = allShloksFromChapter[chapterAndShlok[1]];
-
-        shlok.add({
-          "Shlok": particularShlok['text'],
-          "Number":
-              "अ.${chapterAndShlok[0].substring(7)}, श्लोक.${chapterAndShlok[1].substring(5)}",
-          "Chapter": chapterAndShlok[0],
-          "ShlokNo": chapterAndShlok[1],
-        });
-      }
-    }
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final _deviceSize = MediaQuery.of(context).size;
-    return FutureBuilder(
-        future: fetchUserFavorites(),
-        builder: (context, snapshot) {
-          return snapshot.connectionState == ConnectionState.waiting
-              ? SliverToBoxAdapter(
-                  child: Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(top: _deviceSize.height * 0.30),
-                    child: const CircularProgressIndicator(),
-                  ),
-                )
-              : shlok.isEmpty
-                  ? SliverToBoxAdapter(
-                      child: Container(
-                        alignment: Alignment.center,
-                        margin: EdgeInsets.only(
-                          top: _deviceSize.height * 0.30,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            Text(
-                              " No Favorite Shlok",
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              " Add Some!",
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  : FavoritesItemList(shlok: shlok);
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('user_favorites')
+            .doc(FirebaseAuth.instance.currentUser.uid)
+            .snapshots(),
+        builder: (context, streamSnapShot) {
+          if (streamSnapShot.connectionState == ConnectionState.waiting) {
+            return loading(_deviceSize);
+          }
+          if (streamSnapShot.hasData) {
+            return FutureBuilder(
+                future: Provider.of<FavoritesShlok>(context, listen: false)
+                    .fetchFavoriteShlok(streamSnapShot.data),
+                builder: (context, snapshot) {
+                  return snapshot.connectionState == ConnectionState.waiting
+                      ? loading(_deviceSize)
+                      : Provider.of<FavoritesShlok>(context, listen: false)
+                              .shlok()
+                              .isEmpty
+                          ? noFavorites(_deviceSize)
+                          : FavoritesItemList(
+                              shlok: Provider.of<FavoritesShlok>(context,
+                                      listen: false)
+                                  .shlok());
+                });
+          }
+          return noFavorites(_deviceSize);
         });
   }
 }
@@ -186,6 +162,99 @@ class _FavoritesItemListState extends State<FavoritesItemList> {
       delegate: SliverChildBuilderDelegate(
         (context, index) => FavoriteShlokItem(widget.shlok[index], index),
         childCount: widget.shlok.length,
+      ),
+    );
+  }
+}
+
+class EmptyList extends StatefulWidget {
+  const EmptyList();
+
+  @override
+  _EmptyListState createState() => _EmptyListState();
+}
+
+class _EmptyListState extends State<EmptyList> with TickerProviderStateMixin {
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 80),
+      child: Lottie.asset(
+        'assets/lottie/empty_list.json',
+        height: MediaQuery.of(context).size.height * 0.30,
+        controller: _controller,
+        animate: true,
+        onLoaded: (composition) {
+          _controller
+            ..duration = composition.duration
+            ..forward();
+        },
+      ),
+    );
+  }
+}
+
+class LoadingSpinner extends StatefulWidget {
+  const LoadingSpinner();
+
+  @override
+  _LoadingSpinnerState createState() => _LoadingSpinnerState();
+}
+
+class _LoadingSpinnerState extends State<LoadingSpinner> with TickerProviderStateMixin{
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+    );
+    _controller.addStatusListener((status) {
+    if (status == AnimationStatus.completed) {
+      _controller.repeat();
+    }
+  });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.33),
+      padding: const EdgeInsets.symmetric(horizontal: 80),
+      // decoration: BoxDecoration(border: Border.all(width: 1)),
+      child: Lottie.asset(
+        'assets/lottie/loading_orange.json',
+        height: MediaQuery.of(context).size.height * 0.10,
+        controller: _controller,
+        animate: true,
+        onLoaded: (composition) {
+          _controller
+            ..duration = composition.duration
+            ..forward();
+        },
       ),
     );
   }

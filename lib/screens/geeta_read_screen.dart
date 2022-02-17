@@ -11,7 +11,7 @@ class GeetaReadScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Read Geeta"),
+        title: const Text("Shrimad Bhagavad Geeta"),
         actions: [ProfilePicture()],
       ),
       backgroundColor: Colors.orange.shade50,

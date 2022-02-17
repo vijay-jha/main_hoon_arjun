@@ -55,11 +55,13 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
                       listen: true,
                     ).getcureenshlokplaying() ==
                     widget.shlokIndex
-                ? const Icon(
+                ? Future.delayed( const Duration(milliseconds: 5000),() {
+                  const Icon(
                     Icons.pause_rounded,
                     size: 28,
                     color: Colors.black87,
-                  )
+                  );
+                })  
                 : const Icon(
                     Icons.volume_up_rounded,
                     size: 28,

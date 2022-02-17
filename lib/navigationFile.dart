@@ -50,29 +50,36 @@ class _NavigationFileState extends State<NavigationFile> {
       backgroundColor: Colors.orange.shade50,
       body: _children[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: primaryTextC,
+        backgroundColor: Colors.orange.shade100,
         currentIndex: _selectedIndex,
         onTap: _navigateBottomBar,
         type: BottomNavigationBarType.fixed,
         items: [
           BottomNavigationBarItem(
+
             icon: Icon(Icons.menu_book_outlined),
-            label: 'Read Geeta',
+            label: 'Geeta',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favorites',
+            activeIcon: Icon(Icons.favorite_rounded),
+            icon: Icon(Icons.favorite_border_rounded),
+            label: 'Favorite',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            activeIcon: Icon(Icons.home_rounded),
+            icon: Icon(Icons.home_outlined),
             label: 'Home',
+            
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.feed),
+            activeIcon: Icon(Icons.feed_rounded),
+            backgroundColor: Colors.red,
+            icon: Icon(Icons.feed_outlined),
             label: 'Feed',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            activeIcon: Icon(Icons.settings_rounded),
+            icon: Icon(Icons.settings_outlined),
             label: 'Settings',
           ),
         ],
