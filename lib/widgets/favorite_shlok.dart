@@ -18,11 +18,11 @@ class FavoriteShlokItem extends StatefulWidget {
 
 class _FavoritesShlokState extends State<FavoriteShlokItem> {
   var firestore = FirebaseFirestore.instance;
-  String s;
+  String shlokName;
   @override
   void initState() {
     super.initState();
-    s = "Chap" +
+    shlokName = "Chap" +
         widget.shlok["Chapter"].substring(7) +
         '_' +
         widget.shlok["ShlokNo"] +
@@ -34,7 +34,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
         .ref()
         .child('Shlok Audio Files')
         .child(widget.shlok["Chapter"])
-        .child(s)
+        .child(shlokName)
         .getDownloadURL());
   }
 
@@ -42,7 +42,14 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
     SpeakerIcnBtn.player.stop();
     Provider.of<PlayingShlok>(context, listen: false)
         .setcurrentshlokplaying(-1);
-    Navigator.of(context).pushNamed(DesiredShlokScreen.routeName);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DesiredShlokScreen(
+          shlokMap: widget.shlok,
+        ),
+      ),
+    );
   }
 
   @override
@@ -50,7 +57,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
     final _deviceSize = MediaQuery.of(context).size;
     return Card(
       margin: EdgeInsets.only(
-        top: _deviceSize.height * 0.02, //7.5,
+        top: _deviceSize.height * 0.02, // 7.5,
         bottom: _deviceSize.height * 0.008, // 7.5
         left: _deviceSize.width * 0.025, // 10
         right: _deviceSize.width * 0.025, // 10
@@ -148,7 +155,6 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
 
 class ShlokCard extends StatelessWidget {
   ShlokCard({@required this.shlok, this.deviceSize});
-
   final String shlok;
   final deviceSize;
 

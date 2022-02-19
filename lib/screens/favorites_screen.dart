@@ -94,7 +94,6 @@ class _FavoritesBodyState extends State<FavoritesBody> {
                 fontSize: 18,
                 color: Colors.orange,
                 fontWeight: FontWeight.w700,
-
               ),
             ),
           ],
@@ -217,7 +216,8 @@ class LoadingSpinner extends StatefulWidget {
   _LoadingSpinnerState createState() => _LoadingSpinnerState();
 }
 
-class _LoadingSpinnerState extends State<LoadingSpinner> with TickerProviderStateMixin{
+class _LoadingSpinnerState extends State<LoadingSpinner>
+    with TickerProviderStateMixin {
   AnimationController _controller;
 
   @override
@@ -227,10 +227,10 @@ class _LoadingSpinnerState extends State<LoadingSpinner> with TickerProviderStat
       vsync: this,
     );
     _controller.addStatusListener((status) {
-    if (status == AnimationStatus.completed) {
-      _controller.repeat();
-    }
-  });
+      if (status == AnimationStatus.completed) {
+        _controller.repeat();
+      }
+    });
   }
 
   @override
@@ -238,7 +238,7 @@ class _LoadingSpinnerState extends State<LoadingSpinner> with TickerProviderStat
     _controller.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
