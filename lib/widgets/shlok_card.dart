@@ -2,17 +2,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ShlokCard extends StatefulWidget {
   ShlokCard({
-    @required this.shlok,
+    @required this.currentShlok,
     @required this.isFavorite,
     @required this.toggleFavorite,
+    @required this.shlokNo,
+    @required this.chapterNo,
   });
 
-  final String shlok;
-  bool isFavorite;
+  final String currentShlok;
+  final String shlokNo;
+  final String chapterNo;
   final Function toggleFavorite;
+  bool isFavorite;
 
   @override
   State<ShlokCard> createState() => _ShlokCardState();
@@ -23,60 +28,51 @@ class _ShlokCardState extends State<ShlokCard> {
   Widget build(BuildContext context) {
     final _deviceSize = MediaQuery.of(context).size;
 
-    return Stack(
-      children: [
-        Card(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          margin: EdgeInsets.only(
-            top: _deviceSize.height * 0.07,
-            left: _deviceSize.width * 0.09,
-            right: _deviceSize.width * 0.09,
-          ),
-          child: shlokCard(_deviceSize),
-        ),
-        Positioned(
-          top: _deviceSize.height * 0.047,
-          right: _deviceSize.width * 0.04,
-          child: CircleAvatar(
-            backgroundColor: Colors.white,
-            child:
-                // IconButton(
-                //   onPressed:  () {
-                //     setState(() {
-                //       widget.toggleFavorite();
-                //       widget.isFavorite = !widget.isFavorite;
-                //     });
-                //   },
-                //   icon: Icon(
-                //       widget.isFavorite ? Icons.favorite : Icons.favorite_border),
-                //   color: Colors.red,
-                // ),
-                InkWell(
-              onTap: () {
-                setState(() {
-                  widget.toggleFavorite();
-                  widget.isFavorite = !widget.isFavorite;
-                });
-              },
-              child: LikeButton(
-                size: 23,
-                isLiked: widget.isFavorite,
-                likeBuilder: (isLiked) {
-                  final color = isLiked ? Colors.red : Colors.grey;
-                  return Icon(Icons.favorite, color: color, size: 25);
-                },
+    return FutureBuilder(
+        future: FirebaseFirestore.instance
+            .collection("Geeta")
+            .doc(widget.currentShlok.substring(0, 9))
+            .get(),
+        builder: (context, snapshot) {
+          return Stack(
+            children: [
+              Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                margin: EdgeInsets.only(
+                  top: _deviceSize.height * 0.07,
+                  left: _deviceSize.width * 0.09,
+                  right: _deviceSize.width * 0.09,
+                ),
+                child: shlokCard(_deviceSize, snapshot),
               ),
-            ),
-          ),
-        ),
-      ],
-    );
+              Positioned(
+                top: _deviceSize.height * 0.04,
+                right: _deviceSize.width * 0.04,
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        widget.toggleFavorite();
+                        widget.isFavorite = !widget.isFavorite;
+                      });
+                    },
+                    icon: Icon(widget.isFavorite
+                        ? Icons.favorite
+                        : Icons.favorite_border),
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
   }
 
-  Container shlokCard(Size _deviceSize) {
+  Container shlokCard(Size _deviceSize, AsyncSnapshot snapshot) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.orange.shade100,
@@ -97,7 +93,14 @@ class _ShlokCardState extends State<ShlokCard> {
           horizontal: _deviceSize.width * 0.09,
         ),
         child: Text(
-          widget.shlok.trim(),
+          snapshot.hasData
+              ? snapshot.data['Shlok${widget.shlokNo}']['text']
+              : '''
+........
+........
+........
+........
+          ''',
           style: TextStyle(
             color: Colors.orange.shade900,
             fontSize: 20,

@@ -48,6 +48,8 @@ dependencies:
   shared_preferences: ^2.0.12
   sqflite: ^2.0.2
   like_button: ^2.0.4
+  flutter_spinkit: ^5.1.0
+  http:
   
 
   # The following adds the Cupertino Icons font to your application.

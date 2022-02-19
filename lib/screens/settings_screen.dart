@@ -82,7 +82,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(
                   height: 50,
                 ),
-                // const Divider(),
                 InkWell(
                   onTap: () {
                     showDialog(

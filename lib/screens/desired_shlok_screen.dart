@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
@@ -22,6 +24,12 @@ import '../providers/playing_shlok.dart';
 
 class DesiredShlokScreen extends StatefulWidget {
   static const routeName = '/desiredShlok-screen';
+  
+  DesiredShlokScreen({this.emotions, this.shlokMap});
+
+  dynamic emotions;
+  Map<String, dynamic> shlokMap;
+
 
   @override
   State<DesiredShlokScreen> createState() => _DesiredShlokScreenState();
@@ -29,45 +37,35 @@ class DesiredShlokScreen extends StatefulWidget {
 
 class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool isFavorite = false;
-  var _user, doc;
-  String currentShlok = 'Chapter02_Shlok03';
-
   final _controller = ScreenshotController();
 
-  var shlok = """
-                    कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।
-मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥
-                      """;
+  var _user;
+  var doc;
+
+  String currentShlok;
+  String shlokNo;
+  String chapterNo;
+  bool isFavorite = false;
 
   @override
   void initState() {
     super.initState();
-
     () async {
       _user = FirebaseAuth.instance.currentUser;
       doc = await FirebaseFirestore.instance
           .collection('user_favorites')
           .doc(_user.uid)
           .get();
-
-      var data = doc.data();
-      var favoriteShloks = data['fav_sholks'];
-      if (favoriteShloks.contains(currentShlok)) {
-        setState(() {
-          isFavorite = true;
-        });
-      }
     }();
   }
 
   Future<String> getshlokUrl() async {
-    return (await FirebaseStorage.instance
+    return await FirebaseStorage.instance
         .ref()
         .child('Shlok Audio Files')
-        .child('Chapter02')
-        .child('Chap02_Shlok03.mp3')
-        .getDownloadURL());
+        .child(currentShlok.substring(0, 9))
+        .child('Chap${chapterNo}_Shlok$shlokNo.mp3')
+        .getDownloadURL();
   }
 
   @override
@@ -111,65 +109,113 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   Widget build(BuildContext context) {
     final _deviceSize = MediaQuery.of(context).size;
 
-    return Screenshot(
-      controller: _controller,
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          title: Text("Shlok"),
-          actions: [
-            ProfilePicture(),
-          ],
-        ),
-        backgroundColor: Colors.orange.shade50,
-        body: ListView(
-          children: [
-            ShlokCard(
-              shlok: shlok,
-              isFavorite: isFavorite,
-              toggleFavorite: toggleFavShlok,
-            ),
-            SizedBox(
-              height: _deviceSize.height * 0.05,
-            ),
-            ChangeNotifierProvider(
-              create: (ctx) => PlayingShlok(),
-              child: SpeakerIcnBtn(audioUrl: getshlokUrl(), shlokIndex: 0),
-            ),
-            SizedBox(
-              height: _deviceSize.height * 0.05,
-            ),
-            TranslationCard(),
-          ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: (int index) async {
-            if (index == 2) {
-              final image = await _controller.capture();
-              if (image != null) {
-                // await saveImage(image);
-                shareImage(image);
-              }
+    return FutureBuilder(
+        future: widget.emotions == null
+            ? FirebaseFirestore.instance
+                .collection('emotions')
+                .doc('Happy')
+                .get()
+            : FirebaseFirestore.instance
+                .collection('emotions')
+                .doc(widget.emotions['emotion'])
+                .get(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Scaffold(
+              body: Center(
+                child: SpinKitFadingCircle(
+                  color: Colors.orange,
+                ),
+              ),
+              backgroundColor: Colors.orange.shade50,
+            );
+          }
+          if (snapshot.hasData) {
+            if (widget.shlokMap != null) {
+              currentShlok =
+                  '${widget.shlokMap["Chapter"]}_${widget.shlokMap["ShlokNo"]}';
+              chapterNo = currentShlok.substring(7, 9);
+              shlokNo = currentShlok.substring(15);
             }
-          },
-          currentIndex: 1,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.comment),
-              label: "Comments",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.auto_awesome),
-              label: "Shlok",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.offline_share),
-              label: "Share Shlok",
-            ),
-          ],
-        ),
-      ),
-    );
+            if (widget.emotions != null) {
+              var allShloks = snapshot.data['shloks'];
+              currentShlok = allShloks[Random().nextInt(allShloks.length)];
+              chapterNo = currentShlok.substring(7, 9);
+              shlokNo = currentShlok.substring(15);
+            }
+
+            var docData = doc.data();
+            var favoriteShloks = docData['fav_sholks'];
+            if (favoriteShloks.contains(currentShlok)) {
+              isFavorite = true;
+            }
+          }
+          return Screenshot(
+            controller: _controller,
+            child: Scaffold(
+                key: _scaffoldKey,
+                appBar: AppBar(
+                  title: Text("Shlok"),
+                  actions: [
+                    ProfilePicture(),
+                  ],
+                ),
+                backgroundColor: Colors.orange.shade50,
+                body: ListView(
+                  children: [
+                    ShlokCard(
+                      currentShlok: currentShlok,
+                      isFavorite: isFavorite,
+                      toggleFavorite: toggleFavShlok,
+                      shlokNo: shlokNo,
+                      chapterNo: chapterNo,
+                    ),
+                    SizedBox(
+                      height: _deviceSize.height * 0.05,
+                    ),
+                    ChangeNotifierProvider(
+                      create: (ctx) => PlayingShlok(),
+                      child:
+                          SpeakerIcnBtn(audioUrl: getshlokUrl(), shlokIndex: 0),
+                    ),
+                    SizedBox(
+                      height: _deviceSize.height * 0.05,
+                    ),
+                    TranslationCard(
+                      currentShlok: currentShlok,
+                      shlokNo: shlokNo,
+                      chapterNo: chapterNo,
+                    ),
+                  ],
+                ),
+                bottomNavigationBar: BottomNavigationBar(
+                  onTap: (int index) async {
+                    if (index == 2) {
+                      final image = await _controller.capture();
+                      if (image != null) {
+                        // await saveImage(image);
+                        shareImage(image);
+                      }
+                    }
+                  },
+                  currentIndex: 1,
+                  items: const [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.comment),
+                      label: "Comments",
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.auto_awesome),
+                      label: "Shlok",
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.offline_share),
+                      label: "Share Shlok",
+                    ),
+                  ],
+                )),
+          );
+        });
   }
 
   Future<String> saveImage(Uint8List imageBytes) async {
