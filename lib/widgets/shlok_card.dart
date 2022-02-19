@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
+import 'package:like_button/like_button.dart';
 
 class ShlokCard extends StatefulWidget {
   ShlokCard({
@@ -37,20 +38,37 @@ class _ShlokCardState extends State<ShlokCard> {
           child: shlokCard(_deviceSize),
         ),
         Positioned(
-          top: _deviceSize.height * 0.04,
+          top: _deviceSize.height * 0.047,
           right: _deviceSize.width * 0.04,
           child: CircleAvatar(
             backgroundColor: Colors.white,
-            child: IconButton(
-              onPressed: () {
+            child:
+                // IconButton(
+                //   onPressed:  () {
+                //     setState(() {
+                //       widget.toggleFavorite();
+                //       widget.isFavorite = !widget.isFavorite;
+                //     });
+                //   },
+                //   icon: Icon(
+                //       widget.isFavorite ? Icons.favorite : Icons.favorite_border),
+                //   color: Colors.red,
+                // ),
+                InkWell(
+              onTap: () {
                 setState(() {
                   widget.toggleFavorite();
                   widget.isFavorite = !widget.isFavorite;
                 });
               },
-              icon: Icon(
-                  widget.isFavorite ? Icons.favorite : Icons.favorite_border),
-              color: Colors.red,
+              child: LikeButton(
+                size: 23,
+                isLiked: widget.isFavorite,
+                likeBuilder: (isLiked) {
+                  final color = isLiked ? Colors.red : Colors.grey;
+                  return Icon(Icons.favorite, color: color, size: 25);
+                },
+              ),
             ),
           ),
         ),
