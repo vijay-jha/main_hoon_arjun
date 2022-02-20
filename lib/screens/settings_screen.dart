@@ -87,6 +87,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     showDialog(
                       context: context,
                       builder: (_) => AlertDialog(
+                        backgroundColor: Colors.orange.shade50,
                         title: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [

@@ -67,6 +67,7 @@ class _AuthScreenState extends State<AuthScreen>
               showDialog(
                 context: context,
                 builder: (_) => AlertDialog(
+                  backgroundColor: Colors.orange.shade50,
                   content: Text("Please verify the email."),
                   actions: [
                     OutlinedButton(
@@ -85,8 +86,6 @@ class _AuthScreenState extends State<AuthScreen>
             return null;
           });
         } else {
-          print(email);
-          print("-----------------------------------");
            _auth
               .createUserWithEmailAndPassword(
             email: email,
