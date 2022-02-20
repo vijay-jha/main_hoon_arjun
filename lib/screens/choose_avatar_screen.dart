@@ -48,44 +48,61 @@ class _DisplayAvatarState extends State<DisplayAvatar> {
           Align(
             alignment: Alignment.topCenter,
             child: Container(
-              margin: EdgeInsets.symmetric(vertical: _deviceSize.height * 0.035),
+              margin:
+                  EdgeInsets.symmetric(vertical: _deviceSize.height * 0.035),
               child: Text(
                 Provider.of<MahabharatCharacters>(context, listen: true)
                     .getChosenAvatarName(),
                 style: const TextStyle(
                   color: Colors.orange,
                   fontSize: 30,
-                  
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
-          Center(
-            child: Container(
-              margin: EdgeInsets.only(
-                top: _deviceSize.height * 0.0015,
-              ),
-              height: _deviceSize.height * 0.65,
-              child: Image.asset(
-                Provider.of<MahabharatCharacters>(context, listen: true)
-                    .getChosenAvatarLink(),
-                fit: BoxFit.none,
+          InkWell(
+            onTap: _onTapAvatar,
+            child: Center(
+              child: Container(
+                margin: EdgeInsets.only(
+                  top: _deviceSize.height * 0.0015,
+                ),
+                height: _deviceSize.height * 0.65,
+                child: Image.asset(
+                  Provider.of<MahabharatCharacters>(context, listen: true)
+                      .getChosenAvatarLink(),
+                  fit: BoxFit.none,
+                ),
               ),
             ),
           ),
           SizedBox(
             height: _deviceSize.height * 0.05,
           ),
-          TextButton(
+          ElevatedButton(
             style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
-            ),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+            )),
             onPressed: _onTapAvatar,
-            child: Text(
-              "Change Your Avatar",
-              style: TextStyle(fontSize: 20),
-            ),
+            child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(children: const [
+                  TextSpan(
+                    text: "Change Your Avatar\t",
+                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  ),
+                  WidgetSpan(
+                    child: Icon(
+                      Icons.arrow_forward,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+                ])),
           ),
         ],
       ),
@@ -236,41 +253,73 @@ class _FilterSelectorState extends State<FilterSelector> {
   }
 
   void _onAvatarSelect() async {
-    await AnimatedDialogBox.showScaleAlertBox(
-        title: const Center(child: Text("Avatar")), // IF YOU WANT TO ADD
-        context: context,
-        firstButton: MaterialButton(
-          // FIRST BUTTON IS REQUIRED
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
-          ),
-          color: Colors.white,
-          child: const Text('Ok'),
-          onPressed: () {
-            widget.onSelectAvatar(
-              currentIndexForSelect,
-            );
-            Navigator.of(context).pop();
-            Navigator.of(context).pop();
-          },
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: Colors.orange.shade50,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text("Change Avatar"),
+            Divider(
+              thickness: 1,
+            ),
+          ],
         ),
-        secondButton: MaterialButton(
-          // OPTIONAL BUTTON
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
-          ),
-          color: Colors.white,
-          child: const Text('Cancel'),
-          onPressed: () {
-            Navigator.of(context).pop();
-            // Navigator.of(context).pop();
-          },
-        ),
-        icon: const Icon(
-          Icons.info_outline,
-          color: Colors.red,
-        ), // IF YOU WANT TO ADD ICON
-        yourWidget: Text('Are you Sure you want to Change Avatar'));
+        content: Text("Are you Sure you want to Change Avatar?"),
+        actions: [
+          OutlinedButton(
+              onPressed: () async {
+                await Future.delayed(Duration(milliseconds: 200));
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel")),
+          OutlinedButton(
+              onPressed: () async {
+                await Future.delayed(Duration(milliseconds: 200));
+                widget.onSelectAvatar(
+                  currentIndexForSelect,
+                );
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              child: Text("Yes")),
+        ],
+      ),
+    );
+
+    // await AnimatedDialogBox.showScaleAlertBox(
+    //     title: const Center(child: Text("Avatar")), // IF YOU WANT TO ADD
+    //     context: context,
+    //     firstButton: MaterialButton(
+    //       shape: RoundedRectangleBorder(
+    //         borderRadius: BorderRadius.circular(40),
+    //       ),
+    //       color: Colors.white,
+    //       child: const Text('Cancel'),
+    //       onPressed: () {
+    //         Navigator.of(context).pop();
+    //       },
+    //     ),
+    //     secondButton: MaterialButton(
+    //       shape: RoundedRectangleBorder(
+    //         borderRadius: BorderRadius.circular(40),
+    //       ),
+    //       color: Colors.white,
+    //       child: const Text('Ok'),
+    //       onPressed: () {
+    //         widget.onSelectAvatar(
+    //           currentIndexForSelect,
+    //         );
+    //         Navigator.of(context).pop();
+    //         Navigator.of(context).pop();
+    //       },
+    //     ),
+    //     icon: const Icon(
+    //       Icons.info_outline,
+    //       color: Colors.red,
+    //     ), // IF YOU WANT TO ADD ICON
+    //     yourWidget: Text('Are you Sure you want to Change Avatar'));
   }
 
   @override

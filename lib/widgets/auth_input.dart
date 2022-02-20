@@ -56,24 +56,6 @@ class _RoundedInputState extends State<RoundedInput>
     Size size = MediaQuery.of(context).size;
     return Column(
       children: [
-        // if (!widget.isLogin)
-        // InputContainer(
-        //   child: TextField(
-        //     controller: _usernameController,
-        //     cursorColor: primaryTextC,
-        //     keyboardType: TextInputType.emailAddress,
-        //     decoration: InputDecoration(
-        //       icon: Icon(
-        //         Icons.person,
-        //         color: widget.iconColor,
-        //       ),
-        //       hintText: "Name",
-        //       hintStyle: TextStyle(color: widget.textColor),
-        //       border: InputBorder.none,
-        //     ),
-        //     style: TextStyle(color: widget.textColor),
-        //   ),
-        // ),
         InputContainer(
           child: TextField(
             controller: _emailController,
@@ -151,6 +133,7 @@ class _RoundedInputState extends State<RoundedInput>
                   showDialog(
                     context: context,
                     builder: (_) => AlertDialog(
+                      backgroundColor: Colors.orange.shade50,
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [

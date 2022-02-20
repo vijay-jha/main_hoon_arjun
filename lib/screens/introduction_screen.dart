@@ -29,7 +29,7 @@ class _IntroductionScreensState extends State<IntroductionScreens> {
         image: Lottie.asset("assets/lottie/mobile_tap.json"),
         title: "Complete Geeta\nOn Your Own Mobile",
         body: "",
-        footer: const Text("Click on Done to Begin"),
+        footer: const Text("Click on Done to Begin", style: TextStyle(color: Colors.orange),),
       ),
     ];
   }
@@ -41,14 +41,14 @@ class _IntroductionScreensState extends State<IntroductionScreens> {
         done: const Text(
           'Done',
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.orange,
           ),
         ),
         onDone: () {
           Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
         },
         pages: getPages(),
-        globalBackgroundColor: Colors.white,
+        globalBackgroundColor: Colors.orange.shade50,
         showDoneButton: true,
         showSkipButton: true,
         showNextButton: true,
