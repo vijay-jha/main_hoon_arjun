@@ -127,6 +127,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       'Sign out',
                       style: TextStyle(
                         fontSize: 20,
+                        color: Colors.orange,
                       ),
                       textAlign: TextAlign.start,
                     ),
@@ -154,6 +155,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Navigator.pushNamed(ctx, DisplayAvatar.routeName);
         } else {
           showModalBottomSheet(
+              backgroundColor: Colors.orange.shade50,
               context: ctx,
               builder: (BuildContext context) {
                 return Column(
@@ -227,6 +229,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               choice,
               style: TextStyle(
                 fontSize: 20,
+                color: Colors.orange
               ),
             ),
             Icon(Icons.chevron_right),
