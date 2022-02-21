@@ -19,6 +19,7 @@ import '../widgets/profile_picture.dart';
 import '../widgets/shlok_card.dart';
 import '../widgets/speaker_icon_button.dart';
 import '../providers/playing_shlok.dart';
+import 'comment_screen.dart';
 
 class DesiredShlokScreen extends StatefulWidget {
   static const routeName = '/desiredShlok-screen';
@@ -32,6 +33,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   bool isFavorite = false;
   var _user, doc;
   String currentShlok = 'Chapter02_Shlok03';
+  var _selectedIndex;
 
   final _controller = ScreenshotController();
 
@@ -111,6 +113,12 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   Widget build(BuildContext context) {
     final _deviceSize = MediaQuery.of(context).size;
 
+    void _navigateBottomBar(int index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+
     return Screenshot(
       controller: _controller,
       child: Scaffold(
@@ -149,8 +157,12 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
               if (image != null) {
                 // await saveImage(image);
                 shareImage(image);
-              }
+              } 
             }
+            else if (index == 0) {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CommentScreen(currentShloK : currentShlok)));
+              }
           },
           currentIndex: 1,
           items: const [
