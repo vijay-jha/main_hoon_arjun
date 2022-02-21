@@ -1,17 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:main_hoon_arjun/widgets/shareImage.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,12 +19,11 @@ import '../providers/playing_shlok.dart';
 
 class DesiredShlokScreen extends StatefulWidget {
   static const routeName = '/desiredShlok-screen';
-  
+
   DesiredShlokScreen({this.emotions, this.shlokMap});
 
   dynamic emotions;
   Map<String, dynamic> shlokMap;
-
 
   @override
   State<DesiredShlokScreen> createState() => _DesiredShlokScreenState();
@@ -173,10 +167,17 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                     SizedBox(
                       height: _deviceSize.height * 0.05,
                     ),
-                    ChangeNotifierProvider(
-                      create: (ctx) => PlayingShlok(),
-                      child:
-                          SpeakerIcnBtn(audioUrl: getshlokUrl(), shlokIndex: 0),
+                    Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: _deviceSize.width * 0.42),
+                      child: ChangeNotifierProvider(
+                        create: (ctx) => PlayingShlok(),
+                        child: SpeakerIcnBtn(
+                          audioUrl: getshlokUrl(),
+                          shlokIndex: 0,
+                          isDesired: true,
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: _deviceSize.height * 0.05,
@@ -194,7 +195,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                       final image = await _controller.capture();
                       if (image != null) {
                         // await saveImage(image);
-                        shareImage(image);
+                        ShareImage.shareImage(image);
                       }
                     }
                   },
@@ -216,23 +217,5 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                 )),
           );
         });
-  }
-
-  Future<String> saveImage(Uint8List imageBytes) async {
-    await [Permission.storage].request();
-    final time = DateTime.now()
-        .toIso8601String()
-        .replaceAll('', '-')
-        .replaceAll(':', '-');
-    final name = 'screenshot_$time';
-    final result = await ImageGallerySaver.saveImage(imageBytes, name: name);
-    return result['filePath'];
-  }
-
-  Future shareImage(Uint8List bytes) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final image = File('${directory.path}/flutter.png');
-    image.writeAsBytesSync(bytes);
-    await Share.shareFiles([image.path]);
   }
 }

@@ -157,6 +157,7 @@ class _FavoritesItemListState extends State<FavoritesItemList> {
 
   @override
   Widget build(BuildContext context) {
+    
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) => FavoriteShlokItem(widget.shlok[index], index),

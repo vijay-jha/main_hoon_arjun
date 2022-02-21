@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:screenshot/screenshot.dart';
 
+import './shareImage.dart';
 import './speaker_icon_button.dart';
 import '../screens/desired_shlok_screen.dart';
+
 import '../providers/playing_shlok.dart';
 
 class FavoriteShlokItem extends StatefulWidget {
@@ -17,6 +20,7 @@ class FavoriteShlokItem extends StatefulWidget {
 }
 
 class _FavoritesShlokState extends State<FavoriteShlokItem> {
+  final _controller = ScreenshotController();
   var firestore = FirebaseFirestore.instance;
   String shlokName;
   @override
@@ -55,98 +59,105 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
   @override
   Widget build(BuildContext context) {
     final _deviceSize = MediaQuery.of(context).size;
-    return Card(
-      margin: EdgeInsets.only(
-        top: _deviceSize.height * 0.02, // 7.5,
-        bottom: _deviceSize.height * 0.008, // 7.5
-        left: _deviceSize.width * 0.025, // 10
-        right: _deviceSize.width * 0.025, // 10
-      ),
-      color: Colors.orange.shade100,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25),
-      ),
-      elevation: 3,
-      child: Container(
-        // height: _deviceSize.height * 0.300, //240
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(25)),
+    return Screenshot(
+      controller: _controller,
+      child: Card(
+        margin: EdgeInsets.only(
+          top: _deviceSize.height * 0.02, // 7.5,
+          bottom: _deviceSize.height * 0.008, // 7.5
+          left: _deviceSize.width * 0.025, // 10
+          right: _deviceSize.width * 0.025, // 10
         ),
-        child: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(),
-              margin: EdgeInsets.only(
-                top: _deviceSize.height * 0.009, // 10
-                bottom: 0,
-              ),
-              padding: EdgeInsets.only(
-                left: _deviceSize.width * 0.063, // 25
-                right: _deviceSize.width * 0.040, // 18
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      widget.shlok["Number"],
-                      style: TextStyle(
-                          fontSize: 17,
-                          color: Colors.orange.shade800,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: const Icon(
-                      Icons.more_vert,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            InkWell(
-              onTap: _onTapShlok,
-              child: Container(
+        color: Colors.orange.shade100,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25),
+        ),
+        elevation: 3,
+        child: Container(
+          // height: _deviceSize.height * 0.300, //240
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+          ),
+          child: Column(
+            children: [
+              Container(
                 margin: EdgeInsets.only(
-                  left: _deviceSize.width * 0.035, //14
-                  top: _deviceSize.height * 0.005, //5,
-                  right: _deviceSize.width * 0.035, //14
-                  bottom: _deviceSize.height * 0.005, //5,
+                  top: _deviceSize.height * 0.009, // 10
                 ),
-                child: ShlokCard(
-                  shlok: widget.shlok["Shlok"],
-                  deviceSize: _deviceSize,
+                padding: EdgeInsets.only(
+                  left: _deviceSize.width * 0.063, // 25
+                  right: _deviceSize.width * 0.06, // 18
                 ),
-                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        widget.shlok["Number"],
+                        style: TextStyle(
+                            fontSize: 17,
+                            color: Colors.orange.shade800,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        final image = await _controller.capture();
+                        if (image != null) {
+                          // await saveImage(image);
+                          ShareImage.shareImage(image);
+                        }
+                      },
+                      child:  Icon(
+                        Icons.offline_share_rounded,
+                        color: Colors.orange.shade800,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.only(
-                left: _deviceSize.width * 0.140, // 55
-                right: _deviceSize.width * 0.140, // 55
-                bottom: _deviceSize.height * 0.009, //6
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // shlok numbering Lable
-                  Container(
-                    child: CommentsButton(deviceSize: _deviceSize),
-                    alignment: Alignment.center,
+              InkWell(
+                onTap: _onTapShlok,
+                child: Container(
+                  margin: EdgeInsets.only(
+                    left: _deviceSize.width * 0.035, //14
+                    top: _deviceSize.height * 0.005, //5,
+                    right: _deviceSize.width * 0.035, //14
+                    // bottom: _deviceSize.height * 0.005, //5,
                   ),
+                  child: ShlokCard(
+                    shlok: widget.shlok["Shlok"],
+                    deviceSize: _deviceSize,
+                  ),
+                  width: double.infinity,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                  left: _deviceSize.width * 0.140, // 55
+                  right: _deviceSize.width * 0.140, // 55
+                  // bottom: _deviceSize.height * 0.009, //6
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // shlok numbering Lable
+                    Container(
+                      child: CommentsButton(deviceSize: _deviceSize),
+                      alignment: Alignment.center,
+                    ),
 
-                  SpeakerIcnBtn(
-                    audioUrl: getshlokUrl(),
-                    shlokIndex: widget.shlokIndex,
-                  ),
-                ],
+                    SpeakerIcnBtn(
+                      audioUrl: getshlokUrl(),
+                      shlokIndex: widget.shlokIndex,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -166,14 +177,15 @@ class ShlokCard extends StatelessWidget {
       ),
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: deviceSize.width * 0.048, //19,
+          horizontal: deviceSize.width * 0.065, //19,
+          vertical: deviceSize.height * 0.01,
         ),
         height: deviceSize.height * 0.180, // 165
         alignment: Alignment.center,
         child: Text(
           shlok.trim(),
           style: TextStyle(
-            fontSize: deviceSize.height * 0.029,
+            fontSize: deviceSize.height * 0.027,
             color: Colors.orange.shade800,
           ),
           textAlign: TextAlign.center,
@@ -202,7 +214,7 @@ class CommentsButton extends StatelessWidget {
           bottom: deviceSize.height * 0.005, //5,
         ),
         decoration: const BoxDecoration(
-          color: Colors.amber,
+          // color: Colors.amber,
           borderRadius: BorderRadius.all(
             Radius.circular(16),
           ),
