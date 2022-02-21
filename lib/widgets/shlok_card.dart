@@ -49,21 +49,28 @@ class _ShlokCardState extends State<ShlokCard> {
                 child: shlokCard(_deviceSize, snapshot),
               ),
               Positioned(
-                top: _deviceSize.height * 0.04,
-                right: _deviceSize.width * 0.04,
+                top: _deviceSize.height * 0.047,
+                right: _deviceSize.width * 0.042,
                 child: CircleAvatar(
                   backgroundColor: Colors.white,
-                  child: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        widget.toggleFavorite();
-                        widget.isFavorite = !widget.isFavorite;
-                      });
-                    },
-                    icon: Icon(widget.isFavorite
-                        ? Icons.favorite
-                        : Icons.favorite_border),
-                    color: Colors.red,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 3, top: 3),
+                    child: LikeButton(
+                      size: _deviceSize.width * 0.07,
+                      isLiked: widget.isFavorite,
+                      likeBuilder: (isLiked) {
+                        final color = isLiked ? Colors.red : Colors.grey;
+                        return Icon(Icons.favorite_outlined,
+                            color: color, size: 25);
+                      },
+                      onTap: (isLiked) async {
+                        setState(() {
+                          widget.toggleFavorite();
+                          widget.isFavorite = !widget.isFavorite;
+                        });
+                        return !isLiked;
+                      },
+                    ),
                   ),
                 ),
               ),
