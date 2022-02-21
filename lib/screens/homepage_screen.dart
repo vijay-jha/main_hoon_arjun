@@ -1,12 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
-// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import 'dart:convert';
 
 import './desired_shlok_screen.dart';
 import '../widgets/profile_picture.dart';
-import '../providers/mahabharat_characters.dart';
+import '../api.dart' as api;
+import '../constants.dart' show FEELING_API;
 
 class HomepageScreen extends StatefulWidget {
   static const routeName = '/homepage-screen';
@@ -17,35 +19,26 @@ class HomepageScreen extends StatefulWidget {
 class _HomepageScreenState extends State<HomepageScreen>
     with TickerProviderStateMixin {
   FocusNode inputNode = FocusNode();
-   
-   @override
+  bool isLoading = false;
+
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    //  Provider.of<MahabharatCharacters>(context, listen: false)
-    //       .getIndexFromLocal();
   }
+
   void openKeyboard() {
     FocusScope.of(context).requestFocus(inputNode);
   }
 
-  // Future<void> onRetrive() async {
-  //   var allShloksFromChapter = await FirebaseFirestore.instance
-  //       .collection('Geeta')
-  //       .doc('Chapter01')
-  //       .get();
-  //   var data = allShloksFromChapter.data();
-  //   data1 = data['Shlok01']['meaning']['hindi'];
-  // }
-
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Main Hoon Arjun"),
         actions: [ProfilePicture()],
       ),
-      
       body: Column(children: [
         Container(
           decoration: BoxDecoration(
@@ -55,9 +48,46 @@ class _HomepageScreenState extends State<HomepageScreen>
           ),
           margin: EdgeInsets.symmetric(vertical: 50, horizontal: 15),
           child: TextField(
-            onSubmitted: (feeling) {
+            onSubmitted: (feeling) async {
+              FocusScope.of(context).unfocus();
+              await Future.delayed(const Duration(milliseconds: 500), () {});
+              setState(() {
+                isLoading = true;
+              });
               if (feeling.isNotEmpty) {
-                Navigator.pushNamed(context, DesiredShlokScreen.routeName);
+                var url = Uri.parse('$FEELING_API/feeling?query=' + feeling);
+                var data = await api.getData(url);
+                var decodedData = json.decode(data);
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        DesiredShlokScreen(emotions: decodedData),
+                  ),
+                );
+                setState(() {
+                  isLoading = false;
+                });
+              } else {
+                setState(() {
+                  isLoading = false;
+                });
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    backgroundColor: Colors.orange.shade50,
+                    content: Text("Please enter something about your feeling."),
+                    actions: [
+                      OutlinedButton(
+                          onPressed: () async {
+                            await Future.delayed(Duration(milliseconds: 200));
+                            Navigator.of(context).pop();
+                          },
+                          child: Text("Okay")),
+                    ],
+                  ),
+                );
               }
             },
             focusNode: inputNode,
@@ -76,14 +106,17 @@ class _HomepageScreenState extends State<HomepageScreen>
             // autofocus: true,
             style: TextStyle(fontSize: 20, color: Colors.teal),
           ),
-        )
+        ),
+        if (isLoading)
+          SizedBox(
+            height: _deviceSize.height / 6.5,
+          ),
+        if (isLoading)
+          SpinKitFadingCircle(
+            color: Colors.orange,
+          ),
       ]),
       backgroundColor: Colors.transparent,
     );
   }
 }
-
-// Todo 
-// 1) Add bottombarNavigation
-// 2) Save the text/feeling
-// 3) And clear the input field after onSubmitted

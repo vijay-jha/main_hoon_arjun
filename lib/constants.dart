@@ -9,3 +9,6 @@ const kBackgroundC = Color(0xFF37323E);
 const backgroundC = Color(0xFFFF521B);
 const primaryTextC = Color(0xFF37323E);
 const secondaryC = Color(0xFFffe626);
+
+// Feeling Api
+const FEELING_API = 'https://mainhoonarjun.herokuapp.com';

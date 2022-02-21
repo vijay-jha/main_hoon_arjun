@@ -23,8 +23,6 @@ class GeetaReadScreen extends StatelessWidget {
     data.sort((a, b) => a.toString().compareTo(b.toString()));
 
     for (var i = 0; i < data.length; i++) {
-      // print(adhyay.get(data[i]));
-      // mainData = Map<String, dynamic>.from(adhyay.get(data[i]));
       finalData.insert(i,Map<String, dynamic>.from(adhyay.get(data[i])));
     }
     
