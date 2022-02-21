@@ -25,8 +25,6 @@ class _AdhyayOverviewScreenState extends State<AdhyayOverviewScreen> {
   // var chapterdata = <Map<String, dynamic>>[];
   // var shlokList = <String>[];
 
-  
-
   PageController controller = PageController(initialPage: 0);
   int pagechanged = 1;
   bool _isVisible = false;
@@ -59,6 +57,8 @@ class _AdhyayOverviewScreenState extends State<AdhyayOverviewScreen> {
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(65.0),
             child: BuildAppBar(
+              chapterData: widget.chapterData,
+              shlokList: widget.shlokList,
               controller: controller,
               adhyayName: widget.adhyayName,
               adhyayNumber: widget.title,
@@ -96,7 +96,7 @@ class _AdhyayOverviewScreenState extends State<AdhyayOverviewScreen> {
           ),
           Visibility(
             child: SlideIndicator(
-                totalShloks: widget.totalShloks, currentShlok: pagechanged),
+                totalShloks: widget.shlokList.length, currentShlok: pagechanged),
             visible: _isVisible,
           ),
         ]),
@@ -140,10 +140,14 @@ class BuildAppBar extends StatelessWidget {
     @required this.controller,
     @required this.adhyayName,
     @required this.adhyayNumber,
+    @required this.chapterData,
+    @required this.shlokList
   }) : super(key: key);
 
   final String adhyayName;
   final String adhyayNumber;
+  final  List<Map<String, dynamic>> chapterData;
+  final List<String> shlokList;
 
   @override
   Widget build(BuildContext context) {
@@ -187,6 +191,8 @@ class BuildAppBar extends StatelessWidget {
                     context: context,
                     builder: (BuildContext context) {
                       return ShlokSelection(
+                        chapterData: chapterData,
+                        shlokList: shlokList,
                         pageController: controller,
                       );
                     });

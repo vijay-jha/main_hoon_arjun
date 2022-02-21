@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class ShlokSelection extends StatefulWidget {
   final PageController pageController;
-  const ShlokSelection({@required this.pageController, Key key})
+  final  List<Map<String, dynamic>> chapterData;
+  final List<String> shlokList;
+  const ShlokSelection({@required this.pageController,this.chapterData,this.shlokList, Key key})
       : super(key: key);
 
   @override
@@ -73,7 +75,7 @@ class _ShlokSelectionState extends State<ShlokSelection>
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(
                               maxCrossAxisExtent: 50),
-                      itemCount: 20,
+                      itemCount: widget.shlokList.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
@@ -91,7 +93,7 @@ class _ShlokSelectionState extends State<ShlokSelection>
                             margin: const EdgeInsets.all(6),
                             padding: const EdgeInsets.all(8),
                             child: Text(
-                              (index + 1).toString(),
+                               widget.shlokList[index].substring(5),
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   color: Colors.white,
