@@ -12,7 +12,7 @@ class SpeakerIcnBtn extends StatefulWidget {
     this.isDesired = false,
   }) : super(key: key);
 
-  final isDesired;
+  final bool isDesired;
   final int shlokIndex;
   final Future<String> audioUrl;
   static AudioPlayer player = AudioPlayer(mode: PlayerMode.MEDIA_PLAYER);
@@ -22,7 +22,7 @@ class SpeakerIcnBtn extends StatefulWidget {
 }
 
 class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
-  bool isLoading = false;
+  bool isLoading = true;
   @override
   Widget build(BuildContext context) {
     var playingShlok = Provider.of<PlayingShlok>(context, listen: false);
@@ -102,7 +102,6 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
       setState(() {
         isLoading = false;
       });
-      return null;
     });
 
     if (result == 1) {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +7,6 @@ import 'package:screenshot/screenshot.dart';
 import './shareImage.dart';
 import './speaker_icon_button.dart';
 import '../screens/desired_shlok_screen.dart';
-
 import '../providers/playing_shlok.dart';
 
 class FavoriteShlokItem extends StatefulWidget {
@@ -23,6 +21,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
   final _controller = ScreenshotController();
   var firestore = FirebaseFirestore.instance;
   String shlokName;
+  
   @override
   void initState() {
     super.initState();
@@ -99,7 +98,8 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
                         style: TextStyle(
                             fontSize: 17,
                             color: Colors.orange.shade800,
-                            fontWeight: FontWeight.w600),
+                            fontWeight: FontWeight.w600,
+                            ),
                       ),
                     ),
                     InkWell(
