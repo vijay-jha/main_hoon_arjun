@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 
 import '../providers/playing_shlok.dart';
 
@@ -28,10 +28,49 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
   @override
   void initState() {
     super.initState();
-    SpeakerIcnBtn.player = AudioPlayer(mode: PlayerMode.MEDIA_PLAYER);
+    SpeakerIcnBtn.player = AudioPlayer();
     () async {
       url = await widget.audioUrl;
     }();
+  }
+
+  Widget playingAudio() {
+    return FutureBuilder(
+        future: SpeakerIcnBtn.player.setUrl(url),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting)
+            return CircularProgressIndicator();
+          return StreamBuilder(
+              stream: SpeakerIcnBtn.player.playerStateStream,
+              builder: (context, snapshot) {
+                final playerState = snapshot.data;
+                final processingState = playerState?.processingState;
+                final playing = playerState?.playing;
+
+                if (processingState == ProcessingState.loading ||
+                    processingState == ProcessingState.buffering)
+                  return CircularProgressIndicator();
+                if (playing != true) {
+                  SpeakerIcnBtn.player.play();
+                } else if (processingState == ProcessingState.ready) {
+                  return Icon(
+                    Icons.pause_circle_outline_rounded,
+                    color: Colors.orange.shade900,
+                    size: 33,
+                  );
+                } else if (playing == true &&
+                    processingState == ProcessingState.idle) {
+                  SpeakerIcnBtn.player.dispose();
+                  SpeakerIcnBtn.player = AudioPlayer();
+                  return playingAudio();
+                }
+                return Icon(
+                  Icons.pause_circle_outline_rounded,
+                  color: Colors.orange.shade900,
+                  size: 33,
+                );
+              });
+        });
   }
 
   @override
@@ -39,16 +78,10 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
     var playingShlok = Provider.of<PlayingShlok>(context, listen: false);
     final _deviceSize = MediaQuery.of(context).size;
 
-    void _onTap(context) {
+    void _onTap() {
       if (playingShlok.getCureentShlokPlay() != widget.shlokIndex) {
         SpeakerIcnBtn.player.stop();
         playingShlok.setCurrentshlokPlaying(widget.shlokIndex);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('It might take few seconds to load! 😇'),
-            backgroundColor: Colors.orange,
-          ),
-        );
       } else {
         playingShlok.setCurrentshlokPlaying(-1);
         SpeakerIcnBtn.player.stop();
@@ -62,7 +95,7 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
           borderRadius: BorderRadius.all(Radius.circular(25)),
         ),
         child: InkWell(
-          onTap: () => _onTap(context),
+          onTap: _onTap,
           child: Container(
             width: 55,
             padding: EdgeInsets.symmetric(
@@ -81,42 +114,11 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
             child: Provider.of<PlayingShlok>(context, listen: true)
                         .getCureentShlokPlay() ==
                     widget.shlokIndex
-                ? FutureBuilder(
-                    future: SpeakerIcnBtn.player.play(url),
-                    builder: (ctx, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
-                      }
-                      if (snapshot.hasData) {
-                        return StreamBuilder(
-                            stream: SpeakerIcnBtn.player.onPlayerCompletion,
-                            builder: (contextTwo, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Icon(
-                                  Icons.pause_circle_outline_rounded,
-                                  size: 33,
-                                  color: Colors.orange.shade900,
-                                );
-                              }
-                              return Icon(
-                                Icons.volume_up_sharp,
-                                size: 33,
-                                color: Colors.orange.shade900,
-                              );
-                            });
-                      }
-                      return Icon(
-                        Icons.volume_up_sharp,
-                        size: 33,
-                        color: Colors.orange.shade900,
-                      );
-                    },
-                  )
+                ? playingAudio()
                 : Icon(
                     Icons.volume_up_sharp,
-                    size: 33,
                     color: Colors.orange.shade900,
+                    size: 33,
                   ),
           ),
         ),

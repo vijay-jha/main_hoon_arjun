@@ -1,11 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:main_hoon_arjun/providers/playing_shlok.dart';
-import 'package:main_hoon_arjun/widgets/speaker_icon_button.dart';
-import 'package:provider/provider.dart';
 
 import 'dart:convert';
 
@@ -24,14 +20,6 @@ class _HomepageScreenState extends State<HomepageScreen>
     with TickerProviderStateMixin {
   FocusNode inputNode = FocusNode();
   bool isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // Pro Move 🤩
-    // Provider.of<PlayingShlok>(context, listen: false)
-    //     .setCurrentshlokPlaying(-1);
-  }
 
   void openKeyboard() {
     FocusScope.of(context).requestFocus(inputNode);

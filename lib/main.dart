@@ -102,11 +102,13 @@ class MyApp extends StatelessWidget {
 class _Handler extends WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      SpeakerIcnBtn.player
-          .resume(); // Audio player is a custom class with resume and pause static methods
-    } else {
-      SpeakerIcnBtn.player.pause();
+    if (SpeakerIcnBtn.player != null) {
+      if (state == AppLifecycleState.resumed) {
+        SpeakerIcnBtn.player
+            .play(); // Audio player is a custom class with resume and pause static methods
+      } else {
+        SpeakerIcnBtn.player.pause();
+      }
     }
   }
 }
