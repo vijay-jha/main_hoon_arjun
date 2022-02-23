@@ -115,25 +115,11 @@ void _onTap() {
             child: Provider.of<PlayingShlok>(context, listen: true)
                         .getCureentShlokPlay() ==
                     widget.shlokIndex
-<<<<<<< HEAD
-                ? Future.delayed( const Duration(milliseconds: 5000),() {
-                  const Icon(
-                    Icons.pause_rounded,
-                    size: 28,
-                    color: Colors.black87,
-                  );
-                })  
-                : const Icon(
-                    Icons.volume_up_rounded,
-                    size: 28,
-                    color: Colors.black87,
-=======
                 ? playingAudio()
                 : Icon(
                     Icons.volume_up_sharp,
                     color: Colors.orange.shade900,
                     size: 33,
->>>>>>> c72845b4d9e13d93dff8eb2147caa8a36e376b59
                   ),
           ),
         ),
