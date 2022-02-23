@@ -45,7 +45,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
   void _onTapShlok() async {
     SpeakerIcnBtn.player.stop();
     Provider.of<PlayingShlok>(context, listen: false)
-        .setcurrentshlokplaying(-1);
+        .setCurrentshlokPlaying(-1);
     Navigator.push(
       context,
       MaterialPageRoute(

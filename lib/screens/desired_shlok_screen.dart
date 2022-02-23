@@ -41,6 +41,19 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   String chapterNo;
   bool isFavorite = false;
 
+  Future<String> getshlokUrl() async {
+    return await FirebaseStorage.instance
+        .ref()
+        .child('Shlok Audio Files')
+        .child(currentShlok.substring(0, 9))
+        .child('Chap${chapterNo}_Shlok$shlokNo.mp3')
+        .getDownloadURL();
+  }
+
+  void toggleFavShlok() {
+    isFavorite = !isFavorite;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -53,14 +66,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
     }();
   }
 
-  Future<String> getshlokUrl() async {
-    return await FirebaseStorage.instance
-        .ref()
-        .child('Shlok Audio Files')
-        .child(currentShlok.substring(0, 9))
-        .child('Chap${chapterNo}_Shlok$shlokNo.mp3')
-        .getDownloadURL();
-  }
 
   @override
   Future<void> dispose() async {
@@ -93,10 +98,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
             .set({'fav_sholks': favoriteShloks});
       }
     }
-  }
-
-  void toggleFavShlok() {
-    isFavorite = !isFavorite;
   }
 
   @override
