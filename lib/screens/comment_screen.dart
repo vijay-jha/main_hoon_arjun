@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/comment.dart';
@@ -7,12 +9,63 @@ import '../constants.dart';
 
 class CommentScreen extends StatefulWidget {
   static const routeName = '/comment-screen';
+  final currentShloK;
 
+  // ignore: use_key_in_widget_constructors
+  const CommentScreen({this.currentShloK});
   @override
   State<CommentScreen> createState() => _CommentScreenState();
 }
 
 class _CommentScreenState extends State<CommentScreen> {
+  var comments;
+  // var filedata;
+
+  void _postComment(comment) async {
+    final _user = FirebaseAuth.instance.currentUser;
+    var doc = await FirebaseFirestore.instance
+        .collection('Feed')
+        .doc(widget.currentShloK)
+        .get();
+    if (!doc.exists) {
+      await FirebaseFirestore.instance
+          .collection('Feed')
+          .doc(widget.currentShloK)
+          .collection('comments')
+          .doc(_user.uid)
+          .set({
+        'user': _user.uid,
+        'comment': comment,
+      });
+    } else {
+      await FirebaseFirestore.instance
+          .collection('Feed')
+          .doc(widget.currentShloK)
+          .collection('comments')
+          .doc('sibfiukab')
+          .set({
+        'user': _user.uid,
+        'comment': comment,
+      });
+    }
+  }
+
+  void _getComments() async {
+    AsyncSnapshot snapshot;
+    final _user = FirebaseAuth.instance.currentUser;
+    snapshot = (await FirebaseFirestore.instance
+        .collection('Feed')
+        .doc(widget.currentShloK)
+        .collection('comments').doc(_user.uid)
+        .get()) as AsyncSnapshot;
+    print(snapshot.data['comment']);
+  }
+
+ @override
+  void initState() {
+    _getComments();
+    super.initState();
+  }
   final formKey = GlobalKey<FormState>();
   final TextEditingController commentController = TextEditingController();
   List filedata = [
@@ -63,12 +116,17 @@ class _CommentScreenState extends State<CommentScreen> {
               ),
               title: Text(
                 data[i]['name'],
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                    color: Colors.white),
               ),
-              subtitle: Text(
-                data[i]['message'],
-                style: TextStyle(fontSize: 17, color: Colors.white70, fontWeight:FontWeight.w600 ,)
-              ),
+              subtitle: Text(data[i]['message'],
+                  style: TextStyle(
+                    fontSize: 17,
+                    color: Colors.white70,
+                    fontWeight: FontWeight.w600,
+                  )),
             ),
           )
       ],
@@ -101,6 +159,8 @@ class _CommentScreenState extends State<CommentScreen> {
               };
               filedata.insert(0, value);
             });
+            _postComment(commentController.text);
+
             commentController.clear();
             FocusScope.of(context).unfocus();
           } else {

@@ -16,6 +16,7 @@ import '../widgets/profile_picture.dart';
 import '../widgets/shlok_card.dart';
 import '../widgets/speaker_icon_button.dart';
 import '../providers/playing_shlok.dart';
+import 'comment_screen.dart';
 
 class DesiredShlokScreen extends StatefulWidget {
   static const routeName = '/desiredShlok-screen';
