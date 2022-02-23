@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:main_hoon_arjun/widgets/shlok_selection.dart';
@@ -9,11 +10,18 @@ import 'package:main_hoon_arjun/widgets/verse_page.dart';
 class AdhyayOverviewScreen extends StatefulWidget {
   final String title;
   final String adhyayName;
-  final int totalShloks;
   final List<Map<String, dynamic>> chapterData;
   final List<String> shlokList;
-  // ignore: use_key_in_widget_constructors
-  const AdhyayOverviewScreen({this.title, this.adhyayName, this.totalShloks,this.chapterData,this.shlokList});
+  final bookmarkData;
+  bool isBookmarked;
+  String bookmarkedShlok;
+  AdhyayOverviewScreen({
+    this.bookmarkData,
+    this.title,
+    this.adhyayName,
+    this.chapterData,
+    this.shlokList,
+  });
 
   static const routename = "/AdhyayOverviewScreen";
 
@@ -28,6 +36,10 @@ class _AdhyayOverviewScreenState extends State<AdhyayOverviewScreen> {
   PageController controller = PageController(initialPage: 0);
   int pagechanged = 1;
   bool _isVisible = false;
+  String currentShlok;
+  bool isBookmark;
+  var _user;
+  var doc;
 
   void displayScrollIndicator() async {
     if (_isVisible) return;
@@ -39,69 +51,86 @@ class _AdhyayOverviewScreenState extends State<AdhyayOverviewScreen> {
       _isVisible = false;
     });
   }
-  @override
+
   void initState() {
-    // getChapterData(widget.title);
-    super.initState();
+    () async {
+      var _user = FirebaseAuth.instance.currentUser;
+      doc = await FirebaseFirestore.instance
+          .collection('Bookmark')
+          .doc(_user.uid)
+          .get();
+    }();
   }
 
-  
+  void checkBookmark(currentShlok, doc) {
+    var data = doc.data();
+    var bookmarkedShloks = data['bookmarked_shloks'];
+    if (bookmarkedShloks.contains(currentShlok)) {
+      isBookmark = true;
+    } else {
+      isBookmark = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    
     return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: displayScrollIndicator,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(65.0),
-            child: BuildAppBar(
-              chapterData: widget.chapterData,
-              shlokList: widget.shlokList,
-              controller: controller,
-              adhyayName: widget.adhyayName,
-              adhyayNumber: widget.title,
-            )),
-        body: Stack(children: [
-          PageView.builder(
-            onPageChanged: (index) => {
-              setState(() {
-                pagechanged = index + 1;
-                () async {
-                  if (_isVisible) return;
+        behavior: HitTestBehavior.opaque,
+        onTap: displayScrollIndicator,
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: PreferredSize(
+                preferredSize: const Size.fromHeight(65.0),
+                child: BuildAppBar(
+                  chapterData: widget.chapterData,
+                  shlokList: widget.shlokList,
+                  controller: controller,
+                  adhyayName: widget.adhyayName,
+                  adhyayNumber: widget.title,
+                )),
+            body: Stack(children: [
+              PageView.builder(
+                onPageChanged: (index) => {
                   setState(() {
-                    _isVisible = true;
-                  });
-                  await Future.delayed(const Duration(seconds: 3));
-                  setState(() {
-                    _isVisible = false;
-                  });
-                }();
-              }),
-            },
-            controller: controller,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              return VersePage(
-                verseNumber: index+1,
-                shlokTitle:  widget.chapterData[index]['shlok'],
-                pageController: controller,
-                shlokText:  widget.chapterData[index]['text'],
-                meaning:  widget.chapterData[index]['meaning'],
-                translation:  widget.chapterData[index]['translation'],
-              );
-            },
-            itemCount: widget.shlokList.length,
-          ),
-          Visibility(
-            child: SlideIndicator(
-                totalShloks: widget.shlokList.length, currentShlok: pagechanged),
-            visible: _isVisible,
-          ),
-        ]),
-      ),
-    );
+                    pagechanged = index + 1;
+                    () async {
+                      if (_isVisible) return;
+                      setState(() {
+                        _isVisible = true;
+                      });
+                      await Future.delayed(const Duration(seconds: 3));
+                      setState(() {
+                        _isVisible = false;
+                      });
+                    }();
+                  }),
+                },
+                controller: controller,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  // checkBookmark(
+                  //     "Chapter${widget.chapterData[index]['chapter']}_${widget.shlokList[index]}",
+                  //     widget.bookmarkData)
+                  return VersePage(
+                    currentShlok:
+                        "Chapter${widget.chapterData[index]['chapter']}_${widget.shlokList[index]}",
+                    verseNumber: index + 1,
+                    shlokTitle: widget.chapterData[index]['shlok'],
+                    pageController: controller,
+                    shlokText: widget.chapterData[index]['text'],
+                    meaning: widget.chapterData[index]['meaning'],
+                    translation: widget.chapterData[index]['translation'],
+                  );
+                },
+                itemCount: widget.shlokList.length,
+              ),
+              Visibility(
+                child: SlideIndicator(
+                    totalShloks: widget.shlokList.length,
+                    currentShlok: pagechanged),
+                visible: _isVisible,
+              ),
+            ])));
   }
 }
 
@@ -135,18 +164,18 @@ class SlideIndicator extends StatelessWidget {
 class BuildAppBar extends StatelessWidget {
   final PageController controller;
 
-  const BuildAppBar({
-    Key key,
-    @required this.controller,
-    @required this.adhyayName,
-    @required this.adhyayNumber,
-    @required this.chapterData,
-    @required this.shlokList
-  }) : super(key: key);
+  const BuildAppBar(
+      {Key key,
+      @required this.controller,
+      @required this.adhyayName,
+      @required this.adhyayNumber,
+      @required this.chapterData,
+      @required this.shlokList})
+      : super(key: key);
 
   final String adhyayName;
   final String adhyayNumber;
-  final  List<Map<String, dynamic>> chapterData;
+  final List<Map<String, dynamic>> chapterData;
   final List<String> shlokList;
 
   @override

@@ -5,10 +5,10 @@ import 'package:main_hoon_arjun/screens/adhyay_overview_screen.dart';
 class Adhyay extends StatelessWidget {
   final String title;
   final String name;
-  final int totalSholks;
+  final bookmarkData;
   // final adhyayData;
   // ignore: use_key_in_widget_constructors
-  Adhyay(this.title, this.name, this.totalSholks);
+  Adhyay(this.title, this.name,this.bookmarkData);
   var chapterdata = <Map<String, dynamic>>[];
   var shlokList = <String>[];
 
@@ -29,17 +29,17 @@ class Adhyay extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
-     getChapterData(title);
+    getChapterData(title);
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => AdhyayOverviewScreen(
+            bookmarkData: bookmarkData,
             shlokList: shlokList,
             chapterData: chapterdata,
             title: title,
             adhyayName: name,
-            totalShloks: totalSholks,
           ),
         ),
       ),

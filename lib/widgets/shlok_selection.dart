@@ -43,104 +43,110 @@ class _ShlokSelectionState extends State<ShlokSelection>
   @override
   Widget build(BuildContext context) {
     var _deviceSize = MediaQuery.of(context).size.height;
-    return Material(
-      color: Colors.transparent,
-      child: ScaleTransition(
-        scale: scaleAnimation,
-        child: Center(
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(12)),
-            margin: const EdgeInsets.symmetric(horizontal: 14),
-            height: _deviceSize / 1.8,
-            child: Column(
-              children: [
-                Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(10),
-                    decoration:const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
-                    child: Center(
-                      child: Text(
-                        "Shloks",
-                        style: TextStyle(
-                            color: Colors.orange[800],
-                            fontWeight: FontWeight.w800,
-                            fontSize: 21),
-                      ),
-                    )),
-                Expanded(
-                  child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 50),
-                      itemCount: widget.shlokList.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedItem = index;
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: selectedItem == index
-                                  ? Colors.black
-                                  : Colors.orange,
+    return ScaleTransition(
+      scale: scaleAnimation,
+      child: Center(
+        child: AnimatedContainer(
+          duration: Duration(minutes: 2),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(12)),
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          height: _deviceSize / 1.7,
+          child: Column(
+            children: [
+              Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration:const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12))),
+                  child: Center(
+                    child: Text(
+                      "Shloks",
+                      style: TextStyle(
+                          color: Colors.orange[800],
+                          fontWeight: FontWeight.w800,
+                          fontSize: 21),
+                    ),
+                  )),
+              Container(
+                height: 360,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: GridView.builder(                   
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 72,
+                            mainAxisExtent: 50,
                             ),
-                            margin: const EdgeInsets.all(6),
-                            padding: const EdgeInsets.all(8),
-                            child: Text(
-                               widget.shlokList[index].substring(5),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        );
-                      }),
-                ),
-                Stack(children: [
-                  Positioned(
-                    child: Align(
-                      alignment: FractionalOffset.bottomRight,
-                      child: GestureDetector(
+                    itemCount: widget.shlokList.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
                         onTap: () {
-                          Navigator.pop(context);
-                          //page change animation
-                          if (selectedItem != -1) {
-                            widget.pageController.jumpToPage(selectedItem);
-                            // widget.pageController.animateToPage(selectedItem,
-                            //     duration: const Duration(milliseconds: 700),
-                            //     curve: Curves.bounceInOut);
-                          }
+                          setState(() {
+                            selectedItem = index;
+                            // Navigator.pop(context);
+                            //  widget.pageController.jumpToPage(selectedItem);
+                          });
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: Colors.orange,
+                            borderRadius: BorderRadius.circular(30),
+                            color: selectedItem == index
+                                ? Colors.brown[600]
+                                : Colors.orange,
                           ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 8),
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          child: const Text(
-                            "OK",
-                            style: TextStyle(
+                          margin: const EdgeInsets.all(6),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(0),
+                          child: Text(
+                             widget.shlokList[index].substring(5),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
                                 color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16),
+                                fontWeight: FontWeight.bold),
                           ),
+                        ),
+                      );
+                    }),
+              ),
+              Stack(children: [
+                Positioned(
+                  child: Align(
+                    alignment: FractionalOffset.bottomRight,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        //page change animation
+                        if (selectedItem != -1) {
+                          widget.pageController.jumpToPage(selectedItem);
+                          // widget.pageController.animateToPage(selectedItem,
+                          //     duration: const Duration(milliseconds: 700),
+                          //     curve: Curves.bounceInOut);
+                        }
+                      },
+                      child: Container(  
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.red[600],
+                        ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 140, vertical: 23),
+                        child: const Text(
+                          "OK",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16),
                         ),
                       ),
                     ),
                   ),
-                ]),
-              ],
-            ),
+                ),
+              ]),
+            ],
           ),
         ),
       ),

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -6,10 +8,22 @@ class VersePage extends StatefulWidget {
   String shlokTitle;
   final PageController pageController;
   final String shlokText;
-  final Map<String,dynamic >translation;
-  final Map<String,dynamic> meaning;
+  final Map<String, dynamic> translation;
+  final Map<String, dynamic> meaning;
+  final String currentShlok;
+  Function checkBookmark;
+  bool isBookmark = false;
 
-  VersePage({Key key, @required this.verseNumber, this.pageController,this.shlokTitle,this.shlokText,this.translation,this.meaning})
+  VersePage(
+      {Key key,
+      @required this.verseNumber,
+      this.currentShlok,
+      this.pageController,
+      this.shlokTitle,
+      this.shlokText,
+      this.translation,
+      this.checkBookmark,
+      this.meaning})
       : super(key: key);
 
   @override
@@ -19,24 +33,94 @@ class VersePage extends StatefulWidget {
 class _VersePageState extends State<VersePage> with TickerProviderStateMixin {
   AnimationController _controller;
   bool isEnglish = true;
+  // bool isBookmark;
+  // String bookmarkedShlok;
+  var doc;
+  var _user;
 
   @override
   void initState() {
+    super.initState();
     _controller = AnimationController(
       duration: const Duration(milliseconds: 750),
       vsync: this,
     );
-    super.initState();
+  }
+
+  @mustCallSuper
+  void didChangeDependencies() {
+    () async {
+      _user = FirebaseAuth.instance.currentUser;
+      doc = await FirebaseFirestore.instance
+          .collection('Bookmark')
+          .doc(_user.uid)
+          .get();
+    }();
+  }
+
+  bool checkBookmark() {
+    if (doc != null) {
+      var data = doc.data();
+      var bookmarkedShloks = data['bookmarked_shloks'];
+      if (bookmarkedShloks.contains(widget.currentShlok)) {
+        widget.isBookmark = true;
+        return true;
+      } else {
+        widget.isBookmark = false;
+        return false;
+      }
+    }else{
+      return false;
+    }
+  }
+
+  @override
+  Future<void> dispose() {
+    print("-----------isbookmark");
+    print(widget.isBookmark);
+    super.dispose();
+    () async {
+      if (!doc.exists) {
+        await FirebaseFirestore.instance
+            .collection('Bookmark')
+            .doc(_user.uid)
+            .set({
+          'bookmarked_shloks': [widget.currentShlok]
+        });
+      } else {
+        var data = doc.data();
+        var bookmarkedShloks = data['bookmarked_shloks'];
+        if (widget.isBookmark) {
+          if (!bookmarkedShloks.contains(widget.currentShlok)) {
+            bookmarkedShloks.add(widget.currentShlok);
+            await FirebaseFirestore.instance
+                .collection('Bookmark')
+                .doc(_user.uid)
+                .set({'bookmarked_shloks': bookmarkedShloks});
+          }
+        } else {
+          bookmarkedShloks.remove((widget.currentShlok));
+          await FirebaseFirestore.instance
+              .collection('Bookmark')
+              .doc(_user.uid)
+              .set({'bookmarked_shloks': bookmarkedShloks});
+        }
+      }
+    }();
+  }
+
+  void toggleBookmark() {
+    widget.isBookmark = !widget.isBookmark;
+    print("from toggle-------------");
+    print(widget.isBookmark);
   }
 
   @override
   Widget build(BuildContext context) {
-    String meaning = isEnglish
-        ?  widget.translation['english']
-        : widget.translation['hindi'];
-    String explanation = isEnglish
-        ? widget.meaning['english']
-        : widget.meaning['hindi'];
+    String meaning =
+        isEnglish ? widget.translation['english'] : widget.translation['hindi'];
+    String explanation =
+        isEnglish ? widget.meaning['english'] : widget.meaning['hindi'];
 
     return SingleChildScrollView(
       child: Column(
@@ -62,9 +146,15 @@ class _VersePageState extends State<VersePage> with TickerProviderStateMixin {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              // SizedBox(width: 30,
-              // ),
-              IconButton(onPressed: () => {}, icon: const Icon(Icons.bookmark)),
+              checkBookmark()
+                  ? BookmarkButton(
+                      togglebookmark: toggleBookmark,
+                      isBookmark: true,
+                    )
+                  : BookmarkButton(
+                      togglebookmark: toggleBookmark,
+                      isBookmark: false,
+                    ),
               RotationTransition(
                 turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
                 child: IconButton(
@@ -109,8 +199,6 @@ class _VersePageState extends State<VersePage> with TickerProviderStateMixin {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
-//                 """धृतराष्ट्र उवाच |धर्मक्षेत्रे कुरुक्षेत्रे समवेता युयुत्सवः |
-// मामकाः पाण्डवाश्चैव किमकुर्वत सञ्जय """,
                 widget.shlokText,
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -188,6 +276,38 @@ class _VersePageState extends State<VersePage> with TickerProviderStateMixin {
           ),
         ],
       ),
+    );
+  }
+}
+
+class BookmarkButton extends StatefulWidget {
+  BookmarkButton({Key key, this.togglebookmark, this.isBookmark})
+      : super(key: key);
+
+  final togglebookmark;
+  bool isBookmark;
+
+  @override
+  State<BookmarkButton> createState() => _BookmarkButtonState();
+}
+
+class _BookmarkButtonState extends State<BookmarkButton> {
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        widget.togglebookmark();
+        setState(() {
+          widget.isBookmark = !widget.isBookmark;
+        });
+      },
+      icon: widget.isBookmark
+          ? const Icon(Icons.bookmark)
+          : const Icon(
+              Icons.bookmark_add_outlined,
+              size: 26,
+            ),
+      color: Colors.orange[600],
     );
   }
 }
