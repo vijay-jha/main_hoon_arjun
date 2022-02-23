@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class PlayingShlok with ChangeNotifier {
   int currentPlayingshlok = -1;
 
-  void setcurrentshlokplaying(int id) {
+  void setCurrentshlokPlaying(int id) {
     currentPlayingshlok = id;
     notifyListeners();
   }
 
-  int getcureenshlokplaying() {
+  int getCureentShlokPlay() {
     return currentPlayingshlok;
   }
 

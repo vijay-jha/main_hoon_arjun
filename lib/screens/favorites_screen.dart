@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
+ 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -66,6 +68,8 @@ class FavoritesBody extends StatefulWidget {
 }
 
 class _FavoritesBodyState extends State<FavoritesBody> {
+ 
+
   Widget loading(var _deviceSize) {
     return SliverToBoxAdapter(
       child: Container(
@@ -100,6 +104,13 @@ class _FavoritesBodyState extends State<FavoritesBody> {
         ),
       ),
     );
+  }
+
+   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    SpeakerIcnBtn.player.dispose();
   }
 
   @override
@@ -137,26 +148,27 @@ class _FavoritesBodyState extends State<FavoritesBody> {
 }
 
 class FavoritesItemList extends StatefulWidget {
-  const FavoritesItemList({
+  FavoritesItemList({
     Key key,
     @required this.shlok,
   }) : super(key: key);
 
-  final List<Map<String, dynamic>> shlok;
+  List<Map<String, dynamic>> shlok;
 
   @override
   State<FavoritesItemList> createState() => _FavoritesItemListState();
 }
 
 class _FavoritesItemListState extends State<FavoritesItemList> {
-  @override
-  void dispose() {
-    super.dispose();
-    SpeakerIcnBtn.player.stop();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   SpeakerIcnBtn.player.stop();
+  // }
 
   @override
   Widget build(BuildContext context) {
+    widget.shlok = [...widget.shlok.reversed];
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) => FavoriteShlokItem(widget.shlok[index], index),
