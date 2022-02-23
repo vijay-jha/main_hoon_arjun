@@ -17,6 +17,14 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    SpeakerIcnBtn.player.stop();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -137,12 +145,12 @@ class _FavoritesBodyState extends State<FavoritesBody> {
 }
 
 class FavoritesItemList extends StatefulWidget {
-  const FavoritesItemList({
+   FavoritesItemList({
     Key key,
     @required this.shlok,
   }) : super(key: key);
 
-  final List<Map<String, dynamic>> shlok;
+   List<Map<String, dynamic>> shlok;
 
   @override
   State<FavoritesItemList> createState() => _FavoritesItemListState();
@@ -157,7 +165,7 @@ class _FavoritesItemListState extends State<FavoritesItemList> {
 
   @override
   Widget build(BuildContext context) {
-    
+   widget.shlok = [...widget.shlok.reversed];
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) => FavoriteShlokItem(widget.shlok[index], index),

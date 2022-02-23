@@ -37,6 +37,7 @@ class _IntroductionScreensState extends State<IntroductionScreens> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.orange.shade50,
       body: IntroductionScreen(
         done: const Text(
           'Done',

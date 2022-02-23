@@ -22,94 +22,85 @@ class SpeakerIcnBtn extends StatefulWidget {
 }
 
 class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
-  bool isLoading = true;
+  String url;
+  
+  @override
+  void initState() {
+  
+    super.initState();
+    () async {
+      url = await widget.audioUrl;
+    }();
+  }
+
   @override
   Widget build(BuildContext context) {
     var playingShlok = Provider.of<PlayingShlok>(context, listen: false);
     final _deviceSize = MediaQuery.of(context).size;
 
     void _onTap() {
-      if (playingShlok.getcureenshlokplaying() != widget.shlokIndex) {
-        playingShlok.setcurrentshlokplaying(widget.shlokIndex);
+      if (playingShlok.getCureentShlokPlay() != widget.shlokIndex) {
         SpeakerIcnBtn.player.stop();
-        soundPlay();
+        playingShlok.setCurrentshlokPlaying(widget.shlokIndex);
       } else {
-        playingShlok.setcurrentshlokplaying(-1);
+        playingShlok.setCurrentshlokPlaying(-1);
         SpeakerIcnBtn.player.stop();
       }
     }
 
-    return InkWell(
-      onTap: _onTap,
-      child: Consumer<PlayingShlok>(
-        builder: (_, playingShlok, ch) {
-          return Card(
-            elevation: widget.isDesired ? 4 : 0,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(25)),
+    return Consumer<PlayingShlok>(builder: (_, playingShlok, ch) {
+      return Card(
+        elevation: widget.isDesired ? 4 : 0,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(25)),
+        ),
+        child: InkWell(
+          onTap: _onTap,
+          child: Container(
+            width: 55,
+            padding: EdgeInsets.symmetric(
+              vertical: _deviceSize.height * 0.0089,
+              horizontal: _deviceSize.width * 0.020,
             ),
-            child: Container(
-              width: 55,
-              padding: EdgeInsets.symmetric(
-                vertical: _deviceSize.height * 0.0089,
-                horizontal: _deviceSize.width * 0.020,
+            decoration: BoxDecoration(
+              color: widget.isDesired?Colors.orange.shade100 : Colors.orange.shade200,
+              //  border: Border.all(width: 1),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(25),
               ),
-              decoration: BoxDecoration(
-                color: Colors.orange.shade100,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(25),
-                ),
-              ),
-              child: Provider.of<PlayingShlok>(
-                        context,
-                        listen: true,
-                      ).getcureenshlokplaying() ==
-                      widget.shlokIndex
-                  ? isLoading
-                      ? const CircularProgressIndicator(
-                          color: Colors.orange,
-                        )
-                      : const Icon(
-                          Icons.pause_rounded,
-                          size: 33,
-                          color: Colors.black87,
-                        )
-                  : const Icon(
-                      Icons.volume_up_rounded,
-                      size:  33,
-                      color: Colors.black87,
-                    ),
             ),
-          );
-        },
-      ),
-    );
-  }
-
-  void soundPlay() {
-    int result;
-    setState(() {
-      isLoading = true;
-    });
-
-    () async {
-      String url = await widget.audioUrl;
-      result = await SpeakerIcnBtn.player.play(
-        url,
+            child: Provider.of<PlayingShlok>(context, listen: true)
+                        .getCureentShlokPlay() ==
+                    widget.shlokIndex
+                ? FutureBuilder(
+                    future: SpeakerIcnBtn.player.play(url),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        }
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return StreamBuilder(
+                              stream: SpeakerIcnBtn.player.onPlayerCompletion,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Icon(
+                                      Icons.pause_circle_outline_rounded,
+                                      size: 33,color: Colors.orange.shade900,);
+                                }
+                                return Icon(Icons.volume_up_sharp, size: 33,color: Colors.orange.shade900,);
+                              });
+                        }
+                      }
+                      return Icon(Icons.volume_up_sharp, size: 33,color: Colors.orange.shade900,);
+                    },
+                  )
+                : Icon(Icons.volume_up_sharp, size: 33,color: Colors.orange.shade900,),
+          ),
+        ),
       );
-    }()
-        .then((value) {
-      setState(() {
-        isLoading = false;
-      });
     });
-
-    if (result == 1) {
-      SpeakerIcnBtn.player.onPlayerCompletion.listen((event) {
-        Provider.of<PlayingShlok>(context, listen: false)
-            .setcurrentshlokplaying(-1);
-        SpeakerIcnBtn.player.stop();
-      });
-    }
   }
 }

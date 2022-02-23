@@ -21,7 +21,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
   final _controller = ScreenshotController();
   var firestore = FirebaseFirestore.instance;
   String shlokName;
-  
+
   @override
   void initState() {
     super.initState();
@@ -44,7 +44,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
   void _onTapShlok() async {
     SpeakerIcnBtn.player.stop();
     Provider.of<PlayingShlok>(context, listen: false)
-        .setcurrentshlokplaying(-1);
+        .setCurrentshlokPlaying(-1);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -82,11 +82,11 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
             children: [
               Container(
                 margin: EdgeInsets.only(
-                  top: _deviceSize.height * 0.009, // 10
+                  top: _deviceSize.height * 0.012, // 10
                 ),
                 padding: EdgeInsets.only(
                   left: _deviceSize.width * 0.063, // 25
-                  right: _deviceSize.width * 0.06, // 18
+                  right: _deviceSize.width * 0.05, // 18
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -96,23 +96,23 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
                       child: Text(
                         widget.shlok["Number"],
                         style: TextStyle(
-                            fontSize: 17,
-                            color: Colors.orange.shade800,
-                            fontWeight: FontWeight.w600,
-                            ),
+                          fontSize: 17,
+                          color: Colors.orange.shade800,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                     InkWell(
                       onTap: () async {
                         final image = await _controller.capture();
                         if (image != null) {
-                          // await saveImage(image);
                           ShareImage.shareImage(image);
                         }
                       },
-                      child:  Icon(
+                      child: Icon(
                         Icons.offline_share_rounded,
                         color: Colors.orange.shade800,
+                        size: 23,
                       ),
                     ),
                   ],
@@ -134,27 +134,9 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
                   width: double.infinity,
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(
-                  left: _deviceSize.width * 0.140, // 55
-                  right: _deviceSize.width * 0.140, // 55
-                  // bottom: _deviceSize.height * 0.009, //6
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // shlok numbering Lable
-                    Container(
-                      child: CommentsButton(deviceSize: _deviceSize),
-                      alignment: Alignment.center,
-                    ),
-
-                    SpeakerIcnBtn(
-                      audioUrl: getshlokUrl(),
-                      shlokIndex: widget.shlokIndex,
-                    ),
-                  ],
-                ),
+              SpeakerIcnBtn(
+                audioUrl: getshlokUrl(),
+                shlokIndex: widget.shlokIndex,
               ),
             ],
           ),
@@ -196,35 +178,35 @@ class ShlokCard extends StatelessWidget {
   }
 }
 
-class CommentsButton extends StatelessWidget {
-  CommentsButton({this.deviceSize});
-  final deviceSize;
+// class CommentsButton extends StatelessWidget {
+//   CommentsButton({this.deviceSize});
+//   final deviceSize;
 
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        width: deviceSize.width * 0.140, // 55
-        alignment: Alignment.bottomCenter,
-        padding: EdgeInsets.only(
-          top: deviceSize.height * 0.009, // 8
-          right: deviceSize.width * 0.020, //8,
-          left: deviceSize.width * 0.020, //8,
-          bottom: deviceSize.height * 0.005, //5,
-        ),
-        decoration: const BoxDecoration(
-          // color: Colors.amber,
-          borderRadius: BorderRadius.all(
-            Radius.circular(16),
-          ),
-        ),
-        child: const Icon(
-          Icons.comment_rounded,
-          color: Colors.black87,
-          size: 28,
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return InkWell(
+//       onTap: () {},
+//       child: Container(
+//         width: deviceSize.width * 0.140, // 55
+//         alignment: Alignment.bottomCenter,
+//         padding: EdgeInsets.only(
+//           top: deviceSize.height * 0.009, // 8
+//           right: deviceSize.width * 0.020, //8,
+//           left: deviceSize.width * 0.020, //8,
+//           bottom: deviceSize.height * 0.005, //5,
+//         ),
+//         decoration: const BoxDecoration(
+//           // color: Colors.amber,
+//           borderRadius: BorderRadius.all(
+//             Radius.circular(16),
+//           ),
+//         ),
+//         child: const Icon(
+//           Icons.comment_rounded,
+//           color: Colors.black87,
+//           size: 28,
+//         ),
+//       ),
+//     );
+//   }
+// }
