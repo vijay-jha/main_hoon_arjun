@@ -19,13 +19,6 @@ class FavoritesScreen extends StatefulWidget {
 class _FavoritesScreenState extends State<FavoritesScreen> {
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    SpeakerIcnBtn.player.stop();
-  }
-  
-  @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
@@ -74,6 +67,13 @@ class FavoritesBody extends StatefulWidget {
 }
 
 class _FavoritesBodyState extends State<FavoritesBody> {
+
+  @override
+  void dispose() {
+    super.dispose();
+    SpeakerIcnBtn.player.stop();
+  }
+  
   Widget loading(var _deviceSize) {
     return SliverToBoxAdapter(
       child: Container(
@@ -145,18 +145,19 @@ class _FavoritesBodyState extends State<FavoritesBody> {
 }
 
 class FavoritesItemList extends StatefulWidget {
-   FavoritesItemList({
+  FavoritesItemList({
     Key key,
     @required this.shlok,
   }) : super(key: key);
 
-   List<Map<String, dynamic>> shlok;
+  List<Map<String, dynamic>> shlok;
 
   @override
   State<FavoritesItemList> createState() => _FavoritesItemListState();
 }
 
 class _FavoritesItemListState extends State<FavoritesItemList> {
+
   @override
   void dispose() {
     super.dispose();
@@ -165,7 +166,7 @@ class _FavoritesItemListState extends State<FavoritesItemList> {
 
   @override
   Widget build(BuildContext context) {
-   widget.shlok = [...widget.shlok.reversed];
+    widget.shlok = [...widget.shlok.reversed];
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) => FavoriteShlokItem(widget.shlok[index], index),
