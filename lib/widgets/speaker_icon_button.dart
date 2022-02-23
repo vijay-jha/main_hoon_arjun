@@ -12,7 +12,7 @@ class SpeakerIcnBtn extends StatefulWidget {
     this.isDesired = false,
   }) : super(key: key);
 
-  final isDesired;
+  final bool isDesired;
   final int shlokIndex;
   final Future<String> audioUrl;
   static AudioPlayer player = AudioPlayer(mode: PlayerMode.MEDIA_PLAYER);
@@ -48,14 +48,14 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
       }
     }
 
-    return InkWell(
-      onTap: _onTap,
-      child: Consumer<PlayingShlok>(builder: (_, playingShlok, ch) {
-        return Card(
-          elevation: widget.isDesired ? 4 : 0,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(25)),
-          ),
+    return Consumer<PlayingShlok>(builder: (_, playingShlok, ch) {
+      return Card(
+        elevation: widget.isDesired ? 4 : 0,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(25)),
+        ),
+        child: InkWell(
+          onTap: _onTap,
           child: Container(
             width: 55,
             padding: EdgeInsets.symmetric(
@@ -63,7 +63,8 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
               horizontal: _deviceSize.width * 0.020,
             ),
             decoration: BoxDecoration(
-              color: Colors.orange.shade100,
+              color: widget.isDesired?Colors.orange.shade100 : Colors.orange.shade200,
+              //  border: Border.all(width: 1),
               borderRadius: const BorderRadius.all(
                 Radius.circular(25),
               ),
@@ -87,19 +88,19 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
                                     ConnectionState.waiting) {
                                   return Icon(
                                       Icons.pause_circle_outline_rounded,
-                                      size: 33);
+                                      size: 33,color: Colors.orange.shade900,);
                                 }
-                                return Icon(Icons.volume_up_sharp, size: 33);
+                                return Icon(Icons.volume_up_sharp, size: 33,color: Colors.orange.shade900,);
                               });
                         }
                       }
-                      return Icon(Icons.volume_up_sharp, size: 33);
+                      return Icon(Icons.volume_up_sharp, size: 33,color: Colors.orange.shade900,);
                     },
                   )
-                : Icon(Icons.volume_up_sharp, size: 33),
+                : Icon(Icons.volume_up_sharp, size: 33,color: Colors.orange.shade900,),
           ),
-        );
-      }),
-    );
+        ),
+      );
+    });
   }
 }
