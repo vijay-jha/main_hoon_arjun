@@ -1,11 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'dart:convert';
-import 'dart:math';
 
 import './desired_shlok_screen.dart';
 import '../widgets/profile_picture.dart';
@@ -78,6 +76,7 @@ class _HomepageScreenState extends State<HomepageScreen>
                 showDialog(
                   context: context,
                   builder: (_) => AlertDialog(
+                    backgroundColor: Colors.orange.shade50,
                     content: Text("Please enter something about your feeling."),
                     actions: [
                       OutlinedButton(
