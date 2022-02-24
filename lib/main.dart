@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 import './providers/mahabharat_characters.dart';
 import './widgets/custom_page_transition.dart';
-import './navigationFile.dart';
+import 'navigation_file.dart';
 import './screens/auth_screen.dart';
 import './screens/desired_shlok_screen.dart';
 import './screens/settings_screen.dart';

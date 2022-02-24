@@ -9,7 +9,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import './auth_screen.dart';
-import '../navigationFile.dart';
+import '../navigation_file.dart';
 import '../providers/mahabharat_characters.dart';
 
 class VerifyScreen extends StatefulWidget {
