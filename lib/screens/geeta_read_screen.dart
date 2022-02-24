@@ -58,25 +58,8 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
     {'number': 'Chapter18', 'name': 'मोक्षसंन्यासयोग'},
   ];
 
-  void getChapterData(chapter) async {
-    var adhyay =
-        await FirebaseFirestore.instance.collection('Geeta').doc(chapter).get();
-    var adhyayData = adhyay.data();
-    var data = adhyayData.keys.toList();
-    data.sort((a, b) => a.toString().compareTo(b.toString()));
-
-    for (var i = 0; i < data.length; i++) {
-      finalData.insert(i, Map<String, dynamic>.from(adhyay.get(data[i])));
-    }
-
-    for (var i = 0; i < finalData.length; i++) {
-      print(finalData[i]['shlok']);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    // getChapterData('Chapter02');
     return Scaffold(
       floatingActionButton: ElevatedButton(
         child: const Icon(Icons.bookmark),

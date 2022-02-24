@@ -17,6 +17,7 @@ import '../widgets/profile_picture.dart';
 import '../widgets/shlok_card.dart';
 import '../widgets/speaker_icon_button.dart';
 import '../providers/playing_shlok.dart';
+import 'comment_screen.dart';
 
 class DesiredShlokScreen extends StatefulWidget {
   static const routeName = '/desiredShlok-screen';
@@ -71,7 +72,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   @override
   Future<void> dispose() async {
     super.dispose();
-    SpeakerIcnBtn.player.stop();
+    SpeakerIcnBtn.player.dispose();
 
     if (!doc.exists) {
       await FirebaseFirestore.instance

@@ -28,11 +28,36 @@ class BookmarkScreen extends StatelessWidget {
                 )),
           ])),
 
-        body: ListView.builder(
-          itemCount: 10,
-          itemBuilder: (BuildContext context, int index){
-           return BookmarkCard();
-        }),  
+        // body: StreamBuilder(
+        // stream: FirebaseFirestore.instance
+        //     .collection('user_favorites')
+        //     .doc(FirebaseAuth.instance.currentUser.uid)
+        //     .snapshots(),
+        // builder: (context, streamSnapShot) {
+        //   if (streamSnapShot.connectionState == ConnectionState.waiting) {
+        //     return loading(_deviceSize);
+        //   }
+        //   if (streamSnapShot.hasData) {
+        //     return FutureBuilder(
+        //         future: Provider.of<FavoritesShlok>(context, listen: false)
+        //             .fetchFavoriteShlok(streamSnapShot.data),
+        //         builder: (context, snapshot) {
+        //           return snapshot.connectionState == ConnectionState.waiting
+        //               ? loading(_deviceSize)
+        //               : Provider.of<FavoritesShlok>(context, listen: false)
+        //                       .shlok()
+        //                       .isEmpty
+        //                   ? noFavorites(_deviceSize)
+        //                   : ListView.builder(
+        //   itemCount: 10,
+        //   itemBuilder: (BuildContext context, int index){
+        //    return BookmarkCard();
+        // });
+        //         });
+        //   }
+        //   return noFavorites(_deviceSize);
+        // });
     );
   }
 }
+

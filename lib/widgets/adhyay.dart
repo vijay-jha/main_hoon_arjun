@@ -6,9 +6,9 @@ class Adhyay extends StatelessWidget {
   final String title;
   final String name;
   final bookmarkData;
-  // final adhyayData;
-  // ignore: use_key_in_widget_constructors
+
   Adhyay(this.title, this.name,this.bookmarkData);
+  
   var chapterdata = <Map<String, dynamic>>[];
   var shlokList = <String>[];
 
