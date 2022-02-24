@@ -277,20 +277,15 @@ class _TranslationBtnState extends State<TranslationBtn>
 
   @override
   Widget build(BuildContext context) {
-    bool isEnglish=Provider.of<Translation>(context, listen: true).getIsEnglish();
+    bool isEnglish =
+        Provider.of<Translation>(context, listen: true).getIsEnglish();
     return RotationTransition(
       turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
       child: Consumer<Translation>(builder: (_, tanslation, ch) {
         return IconButton(
           icon: isEnglish
-              ? const Text(
-                  "अ",
-                  style: TextStyle(fontSize: 20),
-                )
-              : const Text(
-                  "A",
-                  style: TextStyle(fontSize: 20),
-                ),
+              ? Image.asset('assets/images/translationEnglish.jpeg')
+              : Image.asset('assets/images/tranlationHindi.jpeg'),
           onPressed: () {
             if (isEnglish) {
               Provider.of<Translation>(context, listen: false)
