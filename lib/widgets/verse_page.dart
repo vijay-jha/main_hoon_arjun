@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:main_hoon_arjun/providers/translation.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class VersePage extends StatefulWidget {
@@ -12,7 +14,7 @@ class VersePage extends StatefulWidget {
   final Map<String, dynamic> meaning;
   final String currentShlok;
   Function checkBookmark;
-  bool isBookmark = false;
+  // bool isBookmark = false;
 
   VersePage(
       {Key key,
@@ -30,79 +32,40 @@ class VersePage extends StatefulWidget {
   State<VersePage> createState() => _VersePageState();
 }
 
-class _VersePageState extends State<VersePage> with TickerProviderStateMixin {
-  AnimationController _controller;
-  bool isEnglish = true;
-  // bool isBookmark;
-  // String bookmarkedShlok;
+class _VersePageState extends State<VersePage> {
   var doc;
-  var _user;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 750),
-      vsync: this,
-    );
-  }
-
-  @mustCallSuper
-  void didChangeDependencies() {
-    () async {
-      _user = FirebaseAuth.instance.currentUser;
-      doc = await FirebaseFirestore.instance
-          .collection('Bookmark')
-          .doc(_user.uid)
-          .get();
-    }();
-  }
-
-  bool checkBookmark() {
-    if (doc != null) {
-      var data = doc.data();
-      var bookmarkedShloks = data['bookmarked_shloks'];
-      if (bookmarkedShloks.contains(widget.currentShlok)) {
-        widget.isBookmark = true;
-        return true;
-      } else {
-        widget.isBookmark = false;
-        return false;
-      }
-    }else{
-      return false;
-    }
-  }
+  bool isBookmark;
 
   @override
   Future<void> dispose() {
-    print("-----------isbookmark");
-    print(widget.isBookmark);
     super.dispose();
     () async {
+      var doc = await FirebaseFirestore.instance
+          .collection('Bookmark')
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .get();
+      var user = FirebaseAuth.instance.currentUser.uid;
       if (!doc.exists) {
         await FirebaseFirestore.instance
             .collection('Bookmark')
-            .doc(_user.uid)
-            .set({
-          'bookmarked_shloks': [widget.currentShlok]
-        });
+            .doc(user)
+            .set({'bookmarked_shloks': []});
       } else {
         var data = doc.data();
         var bookmarkedShloks = data['bookmarked_shloks'];
-        if (widget.isBookmark) {
+        if (isBookmark) {
           if (!bookmarkedShloks.contains(widget.currentShlok)) {
             bookmarkedShloks.add(widget.currentShlok);
             await FirebaseFirestore.instance
                 .collection('Bookmark')
-                .doc(_user.uid)
+                .doc(user)
                 .set({'bookmarked_shloks': bookmarkedShloks});
           }
         } else {
           bookmarkedShloks.remove((widget.currentShlok));
           await FirebaseFirestore.instance
               .collection('Bookmark')
-              .doc(_user.uid)
+              .doc(user)
               .set({'bookmarked_shloks': bookmarkedShloks});
         }
       }
@@ -110,18 +73,11 @@ class _VersePageState extends State<VersePage> with TickerProviderStateMixin {
   }
 
   void toggleBookmark() {
-    widget.isBookmark = !widget.isBookmark;
-    print("from toggle-------------");
-    print(widget.isBookmark);
+    isBookmark = !isBookmark;
   }
 
   @override
   Widget build(BuildContext context) {
-    String meaning =
-        isEnglish ? widget.translation['english'] : widget.translation['hindi'];
-    String explanation =
-        isEnglish ? widget.meaning['english'] : widget.meaning['hindi'];
-
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -146,42 +102,33 @@ class _VersePageState extends State<VersePage> with TickerProviderStateMixin {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              checkBookmark()
-                  ? BookmarkButton(
-                      togglebookmark: toggleBookmark,
-                      isBookmark: true,
-                    )
-                  : BookmarkButton(
-                      togglebookmark: toggleBookmark,
-                      isBookmark: false,
-                    ),
-              RotationTransition(
-                turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
-                child: IconButton(
-                  icon: isEnglish
-                      ? const Text(
-                          "अ",
-                          style: TextStyle(fontSize: 20),
-                        )
-                      : const Text(
-                          "A",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                  onPressed: () {
-                    setState(() {
-                      if (isEnglish) {
-                        isEnglish = !isEnglish;
-                        _controller.forward();
+              FutureBuilder(
+                  future: FirebaseFirestore.instance
+                      .collection('Bookmark')
+                      .doc(FirebaseAuth.instance.currentUser.uid)
+                      .get(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    }
+                    if (snapshot.hasData) {
+                      var docData = snapshot.data;
+                      var bookmarkedShloks = docData['bookmarked_shloks'];
+                      if (bookmarkedShloks.contains(widget.currentShlok)) {
+                        isBookmark = true;
                       } else {
-                        isEnglish = !isEnglish;
-                        _controller.reverse();
+                        isBookmark = false;
                       }
-                    });
-                  },
-                ),
-              ),
+                      return BookmarkButton(
+                          togglebookmark: toggleBookmark,
+                          isBookmark: isBookmark);
+                    }
+                    return Icon(Icons.bookmark_border);
+                  }),
+              TranslationBtn(),
             ],
           ),
+
           Center(
             child: Container(
               width: double.infinity,
@@ -208,11 +155,8 @@ class _VersePageState extends State<VersePage> with TickerProviderStateMixin {
               ),
             ),
           ),
-          CustomWidget(title: "Meaning", content: meaning),
-          CustomWidget(
-            title: "Explanation",
-            content: explanation,
-          ),
+          CustomWidget(title: "Meaning", content: widget.translation),
+          CustomWidget(title: "Explanation", content: widget.meaning),
 
           //Navigation arrows
           Row(
@@ -312,9 +256,61 @@ class _BookmarkButtonState extends State<BookmarkButton> {
   }
 }
 
+class TranslationBtn extends StatefulWidget {
+  const TranslationBtn();
+
+  @override
+  _TranslationBtnState createState() => _TranslationBtnState();
+}
+
+class _TranslationBtnState extends State<TranslationBtn>
+    with TickerProviderStateMixin {
+  AnimationController _controller;
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 750),
+      vsync: this,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    bool isEnglish=Provider.of<Translation>(context, listen: true).getIsEnglish();
+    return RotationTransition(
+      turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
+      child: Consumer<Translation>(builder: (_, tanslation, ch) {
+        return IconButton(
+          icon: isEnglish
+              ? const Text(
+                  "अ",
+                  style: TextStyle(fontSize: 20),
+                )
+              : const Text(
+                  "A",
+                  style: TextStyle(fontSize: 20),
+                ),
+          onPressed: () {
+            if (isEnglish) {
+              Provider.of<Translation>(context, listen: false)
+                  .toggleTranslation();
+              _controller.forward();
+            } else {
+              Provider.of<Translation>(context, listen: false)
+                  .toggleTranslation();
+              _controller.reverse();
+            }
+          },
+        );
+      }),
+    );
+  }
+}
+
 class CustomWidget extends StatelessWidget {
   final String title;
-  final String content;
+  final Map<String, dynamic> content;
   const CustomWidget({
     this.title,
     this.content,
@@ -362,13 +358,17 @@ class CustomWidget extends StatelessWidget {
           Padding(
             padding:
                 const EdgeInsets.only(top: 6, bottom: 28, left: 12, right: 12),
-            child: Text(
-              content,
-              style: TextStyle(
-                  fontSize: 19,
-                  color: Colors.orange[700],
-                  fontWeight: FontWeight.w500),
-            ),
+            child: Consumer<Translation>(builder: (_, tanslation, ch) {
+              return Text(
+                Provider.of<Translation>(context, listen: true).getIsEnglish()
+                    ? content['english']
+                    : content['hindi'],
+                style: TextStyle(
+                    fontSize: 19,
+                    color: Colors.orange[700],
+                    fontWeight: FontWeight.w500),
+              );
+            }),
           ),
         ],
       ),
