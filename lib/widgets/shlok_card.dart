@@ -29,54 +29,56 @@ class _ShlokCardState extends State<ShlokCard> {
     final _deviceSize = MediaQuery.of(context).size;
 
     return FutureBuilder(
-        future: FirebaseFirestore.instance
-            .collection("Geeta")
-            .doc(widget.currentShlok.substring(0, 9))
-            .get(),
-        builder: (context, snapshot) {
-          return Stack(
-            children: [
-              Card(
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                margin: EdgeInsets.only(
-                  top: _deviceSize.height * 0.07,
-                  left: _deviceSize.width * 0.09,
-                  right: _deviceSize.width * 0.09,
-                ),
-                child: shlokCard(_deviceSize, snapshot),
+      future: FirebaseFirestore.instance
+          .collection("Geeta")
+          .doc(widget.currentShlok.substring(0, 9))
+          .get(),
+      builder: (context, snapshot) {
+        return Stack(
+          children: [
+            Card(
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
               ),
-              Positioned(
-                top: _deviceSize.height * 0.047,
-                right: _deviceSize.width * 0.042,
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 3, top: 3),
-                    child: LikeButton(
-                      size: _deviceSize.width * 0.07,
-                      isLiked: widget.isFavorite,
-                      likeBuilder: (isLiked) {
-                        final color = isLiked ? Colors.red : Colors.grey;
-                        return Icon(Icons.favorite_outlined,
-                            color: color, size: 25);
-                      },
-                      onTap: (isLiked) async {
-                        setState(() {
-                          widget.toggleFavorite();
-                          widget.isFavorite = !widget.isFavorite;
-                        });
-                        return !isLiked;
-                      },
-                    ),
+              margin: EdgeInsets.only(
+                top: _deviceSize.height * 0.07,
+                left: _deviceSize.width * 0.09,
+                right: _deviceSize.width * 0.09,
+              ),
+              child: shlokCard(_deviceSize, snapshot),
+            ),
+            Positioned(
+              top: _deviceSize.height * 0.047,
+              right: _deviceSize.width * 0.042,
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 3, top: 3),
+                  child: LikeButton(
+                    size: _deviceSize.width * 0.07,
+                    isLiked: widget.isFavorite,
+                    likeBuilder: (isLiked) {
+                      final color = isLiked ? Colors.red : Colors.grey;
+                      return Icon(Icons.favorite_outlined,
+                          color: color, size: 25,
+                    );
+                    },
+                    onTap: (isLiked) async {
+                      setState(() {
+                        widget.toggleFavorite();
+                        widget.isFavorite = !widget.isFavorite;
+                      });
+                      return !isLiked;
+                    },
                   ),
                 ),
               ),
-            ],
-          );
-        });
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Container shlokCard(Size _deviceSize, AsyncSnapshot snapshot) {

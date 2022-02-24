@@ -12,6 +12,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import './comment_screen.dart';
 import '../widgets/translation_card.dart';
 import '../widgets/profile_picture.dart';
 import '../widgets/shlok_card.dart';
@@ -71,7 +72,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   @override
   Future<void> dispose() async {
     super.dispose();
-    SpeakerIcnBtn.player.stop();
+    SpeakerIcnBtn.player.dispose();
 
     if (!doc.exists) {
       await FirebaseFirestore.instance
@@ -206,6 +207,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                         // await saveImage(image);
                         ShareImage.shareImage(image);
                       }
+<<<<<<< HEAD
                     },
                   ),
                 )
@@ -236,6 +238,22 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                 //   ],
                 // )),
                 ),
+=======
+                    }
+                  },
+                  currentIndex: 1,
+                  items: const [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.auto_awesome),
+                      label: "Shlok",
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.offline_share),
+                      label: "Share Shlok",
+                    ),
+                  ],
+                )),
+>>>>>>> 4fedaeb23c7763799d33f28bee0115e3d18878e9
           );
         });
   }

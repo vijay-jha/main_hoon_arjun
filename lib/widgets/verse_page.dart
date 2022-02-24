@@ -13,20 +13,16 @@ class VersePage extends StatefulWidget {
   final Map<String, dynamic> translation;
   final Map<String, dynamic> meaning;
   final String currentShlok;
-  Function checkBookmark;
-  // bool isBookmark = false;
 
-  VersePage(
-      {Key key,
-      @required this.verseNumber,
-      this.currentShlok,
-      this.pageController,
-      this.shlokTitle,
-      this.shlokText,
-      this.translation,
-      this.checkBookmark,
-      this.meaning})
-      : super(key: key);
+  VersePage({
+    @required this.verseNumber,
+    this.currentShlok,
+    this.pageController,
+    this.shlokTitle,
+    this.shlokText,
+    this.translation,
+    this.meaning,
+  });
 
   @override
   State<VersePage> createState() => _VersePageState();
@@ -37,7 +33,7 @@ class _VersePageState extends State<VersePage> {
   bool isBookmark;
 
   @override
-  Future<void> dispose() {
+  Future<void> dispose() async {
     super.dispose();
     () async {
       var doc = await FirebaseFirestore.instance
@@ -81,7 +77,7 @@ class _VersePageState extends State<VersePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          //shlok number
+          // Shlok number
           Container(
             margin: const EdgeInsets.only(top: 6, bottom: 10),
             decoration: BoxDecoration(
@@ -109,7 +105,7 @@ class _VersePageState extends State<VersePage> {
                       .get(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return Icon(Icons.bookmark_border,color: Colors.orange,);
                     }
                     if (snapshot.hasData) {
                       var docData = snapshot.data;
@@ -123,7 +119,7 @@ class _VersePageState extends State<VersePage> {
                           togglebookmark: toggleBookmark,
                           isBookmark: isBookmark);
                     }
-                    return Icon(Icons.bookmark_border);
+                    return Icon(Icons.bookmark_border,color: Colors.orange,);
                   }),
               TranslationBtn(),
             ],
@@ -317,13 +313,13 @@ class CustomWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.grey,
-            offset: Offset(0.0, 1.0), //(x,y)
-            blurRadius: 6.0,
-          ),
-        ],
+        // boxShadow: const [
+        //   BoxShadow(
+        //     color: Colors.grey,
+        //     offset: Offset(0.0, 1.0), //(x,y)
+        //     blurRadius: 6.0,
+        //   ),
+        // ],
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
       ),
