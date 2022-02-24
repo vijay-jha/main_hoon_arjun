@@ -78,29 +78,30 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
       ),
       backgroundColor: Colors.orange.shade50,
       body: FutureBuilder(
-          future: Future.delayed(Duration(seconds: 1)),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return SpinKitFadingCircle(
-                color: Colors.orange,
-              );
-            }
-            return GridView.builder(
-              clipBehavior: Clip.none,
-              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                mainAxisSpacing: 3,
-                maxCrossAxisExtent: 197,
-                childAspectRatio: (MediaQuery.of(context).size.width / 0.62) /
-                    (MediaQuery.of(context).size.height / 0.9),
-                crossAxisSpacing: 0.1,
-              ),
-              itemCount: geetaChapters.length,
-              itemBuilder: (_, index) => Adhyay(
-                geetaChapters[index]['number'],
-                geetaChapters[index]['name'],
-              ),
+        future: Future.delayed(Duration(seconds: 1)),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SpinKitFadingCircle(
+              color: Colors.orange,
             );
-          }),
+          }
+          return GridView.builder(
+            clipBehavior: Clip.none,
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              mainAxisSpacing: 3,
+              maxCrossAxisExtent: 197,
+              childAspectRatio: (MediaQuery.of(context).size.width / 0.62) /
+                  (MediaQuery.of(context).size.height / 0.9),
+              crossAxisSpacing: 0.1,
+            ),
+            itemCount: geetaChapters.length,
+            itemBuilder: (_, index) => Adhyay(
+              geetaChapters[index]['number'],
+              geetaChapters[index]['name'],
+            ),
+          );
+        },
+      ),
     );
   }
 }
