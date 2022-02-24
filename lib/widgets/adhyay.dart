@@ -5,12 +5,8 @@ import 'package:main_hoon_arjun/screens/adhyay_overview_screen.dart';
 class Adhyay extends StatelessWidget {
   final String title;
   final String name;
-
-  Adhyay(
-    this.title,
-    this.name,
-  );
-
+  Adhyay(this.title, this.name);
+  
   var chapterdata = <Map<String, dynamic>>[];
   var shlokList = <String>[];
 
@@ -29,7 +25,9 @@ class Adhyay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(title);
     getChapterData(title);
+    
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
@@ -39,6 +37,7 @@ class Adhyay extends StatelessWidget {
             chapterData: chapterdata,
             title: title,
             adhyayName: name,
+            initialPage: 0,
           ),
         ),
       ),

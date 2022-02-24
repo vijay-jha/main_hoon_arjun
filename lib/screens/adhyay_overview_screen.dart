@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:main_hoon_arjun/providers/translation.dart';
 import 'package:provider/provider.dart';
@@ -6,30 +8,45 @@ import 'package:main_hoon_arjun/widgets/shlok_selection.dart';
 import 'package:main_hoon_arjun/widgets/verse_page.dart';
 
 class AdhyayOverviewScreen extends StatefulWidget {
+  static const routename = "/AdhyayOverviewScreen";
+
   final String title;
   final String adhyayName;
   final List<Map<String, dynamic>> chapterData;
   final List<String> shlokList;
+  final int initialPage;
+
+  bool isBookmarked;
+  String bookmarkedShlok;
 
   AdhyayOverviewScreen({
     this.title,
     this.adhyayName,
     this.chapterData,
     this.shlokList,
+    this.initialPage,
   });
 
-  static const routename = "/AdhyayOverviewScreen";
 
   @override
   State<AdhyayOverviewScreen> createState() => _AdhyayOverviewScreenState();
 }
 
 class _AdhyayOverviewScreenState extends State<AdhyayOverviewScreen> {
-  PageController controller = PageController(initialPage: 0);
-  int pagechanged = 1;
+  PageController controller;
+  int pagechanged;
+  bool _isVisible = false;
   String currentShlok;
+  bool isBookmark;
 
   var doc;
+
+  @override
+  void initState() {
+    super.initState();
+    pagechanged = widget.initialPage+1;
+    controller = PageController(initialPage: widget.initialPage );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,45 +57,47 @@ class _AdhyayOverviewScreenState extends State<AdhyayOverviewScreen> {
         ),
       ],
       child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () {},
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(65.0),
-              child: BuildAppBar(
-                chapterData: widget.chapterData,
-                shlokList: widget.shlokList,
-                controller: controller,
-                adhyayName: widget.adhyayName,
-                adhyayNumber: widget.title,
-              )),
-          body: Stack(
-            children: [
-              PageView.builder(
-                onPageChanged: (index) {
-                  pagechanged = index + 1;
-                },
-                controller: controller,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return VersePage(
-                    currentShlok:
-                        "Chapter${widget.chapterData[index]['chapter']}_${widget.shlokList[index]}",
-                    verseNumber: index + 1,
-                    shlokTitle: widget.chapterData[index]['shlok'],
-                    pageController: controller,
-                    shlokText: widget.chapterData[index]['text'],
-                    meaning: widget.chapterData[index]['meaning'],
-                    translation: widget.chapterData[index]['translation'],
-                  );
-                },
-                itemCount: widget.shlokList.length,
-              ),
-            ],
-          ),
-        ),
-      ),
+          behavior: HitTestBehavior.opaque,
+          onTap: () {},
+          child: Scaffold(
+              backgroundColor: Colors.white,
+              appBar: PreferredSize(
+                  preferredSize: const Size.fromHeight(65.0),
+                  child: BuildAppBar(
+                    chapterData: widget.chapterData,
+                    shlokList: widget.shlokList,
+                    controller: controller,
+                    adhyayName: widget.adhyayName,
+                    adhyayNumber: widget.title,
+                  )),
+              body: Stack(children: [
+                PageView.builder(
+                  onPageChanged: (index) {
+                    pagechanged = index + 1;
+                  },
+                  controller: controller,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return VersePage(
+                      currentShlok:
+                          "Chapter${widget.chapterData[index]['chapter']}_${widget.shlokList[index]}",
+                      verseNumber: index + 1,
+                      shlokTitle: widget.chapterData[index]['shlok'],
+                      pageController: controller,
+                      shlokText: widget.chapterData[index]['text'],
+                      meaning: widget.chapterData[index]['meaning'],
+                      translation: widget.chapterData[index]['translation'],
+                    );
+                  },
+                  itemCount: widget.shlokList.length,
+                ),
+                Visibility(
+                  child: SlideIndicator(
+                      totalShloks: widget.shlokList.length,
+                      currentShlok: pagechanged),
+                  visible: _isVisible,
+                ),
+              ]))),
     );
   }
 }
