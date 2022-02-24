@@ -22,6 +22,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -37,18 +39,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             return ListView(
               children: [
-                const SizedBox(
-                  height: 20,
+                SizedBox(
+                  height: _deviceSize.height * 0.07, // 50
                 ),
                 Center(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       InkWell(
                         onTap: () {
                           Navigator.pushNamed(context, DisplayAvatar.routeName);
                         },
                         child: CircleAvatar(
-                          radius: 70,
+                          radius: _deviceSize.width * 0.2,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(70),
                             child: Image.asset(
@@ -60,7 +63,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 20, bottom: 20),
+                        padding: EdgeInsets.symmetric(
+                            vertical: _deviceSize.height * 0.03),
                         child: Text(
                           snapshot.hasData ? snapshot.data['username'] : "",
                           style: TextStyle(
@@ -72,64 +76,82 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 50,
+                Container(
+                  color: Colors.orange.shade100,
+                  padding: EdgeInsets.all(_deviceSize.width * 0.015),
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                  child: Column(
+                    children: [
+                      choice(context, 'Username', snapshot, _deviceSize),
+                      choice(context, 'Avatar', snapshot, _deviceSize),
+                      choice(context, 'About', snapshot, _deviceSize),
+                    ],
+                  ),
                 ),
-                choice(context, 'Username', snapshot),
-                choice(context, 'Avatar', snapshot),
-                choice(context, 'About', snapshot),
-                const Divider(),
-                const SizedBox(
-                  height: 50,
+                SizedBox(
+                  height: _deviceSize.height * 0.07,
                 ),
-                InkWell(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                        backgroundColor: Colors.orange.shade50,
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text("Sign Out"),
-                            Divider(
-                              thickness: 1,
-                            ),
+                Container(
+                  color: Colors.orange.shade100,
+                  padding: EdgeInsets.symmetric(horizontal: _deviceSize.width * 0.015),
+                  child: InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          backgroundColor: Colors.orange.shade50,
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text("Sign Out"),
+                              Divider(
+                                thickness: 1,
+                              ),
+                            ],
+                          ),
+                          content: Text("Do you really want to Sign out?"),
+                          actions: [
+                            OutlinedButton(
+                                onPressed: () async {
+                                  await Future.delayed(
+                                      Duration(milliseconds: 200));
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("Cancel")),
+                            OutlinedButton(
+                                onPressed: () async {
+                                  await Future.delayed(
+                                      Duration(milliseconds: 200));
+                                  FirebaseAuth.instance.signOut();
+                                  Navigator.pushReplacementNamed(
+                                      context, SignOutSplashScreen.routeName);
+                                },
+                                child: Text("Sign Out")),
                           ],
                         ),
-                        content: Text("Do you really want to Sign out?"),
-                        actions: [
-                          OutlinedButton(
-                              onPressed: () async {
-                                await Future.delayed(
-                                    Duration(milliseconds: 200));
-                                Navigator.of(context).pop();
-                              },
-                              child: Text("Cancel")),
-                          OutlinedButton(
-                              onPressed: () async {
-                                await Future.delayed(
-                                    Duration(milliseconds: 200));
-                                FirebaseAuth.instance.signOut();
-                                Navigator.pushReplacementNamed(
-                                    context, SignOutSplashScreen.routeName);
-                              },
-                              child: Text("Sign Out")),
+                      );
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Sign out',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.orange.shade700,
+                            ),
+                            textAlign: TextAlign.start,
+                          ),
+                          Icon(
+                            Icons.exit_to_app,
+                            color: Colors.orange.shade700,
+                          ),
                         ],
                       ),
-                    );
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 20),
-                    child: Text(
-                      'Sign out',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.orange,
-                      ),
-                      textAlign: TextAlign.start,
                     ),
                   ),
                 )
@@ -139,7 +161,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  InkWell choice(BuildContext ctx, String choice, AsyncSnapshot snapshot) {
+  InkWell choice(BuildContext ctx, String choice, AsyncSnapshot snapshot, var _deviceSize) {
     final _usernameController = TextEditingController();
     if (snapshot.hasData) {
       _usernameController.text = snapshot.data['username'];
@@ -161,7 +183,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 return Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.only(top: 20, right: 20, left: 20),
+                      padding: EdgeInsets.only(top: _deviceSize.height * 0.02, right: _deviceSize.width * 0.05, left: _deviceSize.width * 0.05),
                       child: TextField(
                         controller: _usernameController,
                         style: TextStyle(
@@ -211,28 +233,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
         }
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        decoration: BoxDecoration(
-          // border: Border.all(color: Colors.grey.shade300),
-          border: Border(
-            bottom: BorderSide.none,
-            top: BorderSide(
-              width: 1,
-              color: Colors.grey.shade300,
-            ),
-          ),
-        ),
+        padding:  EdgeInsets.symmetric(vertical: _deviceSize.height * 0.02, horizontal: _deviceSize.width * 0.05),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               choice,
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.orange
-              ),
+              style: TextStyle(fontSize: 20, color: Colors.orange.shade700),
             ),
-            Icon(Icons.chevron_right),
+            choice == 'Username'
+                ? Icon(
+                    Icons.edit,
+                    color: Colors.orange.shade700,
+                  )
+                : choice == 'Avatar'
+                    ? Icon(
+                        Icons.person_outlined,
+                        color: Colors.orange.shade700,
+                      )
+                    : Icon(
+                        Icons.chevron_right,
+                        color: Colors.orange.shade700,
+                      ),
           ],
         ),
       ),

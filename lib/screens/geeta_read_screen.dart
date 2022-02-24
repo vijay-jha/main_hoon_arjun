@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:main_hoon_arjun/screens/bookmark_screen.dart';
 
 import '../widgets/profile_picture.dart';
@@ -15,26 +16,24 @@ class GeetaReadScreen extends StatefulWidget {
 
 class _GeetaReadScreenState extends State<GeetaReadScreen> {
   var finalData = <Map<String, dynamic>>[];
-  var doc;
 
   @override
   void initState() {
     super.initState();
     () async {
       var _user = FirebaseAuth.instance.currentUser;
-      doc = await FirebaseFirestore.instance
+      var doc = await FirebaseFirestore.instance
           .collection('Bookmark')
           .doc(_user.uid)
           .get();
-    }();
-    if (doc != null) {
+
       if (!doc.exists) {
         FirebaseFirestore.instance
             .collection('Bookmark')
             .doc(FirebaseAuth.instance.currentUser.uid)
             .set({'bookmarked_shloks': []});
       }
-    }
+    }();
   }
 
   List<Map<String, dynamic>> geetaChapters = [
@@ -79,36 +78,29 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
       ),
       backgroundColor: Colors.orange.shade50,
       body: FutureBuilder(
-        future: FirebaseFirestore.instance
-            .collection('Bookmark')
-            .doc(FirebaseAuth.instance.currentUser.uid)
-            .get(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-                child: CircularProgressIndicator(
-              color: Colors.orange[700],
-            ));
-          }
-          if (snapshot.hasData) {
+          future: Future.delayed(Duration(seconds: 1)),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return SpinKitFadingCircle(
+                color: Colors.orange,
+              );
+            }
             return GridView.builder(
               clipBehavior: Clip.none,
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                 mainAxisSpacing: 3,
                 maxCrossAxisExtent: 197,
-                childAspectRatio: (MediaQuery.of(context).size.width / 0.6) /
+                childAspectRatio: (MediaQuery.of(context).size.width / 0.62) /
                     (MediaQuery.of(context).size.height / 0.9),
                 crossAxisSpacing: 0.1,
               ),
               itemCount: geetaChapters.length,
-              itemBuilder: (_, index) => Adhyay(geetaChapters[index]['number'],
-                  geetaChapters[index]['name'], snapshot.data),
+              itemBuilder: (_, index) => Adhyay(
+                geetaChapters[index]['number'],
+                geetaChapters[index]['name'],
+              ),
             );
-          }
-          return const Center();
-        },
-      ),
-      // body: GridView(),
+          }),
     );
   }
 }

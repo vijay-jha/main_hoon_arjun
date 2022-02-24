@@ -1,7 +1,3 @@
-import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:main_hoon_arjun/providers/translation.dart';
 import 'package:provider/provider.dart';
@@ -14,12 +10,8 @@ class AdhyayOverviewScreen extends StatefulWidget {
   final String adhyayName;
   final List<Map<String, dynamic>> chapterData;
   final List<String> shlokList;
-  final bookmarkData;
-  bool isBookmarked;
-  String bookmarkedShlok;
 
   AdhyayOverviewScreen({
-    this.bookmarkData,
     this.title,
     this.adhyayName,
     this.chapterData,
@@ -35,10 +27,8 @@ class AdhyayOverviewScreen extends StatefulWidget {
 class _AdhyayOverviewScreenState extends State<AdhyayOverviewScreen> {
   PageController controller = PageController(initialPage: 0);
   int pagechanged = 1;
-  bool _isVisible = false;
   String currentShlok;
-  bool isBookmark;
-  var _user;
+
   var doc;
 
   @override
@@ -84,12 +74,6 @@ class _AdhyayOverviewScreenState extends State<AdhyayOverviewScreen> {
                   );
                 },
                 itemCount: widget.shlokList.length,
-              ),
-              Visibility(
-                child: SlideIndicator(
-                    totalShloks: widget.shlokList.length,
-                    currentShlok: pagechanged),
-                visible: _isVisible,
               ),
             ],
           ),

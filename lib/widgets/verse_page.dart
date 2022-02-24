@@ -13,19 +13,16 @@ class VersePage extends StatefulWidget {
   final Map<String, dynamic> translation;
   final Map<String, dynamic> meaning;
   final String currentShlok;
-  Function checkBookmark;
 
-  VersePage(
-      {Key key,
-      @required this.verseNumber,
-      this.currentShlok,
-      this.pageController,
-      this.shlokTitle,
-      this.shlokText,
-      this.translation,
-      this.checkBookmark,
-      this.meaning})
-      : super(key: key);
+  VersePage({
+    @required this.verseNumber,
+    this.currentShlok,
+    this.pageController,
+    this.shlokTitle,
+    this.shlokText,
+    this.translation,
+    this.meaning,
+  });
 
   @override
   State<VersePage> createState() => _VersePageState();
@@ -36,7 +33,7 @@ class _VersePageState extends State<VersePage> {
   bool isBookmark;
 
   @override
-  Future<void> dispose() {
+  Future<void> dispose() async {
     super.dispose();
     () async {
       var doc = await FirebaseFirestore.instance
@@ -108,7 +105,7 @@ class _VersePageState extends State<VersePage> {
                       .get(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return Icon(Icons.bookmark_border);
                     }
                     if (snapshot.hasData) {
                       var docData = snapshot.data;
@@ -276,7 +273,8 @@ class _TranslationBtnState extends State<TranslationBtn>
 
   @override
   Widget build(BuildContext context) {
-    bool isEnglish=Provider.of<Translation>(context, listen: true).getIsEnglish();
+    bool isEnglish =
+        Provider.of<Translation>(context, listen: true).getIsEnglish();
     return RotationTransition(
       turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
       child: Consumer<Translation>(builder: (_, tanslation, ch) {
