@@ -319,13 +319,13 @@ class CustomWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.grey,
-            offset: Offset(0.0, 1.0), //(x,y)
-            blurRadius: 6.0,
-          ),
-        ],
+        // boxShadow: const [
+        //   BoxShadow(
+        //     color: Colors.grey,
+        //     offset: Offset(0.0, 1.0), //(x,y)
+        //     blurRadius: 6.0,
+        //   ),
+        // ],
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
       ),

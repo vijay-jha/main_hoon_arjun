@@ -42,12 +42,12 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: ElevatedButton(
-        child: const Icon(Icons.bookmark),
+        child: const Icon(Icons.bookmark, color: Colors.orange,),
         style: ButtonStyle(
             shape: MaterialStateProperty.all<CircleBorder>(
               const CircleBorder(),
             ),
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.orange)),
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.orange.shade100)),
         onPressed: () {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => BookmarkScreen()));
