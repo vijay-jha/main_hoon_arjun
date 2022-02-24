@@ -109,7 +109,7 @@ class _VersePageState extends State<VersePage> {
                       .get(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return Icon(Icons.bookmark_border,color: Colors.orange,);
                     }
                     if (snapshot.hasData) {
                       var docData = snapshot.data;
@@ -123,7 +123,7 @@ class _VersePageState extends State<VersePage> {
                           togglebookmark: toggleBookmark,
                           isBookmark: isBookmark);
                     }
-                    return Icon(Icons.bookmark_border);
+                    return Icon(Icons.bookmark_border,color: Colors.orange,);
                   }),
               TranslationBtn(),
             ],
