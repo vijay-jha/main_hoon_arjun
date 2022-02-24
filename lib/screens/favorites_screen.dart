@@ -102,7 +102,8 @@ class _FavoritesBodyState extends State<FavoritesBody> {
                               shlok: Provider.of<FavoritesShlok>(context,
                                       listen: false)
                                   .shlok());
-                });
+                },
+                );
           }
           return SliverToBoxAdapter(
               child: NoItemInList.noShloks(_deviceSize, false));
@@ -112,9 +113,8 @@ class _FavoritesBodyState extends State<FavoritesBody> {
 
 class FavoritesItemList extends StatefulWidget {
   FavoritesItemList({
-    Key key,
     @required this.shlok,
-  }) : super(key: key);
+  });
 
   List<Map<String, dynamic>> shlok;
 

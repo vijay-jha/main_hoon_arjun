@@ -3,7 +3,6 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-import './constants.dart';
 import './screens/favorites_screen.dart';
 import './screens/feed_screen.dart';
 import './screens/geeta_read_screen.dart';

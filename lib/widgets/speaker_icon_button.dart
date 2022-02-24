@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// import 'package:audioplayers/audioplayers.dart';
 import 'package:just_audio/just_audio.dart';
 
 import '../providers/playing_shlok.dart';
@@ -16,6 +15,7 @@ class SpeakerIcnBtn extends StatefulWidget {
   final bool isDesired;
   final int shlokIndex;
   final Future<String> audioUrl;
+
   static AudioPlayer player;
 
   @override
@@ -31,7 +31,6 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
     SpeakerIcnBtn.player = AudioPlayer();
     () async {
       url = await widget.audioUrl;
-      // final duration = await SpeakerIcnBtn.player.setUrl(url);
     }();
   }
 
@@ -79,7 +78,7 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
     var playingShlok = Provider.of<PlayingShlok>(context, listen: false);
     final _deviceSize = MediaQuery.of(context).size;
 
-void _onTap() {
+    void _onTap() {
       if (playingShlok.getCureentShlokPlay() != widget.shlokIndex) {
         SpeakerIcnBtn.player.stop();
         playingShlok.setCurrentshlokPlaying(widget.shlokIndex);

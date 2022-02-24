@@ -19,13 +19,12 @@ class GeetaReadScreen extends StatefulWidget {
 
 class _GeetaReadScreenState extends State<GeetaReadScreen> {
   var finalData = <Map<String, dynamic>>[];
-  var doc;
 
   void initState() {
     super.initState();
     () async {
       var _user = FirebaseAuth.instance.currentUser;
-      doc = await FirebaseFirestore.instance
+      var doc = await FirebaseFirestore.instance
           .collection('Bookmark')
           .doc(_user.uid)
           .get();
@@ -43,12 +42,12 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: ElevatedButton(
-        child: const Icon(Icons.bookmark),
+        child: const Icon(Icons.bookmark, color: Colors.orange,),
         style: ButtonStyle(
             shape: MaterialStateProperty.all<CircleBorder>(
               const CircleBorder(),
             ),
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.orange)),
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.orange.shade100)),
         onPressed: () {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => BookmarkScreen()));
@@ -85,6 +84,5 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
         },
       ),
     );
-    ;
   }
 }

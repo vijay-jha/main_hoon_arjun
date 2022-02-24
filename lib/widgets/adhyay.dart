@@ -5,10 +5,8 @@ import 'package:main_hoon_arjun/screens/adhyay_overview_screen.dart';
 class Adhyay extends StatelessWidget {
   final String title;
   final String name;
-
-  // final adhyayData;
-  // ignore: use_key_in_widget_constructors
   Adhyay(this.title, this.name);
+  
   var chapterdata = <Map<String, dynamic>>[];
   var shlokList = <String>[];
 
