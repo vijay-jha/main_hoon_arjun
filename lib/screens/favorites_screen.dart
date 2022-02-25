@@ -82,31 +82,29 @@ class _FavoritesBodyState extends State<FavoritesBody> {
             .snapshots(),
         builder: (context, streamSnapShot) {
           if (streamSnapShot.connectionState == ConnectionState.waiting) {
-            return SliverToBoxAdapter(
-                child: NoItemInList.loading(_deviceSize, false));
+            return NoItemInList.loading(_deviceSize);
           }
           if (streamSnapShot.hasData) {
             return FutureBuilder(
-                future: Provider.of<FavoritesShlok>(context, listen: false)
-                    .fetchFavoriteShlok(streamSnapShot.data),
-                builder: (context, snapshot) {
-                  return snapshot.connectionState == ConnectionState.waiting
-                      ? SliverToBoxAdapter(
-                          child: NoItemInList.loading(_deviceSize, false))
-                      : Provider.of<FavoritesShlok>(context, listen: false)
-                              .shlok()
-                              .isEmpty
-                          ? SliverToBoxAdapter(
-                              child: NoItemInList.noShloks(_deviceSize, false))
-                          : FavoritesItemList(
-                              shlok: Provider.of<FavoritesShlok>(context,
-                                      listen: false)
-                                  .shlok());
-                },
-                );
+              future: Provider.of<FavoritesShlok>(context, listen: false)
+                  .fetchFavoriteShlok(streamSnapShot.data),
+              builder: (context, snapshot) {
+                return snapshot.connectionState == ConnectionState.waiting
+                    ? NoItemInList.loading(_deviceSize)
+                    : Provider.of<FavoritesShlok>(context, listen: false)
+                            .shlok()
+                            .isEmpty
+                        ? 
+                            NoItemInList.noShloks(_deviceSize, )
+                        : FavoritesItemList(
+                            shlok: Provider.of<FavoritesShlok>(context,
+                                    listen: false)
+                                .shlok());
+              },
+            );
           }
-          return SliverToBoxAdapter(
-              child: NoItemInList.noShloks(_deviceSize, false));
+          return 
+              NoItemInList.noShloks(_deviceSize);
         });
   }
 }

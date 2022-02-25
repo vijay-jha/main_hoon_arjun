@@ -4,15 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:main_hoon_arjun/providers/bookmark.dart';
 import 'package:main_hoon_arjun/widgets/bookmark_card.dart';
 import 'package:main_hoon_arjun/widgets/noItemInList.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
-class BookmarkScreen extends StatelessWidget {
-  // ignore: use_key_in_widget_constructors
-  const BookmarkScreen() : super();
+class BookmarkScreen extends StatefulWidget {
+  const BookmarkScreen();
 
   @override
+  _BookmarkScreenState createState() => _BookmarkScreenState();
+}
+
+class _BookmarkScreenState extends State<BookmarkScreen> {
+  @override
   Widget build(BuildContext context) {
-    final _deviceSize = MediaQuery.of(context).size;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -21,56 +25,76 @@ class BookmarkScreen extends StatelessWidget {
       ],
       child: Scaffold(
         backgroundColor: Colors.orange.shade50,
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.orange, //change your color here
-          ),
-          backgroundColor: Colors.white,
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: const EdgeInsets.only(left: 15.0, top: 10),
-                  child: Text(
-                    "Bookmarks",
+        body: Container(
+          color: Colors.orange.shade50,
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                backgroundColor: Colors.orange.shade600,
+                expandedHeight: 240,
+                pinned: true,
+                flexibleSpace: FlexibleSpaceBar(
+                  // centerTitle: true,
+                  title: const Text(
+                    "Bookmark",
                     style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.orange[700],
-                        fontWeight: FontWeight.bold),
-                  )),
+                      color: Colors.white,
+                    ),
+                  ),
+                  background: Image.asset(
+                    "assets/images/MorPankh.jpg",
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              const BookmarkBody(),
             ],
           ),
         ),
-        body: StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('Bookmark')
-                .doc(FirebaseAuth.instance.currentUser.uid)
-                .snapshots(),
-            builder: (context, streamSnapShot) {
-              if (streamSnapShot.connectionState == ConnectionState.waiting) {
-                return NoItemInList.loading(_deviceSize,true);
-              }
-              if (streamSnapShot.hasData) {
-              
-                return FutureBuilder(
-                    future: Provider.of<BookmarkShlok>(context, listen: false)
-                        .fetchBookmarkShlok(streamSnapShot.data),
-                    builder: (context, snapshot) {
-                      return snapshot.connectionState == ConnectionState.waiting
-                          ? NoItemInList.loading(_deviceSize,true)
-                          : Provider.of<BookmarkShlok>(context, listen: false)
-                                  .shlok()
-                                  .isEmpty
-                              ? NoItemInList.noShloks(_deviceSize,true)
-                              : BookmarkList(Provider.of<BookmarkShlok>(context,
-                                      listen: false)
-                                  .shlok());
-                    });
-              }
-              return NoItemInList.noShloks(_deviceSize,true);
-            }),
       ),
     );
+  }
+}
+
+
+class BookmarkBody extends StatefulWidget {
+  const BookmarkBody();
+
+  @override
+  _BookmarkBobyState createState() => _BookmarkBobyState();
+}
+
+class _BookmarkBobyState extends State<BookmarkBody> {
+  @override
+  Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('Bookmark')
+            .doc(FirebaseAuth.instance.currentUser.uid)
+            .snapshots(),
+        builder: (context, streamSnapShot) {
+          if (streamSnapShot.connectionState == ConnectionState.waiting) {
+            return NoItemInList.loading(_deviceSize);
+          }
+          if (streamSnapShot.hasData) {
+            return FutureBuilder(
+                future: Provider.of<BookmarkShlok>(context, listen: false)
+                    .fetchBookmarkShlok(streamSnapShot.data),
+                builder: (context, snapshot) {
+                  return snapshot.connectionState == ConnectionState.waiting
+                      ? NoItemInList.loading(_deviceSize)
+                      : Provider.of<BookmarkShlok>(context, listen: false)
+                              .shlok()
+                              .isEmpty
+                          ? NoItemInList.noShloks(_deviceSize)
+                          : BookmarkList(
+                              Provider.of<BookmarkShlok>(context, listen: false)
+                                  .shlok());
+                });
+          }
+          return NoItemInList.noShloks(_deviceSize);
+        });
   }
 }
 
@@ -80,10 +104,11 @@ class BookmarkList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     shlok = [...shlok.reversed];
-    return ListView.builder(
-        itemCount: shlok.length,
-        itemBuilder: (BuildContext context, int index) {
-          return BookmarkCard(shlok[index]);
-        });
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) => BookmarkCard(shlok[index]),
+        childCount: shlok.length,
+      ),
+    );
   }
 }
