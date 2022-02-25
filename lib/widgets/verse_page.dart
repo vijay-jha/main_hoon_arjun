@@ -280,14 +280,8 @@ class _TranslationBtnState extends State<TranslationBtn>
       child: Consumer<Translation>(builder: (_, tanslation, ch) {
         return IconButton(
           icon: isEnglish
-              ? const Text(
-                  "अ",
-                  style: TextStyle(fontSize: 20),
-                )
-              : const Text(
-                  "A",
-                  style: TextStyle(fontSize: 20),
-                ),
+              ? Image.asset('assets/images/translationEnglish.jpeg')
+              : Image.asset('assets/images/tranlationHindi.jpeg'),
           onPressed: () {
             if (isEnglish) {
               Provider.of<Translation>(context, listen: false)
