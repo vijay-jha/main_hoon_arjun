@@ -259,11 +259,7 @@ class _AuthScreenState extends State<AuthScreen>
                         iconColor: kPrimaryC,
                         submit: _submitAuthForm,
                         isLogin: true,
-<<<<<<< HEAD
-                        textColor: null,
-=======
                         textColor: Colors.orange.shade900,
->>>>>>> ceed17cfe8abbc8ac62bc53b6076a81a7f14134f
                         deviceSize: _deviceSize,
                       ),
                     ],

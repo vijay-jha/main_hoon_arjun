@@ -165,23 +165,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                 SizedBox(
                   height: _deviceSize.height * 0.05,
                 ),
-<<<<<<< HEAD
-                floatingActionButton: Padding(
-                  padding: const EdgeInsets.only(left: 40),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.orange, shape: CircleBorder()),
-                    child: Container(
-                        padding: const EdgeInsets.all(14),
-                        child: const Icon(Icons.offline_share)),
-                    onPressed: () async {
-                      final image = await _controller.capture();
-                      if (image != null) {
-                        // await saveImage(image);
-                        ShareImage.shareImage(image);
-                      }
-                    },
-=======
                 Container(
                   margin: EdgeInsets.symmetric(
                       horizontal: _deviceSize.width * 0.42),
@@ -192,13 +175,8 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                       shlokIndex: 0,
                       isDesired: true,
                     ),
->>>>>>> ceed17cfe8abbc8ac62bc53b6076a81a7f14134f
                   ),
                 ),
-<<<<<<< HEAD
-          );
-        });
-=======
                 SizedBox(
                   height: _deviceSize.height * 0.05,
                 ),
@@ -233,6 +211,5 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
         );
       },
     );
->>>>>>> ceed17cfe8abbc8ac62bc53b6076a81a7f14134f
   }
 }
