@@ -66,7 +66,7 @@ class AboutScreen extends StatelessWidget {
               child: Text(
                 """'Mai Hoon Arjun' is based on the 'Shrimad Bhagvad Geeta' which has solution  for controlling all human feelings.The app provides shloks with enriched translation and meaning based on user feelings. 
 
-Our misssion is to spread the learnings from 'Shrimad Bhagvad Geeta' and make peope aware of this great treasure.""",
+Our misssion is to spread the learnings from 'Shrimad Bhagvad Geeta' and make people aware of this great treasure.""",
                 style: TextStyle(
                     fontSize: 18,
                     color: Colors.orange[700],
