@@ -20,11 +20,11 @@ class BookmarkScreen extends StatelessWidget {
         ),
       ],
       child: Scaffold(
+        backgroundColor: Colors.orange.shade50,
         appBar: AppBar(
           iconTheme: const IconThemeData(
             color: Colors.orange, //change your color here
           ),
-          elevation: 0,
           backgroundColor: Colors.white,
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

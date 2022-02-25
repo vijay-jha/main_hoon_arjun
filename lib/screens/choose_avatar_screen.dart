@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ViewportOffset;
 import 'package:provider/provider.dart';
 
-import './animated_dialog_box.dart';
 import '../providers/mahabharat_characters.dart';
 
 class DisplayAvatar extends StatefulWidget {
@@ -121,8 +120,6 @@ class Avatar extends StatefulWidget {
 }
 
 class _AvatarState extends State<Avatar> {
-  // final mahabharatAvatars = MahabharatCharacters();
-
   final _filterCharacters = ValueNotifier<String>(
     'assets/images/Arjun.png',
   );
@@ -202,7 +199,7 @@ class FilterSelector extends StatefulWidget {
     @required this.filters,
     @required this.onFilterChanged,
     @required this.onSelectAvatar,
-    this.padding = const EdgeInsets.symmetric(vertical: 24.0),
+    this.padding = const EdgeInsets.symmetric(vertical: 25.0),
   });
 
   final List<Map<String, String>> filters;
@@ -287,39 +284,6 @@ class _FilterSelectorState extends State<FilterSelector> {
         ],
       ),
     );
-
-    // await AnimatedDialogBox.showScaleAlertBox(
-    //     title: const Center(child: Text("Avatar")), // IF YOU WANT TO ADD
-    //     context: context,
-    //     firstButton: MaterialButton(
-    //       shape: RoundedRectangleBorder(
-    //         borderRadius: BorderRadius.circular(40),
-    //       ),
-    //       color: Colors.white,
-    //       child: const Text('Cancel'),
-    //       onPressed: () {
-    //         Navigator.of(context).pop();
-    //       },
-    //     ),
-    //     secondButton: MaterialButton(
-    //       shape: RoundedRectangleBorder(
-    //         borderRadius: BorderRadius.circular(40),
-    //       ),
-    //       color: Colors.white,
-    //       child: const Text('Ok'),
-    //       onPressed: () {
-    //         widget.onSelectAvatar(
-    //           currentIndexForSelect,
-    //         );
-    //         Navigator.of(context).pop();
-    //         Navigator.of(context).pop();
-    //       },
-    //     ),
-    //     icon: const Icon(
-    //       Icons.info_outline,
-    //       color: Colors.red,
-    //     ), // IF YOU WANT TO ADD ICON
-    //     yourWidget: Text('Are you Sure you want to Change Avatar'));
   }
 
   @override
@@ -330,6 +294,8 @@ class _FilterSelectorState extends State<FilterSelector> {
 
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
+
     return Scrollable(
       controller: _controller,
       axisDirection: AxisDirection.right,

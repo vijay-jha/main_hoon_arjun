@@ -78,8 +78,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 Container(
                   color: Colors.orange.shade100,
-                  padding: EdgeInsets.all(_deviceSize.width * 0.015),
-                  margin: EdgeInsets.symmetric(vertical: 10),
+                  padding: EdgeInsets.all(_deviceSize.width * 0.005),
+                  margin: EdgeInsets.only(
+                    top: _deviceSize.height * 0.01,
+                    bottom: _deviceSize.height * 0.002,
+                  ),
                   child: Column(
                     children: [
                       choice(context, 'Username', snapshot, _deviceSize),
@@ -89,11 +92,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: _deviceSize.height * 0.07,
+                  height: _deviceSize.height * 0.05,
                 ),
                 Container(
                   color: Colors.orange.shade100,
-                  padding: EdgeInsets.symmetric(horizontal: _deviceSize.width * 0.015),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: _deviceSize.width * 0.015),
                   child: InkWell(
                     onTap: () {
                       showDialog(
@@ -161,7 +165,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  InkWell choice(BuildContext ctx, String choice, AsyncSnapshot snapshot, var _deviceSize) {
+  InkWell choice(BuildContext ctx, String choice, AsyncSnapshot snapshot,
+      var _deviceSize) {
     final _usernameController = TextEditingController();
     if (snapshot.hasData) {
       _usernameController.text = snapshot.data['username'];
@@ -183,7 +188,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 return Column(
                   children: [
                     Container(
-                      padding: EdgeInsets.only(top: _deviceSize.height * 0.02, right: _deviceSize.width * 0.05, left: _deviceSize.width * 0.05),
+                      padding: EdgeInsets.only(
+                          top: _deviceSize.height * 0.02,
+                          right: _deviceSize.width * 0.05,
+                          left: _deviceSize.width * 0.05),
                       child: TextField(
                         controller: _usernameController,
                         style: TextStyle(
@@ -233,7 +241,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         }
       },
       child: Container(
-        padding:  EdgeInsets.symmetric(vertical: _deviceSize.height * 0.02, horizontal: _deviceSize.width * 0.05),
+        padding: EdgeInsets.symmetric(
+            vertical: _deviceSize.height * 0.02,
+            horizontal: _deviceSize.width * 0.05),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
