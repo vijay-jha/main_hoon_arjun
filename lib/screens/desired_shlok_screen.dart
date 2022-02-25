@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:main_hoon_arjun/widgets/shareImage.dart';
 import 'package:provider/provider.dart';
@@ -68,7 +69,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
     }();
   }
 
-
   @override
   Future<void> dispose() async {
     super.dispose();
@@ -102,6 +102,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
     }
   }
 
+  bool isShareVisible = true;
   @override
   Widget build(BuildContext context) {
     final _deviceSize = MediaQuery.of(context).size;
@@ -192,14 +193,52 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                     ),
                   ],
                 ),
-                bottomNavigationBar: BottomNavigationBar(
-                  onTap: (int index) async {
-                    if (index == 2) {
+                floatingActionButton: Padding(
+                  padding: const EdgeInsets.only(left: 40),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.orange, shape: CircleBorder()),
+                    child: Container(
+                        padding: const EdgeInsets.all(14),
+                        child: const Icon(Icons.offline_share)),
+                    onPressed: () async {
                       final image = await _controller.capture();
                       if (image != null) {
                         // await saveImage(image);
                         ShareImage.shareImage(image);
                       }
+<<<<<<< HEAD
+                    },
+                  ),
+                )
+                // bottomNavigationBar: BottomNavigationBar(
+                //   onTap: (int index) async {
+                //     if (index == 2) {
+                //       final image = await _controller.capture();
+                //       if (image != null) {
+                //         // await saveImage(image);
+                //         ShareImage.shareImage(image);
+                //       }
+                //     }
+                //   },
+                //   currentIndex: 1,
+                //   items: const [
+                //     BottomNavigationBarItem(
+                //       icon: Icon(Icons.comment),
+                //       label: "Comments",
+                //     ),
+                //     BottomNavigationBarItem(
+                //       icon: Icon(Icons.auto_awesome),
+                //       label: "Shlok",
+                //     ),
+                //     BottomNavigationBarItem(
+                //       icon: Icon(Icons.offline_share),
+                //       label: "Share Shlok",
+                //     ),
+                //   ],
+                // )),
+                ),
+=======
                     }
                   },
                   currentIndex: 1,
@@ -214,6 +253,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                     ),
                   ],
                 )),
+>>>>>>> 4fedaeb23c7763799d33f28bee0115e3d18878e9
           );
         });
   }

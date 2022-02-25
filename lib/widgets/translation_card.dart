@@ -34,48 +34,58 @@ class _TranslationCardState extends State<TranslationCard> {
           return Stack(
             children: [
               Container(
+                padding: EdgeInsets.all(24),
                 margin: EdgeInsets.only(
-                  left: _deviceSize.width * 0.09,
-                  right: _deviceSize.width * 0.09,
+                  left: _deviceSize.width * 0.08,
+                  right: _deviceSize.width * 0.08,
                 ),
-                padding: EdgeInsets.all(30),
-                width: double.infinity,
-                // height: _deviceSize.height * 0.3,
                 decoration: BoxDecoration(
+                  color: Colors.orange.shade100,
                   shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
                 ),
-                child: Text(
-                  snapshot.hasData
-                      ? isTranslatedToEnglish
-                          ? snapshot.data['Shlok${widget.shlokNo}']['translation']
-                              ['english']
-                          : snapshot.data['Shlok${widget.shlokNo}']['translation']
-                              ['hindi']
-                      : '''
-........
-........
-........
-........
-          ''',
-                  style: TextStyle(
-                    color: Colors.orange.shade900,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                child: Container(
+                  padding:
+                      EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 53),
+                  width: double.infinity,
+                  // height: _deviceSize.height * 0.3,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
                   ),
-                  textAlign: TextAlign.center,
-                  softWrap: true,
+                  child: Text(
+                    snapshot.hasData
+                        ? isTranslatedToEnglish
+                            ? snapshot.data['Shlok${widget.shlokNo}']
+                                ['translation']['english']
+                            : snapshot.data['Shlok${widget.shlokNo}']
+                                ['translation']['hindi']
+                        : '''
+              ........
+              ........
+              ........
+              ........
+                        ''',
+                    style: TextStyle(
+                      color: Colors.orange.shade900,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                  ),
                 ),
               ),
               Positioned(
-                bottom: _deviceSize.height * 0.01,
-                right: _deviceSize.width * 0.09,
+                bottom: _deviceSize.height * 0.025,
+                left: _deviceSize.width * 0.14,
                 child: Container(
+                  padding: EdgeInsets.all(0),
+                  margin: EdgeInsets.only(left: 10, bottom: 7),
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
-                    borderRadius:
-                        BorderRadius.only(topLeft: Radius.circular(15)),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                     color: Colors.orange.shade200,
                   ),
                   child: IconButton(
