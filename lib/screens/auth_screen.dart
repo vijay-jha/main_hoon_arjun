@@ -183,11 +183,11 @@ class _AuthScreenState extends State<AuthScreen>
       body: Stack(
         children: [
           Positioned(
-              top: 100,
+              top: _deviceSize.height * 0.14,
               right: -50,
               child: Container(
-                width: 100,
-                height: 100,
+                width: _deviceSize.width * 0.28,
+                height: _deviceSize.height * 0.13,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
                   color: kPrimaryC,
@@ -199,8 +199,8 @@ class _AuthScreenState extends State<AuthScreen>
               top: -50,
               left: -50,
               child: Container(
-                width: 180,
-                height: 180,
+                width: _deviceSize.width * 0.5,
+                height: _deviceSize.height * 0.25,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
                   color: kPrimaryC,
@@ -259,7 +259,11 @@ class _AuthScreenState extends State<AuthScreen>
                         iconColor: kPrimaryC,
                         submit: _submitAuthForm,
                         isLogin: true,
+<<<<<<< HEAD
                         textColor: null,
+=======
+                        textColor: Colors.orange.shade900,
+>>>>>>> ceed17cfe8abbc8ac62bc53b6076a81a7f14134f
                         deviceSize: _deviceSize,
                       ),
                     ],

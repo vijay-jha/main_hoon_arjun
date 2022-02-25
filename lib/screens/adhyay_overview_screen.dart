@@ -58,7 +58,7 @@ class _AdhyayOverviewScreenState extends State<AdhyayOverviewScreen> {
         behavior: HitTestBehavior.opaque,
         onTap: () {},
         child: Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.orange.shade50,
           appBar: PreferredSize(
               preferredSize: const Size.fromHeight(65.0),
               child: BuildAppBar(
@@ -116,6 +116,8 @@ class BuildAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
+
     return AppBar(
       iconTheme: const IconThemeData(
         color: Colors.orange, //change your color here
@@ -126,7 +128,10 @@ class BuildAppBar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-              padding: const EdgeInsets.only(left: 15.0, top: 10),
+              padding: EdgeInsets.only(
+                left: _deviceSize.width * 0.05,
+                top: _deviceSize.height * 0.01,
+              ),
               child: Text(
                 adhyayName,
                 style: TextStyle(
@@ -135,8 +140,8 @@ class BuildAppBar extends StatelessWidget {
                     fontWeight: FontWeight.bold),
               )),
           Padding(
-              padding: const EdgeInsets.only(
-                left: 18,
+              padding: EdgeInsets.only(
+                left: _deviceSize.width * 0.05,
               ),
               child: Text(
                 adhyayNumber,
@@ -149,7 +154,7 @@ class BuildAppBar extends StatelessWidget {
       ),
       actions: [
         Padding(
-          padding: const EdgeInsets.only(right: 6),
+          padding:  EdgeInsets.only(right: _deviceSize.width * 0.03,),
           child: IconButton(
               onPressed: () {
                 showDialog(
