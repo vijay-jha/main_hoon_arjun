@@ -104,7 +104,7 @@ Our misssion is to spread the learnings from 'Shrimad Bhagvad Geeta' and make pe
             ),
             Center(
               child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 40),
+                  margin: EdgeInsets.only(top: 40 ,bottom: 10),
                   child: Text(
                     "version 1.0",
                     style: TextStyle(
