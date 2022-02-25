@@ -56,7 +56,7 @@ class _ShlokSelectionState extends State<ShlokSelection>
               color: Colors.orange.shade50,
               borderRadius: BorderRadius.circular(12)),
           margin: const EdgeInsets.symmetric(horizontal: 20),
-          height: _deviceSize.height / 1.6,
+          height: _deviceSize.height / 1.5,
           child: Column(children: [
             Container(
                 width: double.infinity,
@@ -76,7 +76,7 @@ class _ShlokSelectionState extends State<ShlokSelection>
                   ),
                 )),
             Container(
-              height: _deviceSize.height / 2.2,
+              height: _deviceSize.height / 2.1,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -133,7 +133,7 @@ class _ShlokSelectionState extends State<ShlokSelection>
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 margin: EdgeInsets.symmetric(
-                    horizontal: _deviceSize.width / 3.2, vertical: 26),
+                    horizontal: _deviceSize.width / 3.4,),
                 child: const Text(
                   "OK",
                   style: TextStyle(

@@ -16,7 +16,7 @@ List<Map<String, dynamic>> geetaChapters = [
     {'number': 'Chapter13', 'name': 'क्षेत्रक्षेत्रज्ञविभागयोग'},
     {'number': 'Chapter14', 'name': 'गुण-त्रयविभागयोग'},
     {'number': 'Chapter15', 'name': 'पुरुषोतमयोग'},
-    {'number': 'Chapter16', 'name': 'दैवासुरसंपद्विभागयोग'},
+    {'number': 'Chapter16', 'name': 'दैवासुरसंपद्विभाग'},
     {'number': 'Chapter17', 'name': 'श्र्द्धात्रयविभागयोग'},
     {'number': 'Chapter18', 'name': 'मोक्षसंन्यासयोग'},
   ];

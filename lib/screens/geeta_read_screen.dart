@@ -70,9 +70,9 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
             clipBehavior: Clip.none,
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               mainAxisSpacing: 3,
-              maxCrossAxisExtent: 300,
+              maxCrossAxisExtent: 320,
               mainAxisExtent: 275,
-              crossAxisSpacing: 0.1,
+              crossAxisSpacing: 0.001,
             ),
             itemCount: geetaChapters.length,
             itemBuilder: (_, index) => Adhyay(

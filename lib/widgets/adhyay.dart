@@ -84,7 +84,7 @@ class Adhyay extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.orange[800],
                     fontFamily: 'NotoSansMono',
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
