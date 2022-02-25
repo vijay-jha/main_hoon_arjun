@@ -103,7 +103,7 @@ backgroundColor: Colors.orange.shade50,
                 top: MediaQuery.of(context).size.height * 0.47,
               ),
               child: const Text(
-                "You have successfully logged in !",
+                "You have successfully logged in!",
                 style: TextStyle(
                     color: Color(0xFFFF521B),
                     fontSize: 29,

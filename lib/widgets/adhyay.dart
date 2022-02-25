@@ -81,7 +81,7 @@ class Adhyay extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.only(left: 4, bottom: 0),
+                padding: const EdgeInsets.only(left: 4, top :5),
                 width: double.infinity,
                 child: Text(
                   name,

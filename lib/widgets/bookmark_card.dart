@@ -51,7 +51,7 @@ class BookmarkCard extends StatelessWidget {
           children: [
             Container(
               margin: EdgeInsets.only(
-                top: _deviceSize.height * 0.012, // 10
+                top: _deviceSize.height * 0.008, // 10
               ),
               padding: EdgeInsets.only(
                 left: _deviceSize.width * 0.063, // 25
@@ -99,7 +99,6 @@ class BookmarkCard extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.only(
                   left: _deviceSize.width * 0.035, //14
-                  top: _deviceSize.height * 0.005, //5,
                   right: _deviceSize.width * 0.035, //14
                   bottom: _deviceSize.height * 0.02, //5,
                 ),
@@ -138,7 +137,7 @@ class ShlokCard extends StatelessWidget {
         child: Text(
           shlok.trim(),
           style: TextStyle(
-            fontSize: deviceSize.height * 0.027,
+            fontSize: deviceSize.height * 0.025,
             color: Colors.orange.shade800,
           ),
           textAlign: TextAlign.center,

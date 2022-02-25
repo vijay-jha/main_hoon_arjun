@@ -167,7 +167,7 @@ class ShlokCard extends StatelessWidget {
         child: Text(
           shlok.trim(),
           style: TextStyle(
-            fontSize: deviceSize.height * 0.027,
+            fontSize: deviceSize.height * 0.025,
             color: Colors.orange.shade800,
           ),
           textAlign: TextAlign.center,
