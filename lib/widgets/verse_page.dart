@@ -74,17 +74,22 @@ class _VersePageState extends State<VersePage> {
 
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
+
     return SingleChildScrollView(
       child: Column(
         children: [
           // Shlok number
           Container(
-            margin: const EdgeInsets.only(top: 6, bottom: 10),
+            margin: EdgeInsets.only(
+              top: _deviceSize.height * 0.01,
+              bottom: _deviceSize.height * 0.02,
+            ),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(15),
               color: const Color(0xFF37323E),
             ),
-            padding: const EdgeInsets.all(11),
+            padding: const EdgeInsets.all(10),
             child: Text(
               'Shlok ${widget.shlokTitle}',
               style: const TextStyle(
@@ -105,7 +110,10 @@ class _VersePageState extends State<VersePage> {
                       .get(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Icon(Icons.bookmark_border,color: Colors.orange,);
+                      return Icon(
+                        Icons.bookmark_border,
+                        color: Colors.orange,
+                      );
                     }
                     if (snapshot.hasData) {
                       var docData = snapshot.data;
@@ -119,7 +127,10 @@ class _VersePageState extends State<VersePage> {
                           togglebookmark: toggleBookmark,
                           isBookmark: isBookmark);
                     }
-                    return Icon(Icons.bookmark_border,color: Colors.orange,);
+                    return Icon(
+                      Icons.bookmark_border,
+                      color: Colors.orange,
+                    );
                   }),
               TranslationBtn(),
             ],
@@ -127,9 +138,14 @@ class _VersePageState extends State<VersePage> {
 
           Center(
             child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              padding: EdgeInsets.symmetric(
+                vertical: _deviceSize.height * 0.02,
+                horizontal: _deviceSize.width * 0.05,
+              ),
+              margin: EdgeInsets.symmetric(
+                vertical: _deviceSize.height * 0.02,
+                horizontal: _deviceSize.width * 0.1,
+              ),
               decoration: BoxDecoration(
                 boxShadow: const [
                   BoxShadow(
@@ -145,16 +161,18 @@ class _VersePageState extends State<VersePage> {
                 widget.shlokText,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 23,
-                    color: Colors.orange[700],
-                    fontWeight: FontWeight.w600),
+                  fontSize: 23,
+                  color: Colors.orange[700],
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ),
+
           CustomWidget(title: "Meaning", content: widget.translation),
           CustomWidget(title: "Explanation", content: widget.meaning),
 
-          //Navigation arrows
+          // Navigation arrows
           Row(
             mainAxisAlignment: widget.verseNumber != 1
                 ? MainAxisAlignment.spaceBetween
@@ -169,21 +187,25 @@ class _VersePageState extends State<VersePage> {
                         curve: Curves.bounceInOut);
                   },
                   child: Container(
-                    margin:
-                        const EdgeInsets.only(left: 40, top: 10, bottom: 20),
+                    margin: EdgeInsets.only(
+                      left: _deviceSize.width * 0.1,
+                      top: _deviceSize.height * 0.01,
+                      bottom: _deviceSize.height * 0.02,
+                    ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
                       children: const [
                         //arrow
-                        Icon(
-                          Icons.keyboard_arrow_left_sharp,
-                          color: Colors.black,
-                        ),
+                        Icon(Icons.keyboard_arrow_left_sharp,
+                            color: Colors.orange),
                         Text(
                           "Prev",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.orange,
+                          ),
                         ),
                       ],
                     ),
@@ -196,8 +218,11 @@ class _VersePageState extends State<VersePage> {
                       curve: Curves.bounceInOut);
                 },
                 child: Container(
-                    margin:
-                        const EdgeInsets.only(right: 40, top: 10, bottom: 20),
+                    margin: EdgeInsets.only(
+                      right: _deviceSize.width * 0.1,
+                      top: _deviceSize.height * 0.01,
+                      bottom: _deviceSize.height * 0.02,
+                    ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -206,9 +231,15 @@ class _VersePageState extends State<VersePage> {
                         //arrow
                         Text(
                           "Next",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.orange,
+                          ),
                         ),
-                        Icon(Icons.keyboard_arrow_right_outlined),
+                        Icon(
+                          Icons.keyboard_arrow_right_outlined,
+                          color: Colors.orange,
+                        ),
                       ],
                     )),
               ),
@@ -280,17 +311,21 @@ class _TranslationBtnState extends State<TranslationBtn>
       child: Consumer<Translation>(builder: (_, tanslation, ch) {
         return IconButton(
           icon: isEnglish
-              ? Image.asset('assets/images/translationEnglish.jpeg')
-              : Image.asset('assets/images/tranlationHindi.jpeg'),
+              ? Image.asset(
+                  'assets/images/translationEnglish.png',
+                )
+              : Image.asset('assets/images/translationHindi.png'),
           onPressed: () {
-            if (isEnglish) {
-              Provider.of<Translation>(context, listen: false)
-                  .toggleTranslation();
+            if (!isEnglish) {
+              _controller.reset();
               _controller.forward();
-            } else {
               Provider.of<Translation>(context, listen: false)
                   .toggleTranslation();
-              _controller.reverse();
+            } else {
+              _controller.reset();
+              _controller.forward();
+              Provider.of<Translation>(context, listen: false)
+                  .toggleTranslation();
             }
           },
         );
@@ -310,8 +345,10 @@ class CustomWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
+
     return Container(
-      margin: const EdgeInsets.all(8),
+      // margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         // boxShadow: const [
         //   BoxShadow(
@@ -320,44 +357,61 @@ class CustomWidget extends StatelessWidget {
         //     blurRadius: 6.0,
         //   ),
         // ],
-        color: Colors.white,
+        color: Colors.orange.shade50,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         children: [
           Container(
-            padding:
-                const EdgeInsets.only(bottom: 12, right: 12, top: 12, left: 30),
-            margin: const EdgeInsets.only(
-              bottom: 7,
+            padding: EdgeInsets.symmetric(
+              vertical: _deviceSize.height * 0.02,
+              horizontal: _deviceSize.width * 0.05,
+            ),
+            margin: EdgeInsets.symmetric(
+              vertical: _deviceSize.height * 0.01,
+              horizontal: _deviceSize.width * 0.05,
             ),
             width: double.infinity,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(10), topLeft: Radius.circular(10)),
+                topRight: Radius.circular(10),
+                topLeft: Radius.circular(10),
+              ),
               color: Color(0xFF37323E),
             ),
             child: Text(
               title,
-              style: const TextStyle(
-                  color: Colors.yellow,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600),
+              style: TextStyle(
+                color: Colors.yellow,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
               textAlign: TextAlign.left,
             ),
           ),
-          Padding(
-            padding:
-                const EdgeInsets.only(top: 6, bottom: 28, left: 12, right: 12),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: Colors.white,
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: _deviceSize.width * 0.05,
+              vertical: _deviceSize.height * 0.03,
+            ),
+            margin: EdgeInsets.symmetric(
+              vertical: _deviceSize.height * 0.02,
+              horizontal: _deviceSize.width * 0.05,
+            ),
             child: Consumer<Translation>(builder: (_, tanslation, ch) {
               return Text(
                 Provider.of<Translation>(context, listen: true).getIsEnglish()
                     ? content['english']
                     : content['hindi'],
                 style: TextStyle(
-                    fontSize: 19,
-                    color: Colors.orange[700],
-                    fontWeight: FontWeight.w500),
+                  fontSize: 19,
+                  color: Colors.orange[700],
+                  fontWeight: FontWeight.w500,
+                ),
               );
             }),
           ),

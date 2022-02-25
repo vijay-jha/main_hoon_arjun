@@ -41,7 +41,10 @@ class _HomepageScreenState extends State<HomepageScreen>
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(15),
           ),
-          margin: EdgeInsets.symmetric(vertical: 50, horizontal: 15),
+          margin: EdgeInsets.symmetric(
+            vertical: _deviceSize.height * 0.1,
+            horizontal: _deviceSize.width * 0.05,
+          ),
           child: TextField(
             onSubmitted: (feeling) async {
               FocusScope.of(context).unfocus();
@@ -95,7 +98,7 @@ class _HomepageScreenState extends State<HomepageScreen>
                 borderSide: BorderSide(color: Colors.blue, width: 2.0),
                 borderRadius: BorderRadius.circular(15),
               ),
-              hintText: "How you are feeling today?",
+              hintText: "How are you feeling today?",
               hintStyle: TextStyle(color: Colors.blue),
             ),
             // autofocus: true,

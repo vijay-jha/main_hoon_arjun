@@ -41,18 +41,18 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: ElevatedButton(
-        child: const Icon(Icons.bookmark, color: Colors.orange,),
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all<CircleBorder>(
-              const CircleBorder(),
-            ),
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.orange.shade100)),
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => BookmarkScreen()));
-        },
-      ),
+      // floatingActionButton: ElevatedButton(
+      //   child: const Icon(Icons.bookmark, color: Colors.orange,),
+      //   style: ButtonStyle(
+      //       shape: MaterialStateProperty.all<CircleBorder>(
+      //         const CircleBorder(),
+      //       ),
+      //       backgroundColor: MaterialStateProperty.all<Color>(Colors.orange.shade100)),
+      //   onPressed: () {
+      //     Navigator.push(context,
+      //         MaterialPageRoute(builder: (context) => BookmarkScreen()));
+      //   },
+      // ),
       appBar: AppBar(
         title: const Text("Shrimad Bhagavad Geeta"),
         actions: [ProfilePicture()],
@@ -70,9 +70,8 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
             clipBehavior: Clip.none,
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               mainAxisSpacing: 3,
-              maxCrossAxisExtent: 197,
-              childAspectRatio: (MediaQuery.of(context).size.width / 0.62) /
-                  (MediaQuery.of(context).size.height / 0.9),
+              maxCrossAxisExtent: 300,
+              mainAxisExtent: 275,
               crossAxisSpacing: 0.1,
             ),
             itemCount: geetaChapters.length,
