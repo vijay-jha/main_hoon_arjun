@@ -21,13 +21,13 @@ class AboutScreen extends StatelessWidget {
                     Center(
                       child: Container(
                         // padding: EdgeInsets.all(14),
-                        height: MediaQuery.of(context).size.height/1.9,
+                        height: MediaQuery.of(context).size.height/2.3,
                         width: double.infinity,
                         decoration: BoxDecoration(color: Colors.orange),
                         child: Image.asset(
                           "assets/images/mai_hoon_arjun_logo.png",
                           color: Colors.white,
-                          cacheHeight: (MediaQuery.of(context).size.height/3).round(),
+                          cacheHeight: (MediaQuery.of(context).size.height/3.5).round(),
                         ),
                       ),
                     ),
