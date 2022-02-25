@@ -26,10 +26,9 @@ class _SignOutSplashScreenState extends State<SignOutSplashScreen>
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         Provider.of<MahabharatCharacters>(context, listen: false)
-          .deleteIndexFromLocal();
+            .deleteIndexFromLocal();
         Navigator.of(context).popUntil((route) => route.isFirst);
         Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
-        
       }
     });
   }
@@ -38,11 +37,12 @@ class _SignOutSplashScreenState extends State<SignOutSplashScreen>
   void dispose() {
     _controller.dispose();
     super.dispose();
-   
   }
 
   @override
   Widget build(BuildContext context) {
+    Size _deviceSize = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
       body: Stack(children: [
@@ -50,8 +50,8 @@ class _SignOutSplashScreenState extends State<SignOutSplashScreen>
           top: -50,
           left: -50,
           child: Container(
-            width: 180,
-            height: 180,
+            width: _deviceSize.width * 0.5,
+            height: _deviceSize.height * 0.25,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
               color: const Color(0xFFFF521B),
@@ -59,11 +59,11 @@ class _SignOutSplashScreenState extends State<SignOutSplashScreen>
           ),
         ),
         Positioned(
-            top: 100,
+            top: _deviceSize.height * 0.14,
             right: -50,
             child: Container(
-              width: 100,
-              height: 100,
+              width: _deviceSize.width * 0.28,
+              height: _deviceSize.height * 0.13,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
                 color: const Color(0xFFFF521B),
@@ -73,10 +73,10 @@ class _SignOutSplashScreenState extends State<SignOutSplashScreen>
             bottom: -240,
             right: 0,
             child: Container(
-              width: 400,
-              height: 360,
+              width: _deviceSize.width * 1,
+              height: _deviceSize.height * 0.5,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(200),
+                borderRadius: BorderRadius.circular(150),
                 color: const Color(0xFFFF521B),
               ),
             )),
@@ -101,9 +101,9 @@ class _SignOutSplashScreenState extends State<SignOutSplashScreen>
             Container(
               alignment: Alignment.center,
               margin: EdgeInsets.only(
-                left: 24,
-                right: 24,
-                top: MediaQuery.of(context).size.height * 0.47,
+                left: _deviceSize.height * 0.1,
+                right: _deviceSize.height * 0.1,
+                top: _deviceSize.height * 0.47,
               ),
               child: const Text(
                 "धन्यवाद!",

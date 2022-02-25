@@ -40,7 +40,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   title: const Text(
                     "Favorites",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.white, 
                     ),
                   ),
                   background: Image.asset(

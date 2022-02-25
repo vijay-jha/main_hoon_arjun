@@ -48,6 +48,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          fontFamily: 'Hind',
           primarySwatch: Colors.orange,
           appBarTheme: const AppBarTheme(
             foregroundColor: Colors.white,
