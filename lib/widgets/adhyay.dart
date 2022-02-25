@@ -57,31 +57,26 @@ class Adhyay extends StatelessWidget {
             ],
           ),
           width: 170,
-          height: 200,
+          height: 300,
           child: Column(
             children: [
               Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Container(
-                  padding: const EdgeInsets.only(
-                      top: 2, left: 2, right: 2, bottom: 5),
-                  // padding: EdgeInsets.all(2),
-                  height: 190,
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(12),
-                        topRight: Radius.circular(12)),
-                    child: Image.asset(
-                      "assets/images/Geeta.jfif",
-                      fit: BoxFit.cover,
-                    ),
+                padding: const EdgeInsets.only(
+                    top: 2, left: 2, right: 2, bottom: 5),
+                // padding: EdgeInsets.all(2),
+                height: 190,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12)),
+                  child: Image.asset(
+                    "assets/images/Geeta.jfif",
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
               Container(
-                padding: const EdgeInsets.only(left: 4, bottom: 0),
+                padding: const EdgeInsets.only(left: 7, bottom: 0),
                 width: double.infinity,
                 child: Text(
                   name,

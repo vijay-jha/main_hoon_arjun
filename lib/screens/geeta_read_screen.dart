@@ -70,9 +70,10 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
             clipBehavior: Clip.none,
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               mainAxisSpacing: 3,
-              maxCrossAxisExtent: 197,
-              childAspectRatio: (MediaQuery.of(context).size.width / 0.62) /
-                  (MediaQuery.of(context).size.height / 0.9),
+              maxCrossAxisExtent: 300,
+              mainAxisExtent: 275,
+              // childAspectRatio: (MediaQuery.of(context).size.width / 0.62) /
+              //     (MediaQuery.of(context).size.height / 0.9),
               crossAxisSpacing: 0.1,
             ),
             itemCount: geetaChapters.length,

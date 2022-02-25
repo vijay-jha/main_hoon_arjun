@@ -86,7 +86,7 @@ class _AuthScreenState extends State<AuthScreen>
             return null;
           });
         } else {
-           _auth
+          _auth
               .createUserWithEmailAndPassword(
             email: email,
             password: password,
@@ -164,15 +164,16 @@ class _AuthScreenState extends State<AuthScreen>
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size _deviceSize = MediaQuery.of(context).size;
     double viewInset = MediaQuery.of(context)
         .viewInsets
         .bottom; //using this to determine whether keyboard is opened or not
-    double defaultLoginSize = size.height - (size.height * 0.2);
-    double defaultRegisterSize = size.height - (size.height * 0.1);
+    double defaultLoginSize = _deviceSize.height - (_deviceSize.height * 0.2);
+    double defaultRegisterSize =
+        _deviceSize.height - (_deviceSize.height * 0.1);
 
     containerSize = Tween<double>(
-            begin: size.height * 0.1, end: defaultRegisterSize)
+            begin: _deviceSize.height * 0.1, end: defaultRegisterSize)
         .animate(
             CurvedAnimation(parent: animationController, curve: Curves.linear));
 
@@ -213,8 +214,8 @@ class _AuthScreenState extends State<AuthScreen>
             child: Align(
               alignment: Alignment.topCenter,
               child: Container(
-                width: size.width,
-                height: size.height * 0.1,
+                width: _deviceSize.width,
+                height: _deviceSize.height * 0.1,
                 alignment: Alignment.bottomCenter,
                 child: IconButton(
                   onPressed: isLogin
@@ -232,7 +233,7 @@ class _AuthScreenState extends State<AuthScreen>
             ),
           ),
 
-          //login form
+          // Login form
           AnimatedOpacity(
             opacity: isLogin ? 1.0 : 0.0,
             duration: animationDuration * 4,
@@ -240,7 +241,7 @@ class _AuthScreenState extends State<AuthScreen>
               alignment: Alignment.center,
               child: SingleChildScrollView(
                 child: Container(
-                  width: size.width,
+                  width: _deviceSize.width,
                   height: defaultLoginSize,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -248,17 +249,18 @@ class _AuthScreenState extends State<AuthScreen>
                     children: [
                       Image.asset(
                         "assets/images/Book.png",
-                        width: 200,
-                        height: 200,
+                        width: _deviceSize.width * 0.55,
+                        height: _deviceSize.height * 0.2,
                       ),
-                      const SizedBox(
-                        height: 60,
+                       SizedBox(
+                        height: _deviceSize.height * 0.08,
                       ),
                       RoundedInput(
                         iconColor: kPrimaryC,
                         submit: _submitAuthForm,
                         isLogin: true,
                         textColor: null,
+                        deviceSize: _deviceSize,
                       ),
                     ],
                   ),
@@ -291,28 +293,29 @@ class _AuthScreenState extends State<AuthScreen>
                 alignment: Alignment.center,
                 child: SingleChildScrollView(
                   child: Container(
-                    width: size.width,
+                    width: _deviceSize.width,
                     height: defaultLoginSize,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(
-                          height: 10,
+                          height: _deviceSize.height * 0.015,
                         ),
                         Image.asset(
                           "assets/images/Book.png",
-                          width: 200,
-                          height: 200,
+                          width: _deviceSize.width * 0.55,
+                          height: _deviceSize.height * 0.2,
                         ),
                         SizedBox(
-                          height: 40,
+                          height: _deviceSize.height * 0.06,
                         ),
                         RoundedInput(
                           iconColor: secondaryC,
                           submit: _submitAuthForm,
                           isLogin: false,
                           textColor: secondaryC,
+                          deviceSize: _deviceSize,
                         ),
                       ],
                     ),

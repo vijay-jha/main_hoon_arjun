@@ -207,7 +207,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                         // await saveImage(image);
                         ShareImage.shareImage(image);
                       }
-<<<<<<< HEAD
                     },
                   ),
                 )
@@ -238,22 +237,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                 //   ],
                 // )),
                 ),
-=======
-                    }
-                  },
-                  currentIndex: 1,
-                  items: const [
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.auto_awesome),
-                      label: "Shlok",
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.offline_share),
-                      label: "Share Shlok",
-                    ),
-                  ],
-                )),
->>>>>>> 4fedaeb23c7763799d33f28bee0115e3d18878e9
           );
         });
   }

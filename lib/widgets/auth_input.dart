@@ -14,12 +14,14 @@ class RoundedInput extends StatefulWidget {
     @required this.textColor,
     @required this.submit,
     @required this.isLogin,
+    @required this.deviceSize,
   }) : super(key: key);
 
   final Color iconColor;
   final Color textColor;
   final Function submit;
   final bool isLogin;
+  final Size deviceSize;
 
   @override
   State<RoundedInput> createState() => _RoundedInputState();
@@ -30,7 +32,7 @@ class _RoundedInputState extends State<RoundedInput>
   AnimationController _loginButtonController;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  // final _usernameController = TextEditingController();
+
   Password _password = Password.nonVisibility;
   bool isLoading = false;
   String errorMessage = "";
@@ -39,9 +41,7 @@ class _RoundedInputState extends State<RoundedInput>
     try {
       await _loginButtonController.forward();
       await _loginButtonController.reverse();
-    }
-    // ignore: empty_catches
-    on TickerCanceled {}
+    } on TickerCanceled {}
   }
 
   @override
@@ -123,7 +123,7 @@ class _RoundedInputState extends State<RoundedInput>
         ),
         if (widget.isLogin)
           Container(
-            margin: EdgeInsets.only(right: 40),
+            margin: EdgeInsets.only(right: widget.deviceSize.width * 0.1),
             alignment: Alignment.centerRight,
             child: TextButton(
               onPressed: () async {
@@ -159,14 +159,14 @@ class _RoundedInputState extends State<RoundedInput>
                                 email: _emailController.text,
                               );
                             } on FirebaseAuthException catch (error) {
-                            switch (error.code) {
+                              switch (error.code) {
                                 case "user-not-found":
                                   errorMessage =
-                                      "User with this email doesn't exist.";  
+                                      "User with this email doesn't exist.";
                                   break;
-                                case "invalid-email":   
-                                errorMessage =
-                                      "Please enter a valid email address."; 
+                                case "invalid-email":
+                                  errorMessage =
+                                      "Please enter a valid email address.";
                                   break;
                               }
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -196,7 +196,9 @@ class _RoundedInputState extends State<RoundedInput>
             ),
           ),
         SizedBox(
-          height: widget.isLogin ? 10 : 20,
+          height: widget.isLogin
+              ? widget.deviceSize.height * 0.015
+              : widget.deviceSize.height * 0.03,
         ),
         InkWell(
           onTap: () async {
@@ -214,7 +216,7 @@ class _RoundedInputState extends State<RoundedInput>
               _passwordController.text,
               widget.isLogin,
             );
-            await Future.delayed(Duration(milliseconds: 2000)); 
+            await Future.delayed(Duration(milliseconds: 2000));
             setState(() {
               isLoading = false;
             });
@@ -225,7 +227,7 @@ class _RoundedInputState extends State<RoundedInput>
               borderRadius: BorderRadius.circular(30),
               color: kPrimaryC,
             ),
-            padding: EdgeInsets.symmetric(vertical: 20),
+            padding: EdgeInsets.symmetric(vertical: widget.deviceSize.height * 0.03),
             alignment: Alignment.center,
             child: isLoading
                 ? CircularProgressIndicator(color: Colors.white)
