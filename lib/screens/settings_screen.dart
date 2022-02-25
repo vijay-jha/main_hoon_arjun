@@ -242,7 +242,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-            vertical: _deviceSize.height * 0.02,
+            vertical: _deviceSize.height * 0.018,
             horizontal: _deviceSize.width * 0.05),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

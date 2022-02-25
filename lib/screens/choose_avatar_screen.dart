@@ -77,7 +77,7 @@ class _DisplayAvatarState extends State<DisplayAvatar> {
             ),
           ),
           SizedBox(
-            height: _deviceSize.height * 0.05,
+            height: _deviceSize.height * 0.02,
           ),
           ElevatedButton(
             style: ButtonStyle(
@@ -88,8 +88,9 @@ class _DisplayAvatarState extends State<DisplayAvatar> {
             )),
             onPressed: _onTapAvatar,
             child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(children: const [
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                children: const [
                   TextSpan(
                     text: "Change Your Avatar\t",
                     style: TextStyle(fontSize: 20, color: Colors.white),
@@ -101,7 +102,9 @@ class _DisplayAvatarState extends State<DisplayAvatar> {
                       size: 20,
                     ),
                   ),
-                ])),
+                ],
+              ),
+            ),
           ),
         ],
       ),
