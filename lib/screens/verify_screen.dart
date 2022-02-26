@@ -96,8 +96,8 @@ class _VerifyScreenState extends State<VerifyScreen>
 backgroundColor: Colors.orange.shade50,
       body: Stack(children: [
         Positioned(
-            top: -50,
-            left: -50,
+            top: -(_deviceSize.height * 0.058),
+            left: -(_deviceSize.width * 0.127),
             child: Container(
               width: _deviceSize.width * 0.5,
             height: _deviceSize.height * 0.25,
@@ -108,7 +108,7 @@ backgroundColor: Colors.orange.shade50,
             )),
         Positioned(
             top: _deviceSize.height * 0.14,
-            right: -50,
+            right: -(_deviceSize.width * 0.127),
             child: Container(
               width: _deviceSize.width * 0.28,
               height: _deviceSize.height * 0.13,
@@ -118,8 +118,8 @@ backgroundColor: Colors.orange.shade50,
               ),
             )),
         Positioned(
-            bottom: -240,
-            right: 0,
+            bottom: -(_deviceSize.height * 0.282),
+
             child: Container(
               width: _deviceSize.width * 1,
               height: _deviceSize.height * 0.5,
@@ -136,7 +136,7 @@ backgroundColor: Colors.orange.shade50,
                   top: MediaQuery.of(context).size.height * 0.33),
               // decoration: BoxDecoration(border: Border.all(width: 1)),
               padding:
-                  !isVerified ? null : EdgeInsets.symmetric(horizontal: 80),
+                  !isVerified ? null : EdgeInsets.symmetric(horizontal: _deviceSize.width * 0.203),
               child: !isVerified
                   ? Lottie.asset(
                       'assets/lottie/verify_loading.json', //change the path here
