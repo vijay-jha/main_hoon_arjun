@@ -54,6 +54,8 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
     isFavorite = !isFavorite;
   }
 
+  bool itExists;
+
   @override
   void initState() {
     super.initState();
@@ -63,6 +65,8 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
           .collection('user_favorites')
           .doc(_user.uid)
           .get();
+
+      itExists = doc.exists;
     }();
   }
 
@@ -100,6 +104,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   }
 
   bool isShareVisible = true;
+
   @override
   Widget build(BuildContext context) {
     final _deviceSize = MediaQuery.of(context).size;
@@ -136,77 +141,79 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
             shlokNo = currentShlok.substring(15);
           }
 
-          var docData = doc.data();
-          var favoriteShloks = docData['fav_sholks'];
-          if (favoriteShloks.contains(currentShlok)) {
-            isFavorite = true;
+          if (itExists) {
+            var docData = doc.data();
+            var favoriteShloks = docData['fav_sholks'];
+            if (favoriteShloks.contains(currentShlok)) {
+              isFavorite = true;
+            }
           }
         }
-        return Screenshot(
-          controller: _controller,
-          child: Scaffold(
-            key: _scaffoldKey,
-            appBar: AppBar(
-              title: Text("Shlok"),
-              actions: [
-                ProfilePicture(),
-              ],
-            ),
-            backgroundColor: Colors.orange.shade50,
-            body: ListView(
-              children: [
-                ShlokCard(
+        return Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(
+            title: Text("Shlok"),
+            actions: [
+              ProfilePicture(),
+            ],
+          ),
+          backgroundColor: Colors.orange.shade50,
+          body: ListView(
+            children: [
+              Screenshot(
+                controller: _controller,
+                child: ShlokCard(
                   currentShlok: currentShlok,
                   isFavorite: isFavorite,
                   toggleFavorite: toggleFavShlok,
                   shlokNo: shlokNo,
                   chapterNo: chapterNo,
                 ),
-                SizedBox(
-                  height: _deviceSize.height * 0.05,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: _deviceSize.width * 0.42),
-                  child: ChangeNotifierProvider(
-                    create: (ctx) => PlayingShlok(),
-                    child: SpeakerIcnBtn(
-                      audioUrl: getshlokUrl(),
-                      shlokIndex: 0,
-                      isDesired: true,
-                    ),
+              ),
+              SizedBox(
+                height: _deviceSize.height * 0.03,
+              ),
+              Container(
+                margin:
+                    EdgeInsets.symmetric(horizontal: _deviceSize.width * 0.42),
+                child: ChangeNotifierProvider(
+                  create: (ctx) => PlayingShlok(),
+                  child: SpeakerIcnBtn(
+                    audioUrl: getshlokUrl(),
+                    shlokIndex: 0,
+                    isDesired: true,
                   ),
                 ),
-                SizedBox(
-                  height: _deviceSize.height * 0.05,
-                ),
-                TranslationCard(
-                  currentShlok: currentShlok,
-                  shlokNo: shlokNo,
-                  chapterNo: chapterNo,
-                ),
-              ],
-            ),
-            floatingActionButton: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.orange,
-                shape: CircleBorder(),
               ),
-              child: Container(
-                padding: const EdgeInsets.all(15),
-                child: Icon(
-                  Icons.offline_share,
-                  color: Colors.orange.shade100,
-                ),
+              SizedBox(
+                height: _deviceSize.height * 0.03,
               ),
-              onPressed: () async {
-                final image = await _controller.capture();
-                if (image != null) {
-                  // await saveImage(image);
-                  ShareImage.shareImage(image);
-                }
-              },
+              TranslationCard(
+                currentShlok: currentShlok,
+                shlokNo: shlokNo,
+                chapterNo: chapterNo,
+              ),
+            ],
+          ),
+          floatingActionButton: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.orange,
+              shape: CircleBorder(),
             ),
+            child: Container(
+              padding: const EdgeInsets.all(15),
+              child: Icon(
+                Icons.offline_share,
+                color: Colors.orange.shade50,
+              ),
+            ),
+            onPressed: () async {
+              final image = await _controller.capture();
+              if (image != null) {
+                // await saveImage(image);
+                ShareImage.shareImage(image);
+              }
+            },
           ),
         );
       },

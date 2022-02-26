@@ -49,6 +49,7 @@ class _AdhyayOverviewScreenState extends State<AdhyayOverviewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var _deviceSize = MediaQuery.of(context).size;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -61,13 +62,14 @@ class _AdhyayOverviewScreenState extends State<AdhyayOverviewScreen> {
         child: Scaffold(
           backgroundColor: Colors.orange.shade50,
           appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(65.0),
+              preferredSize: Size.fromHeight(_deviceSize.height * 0.070),
               child: BuildAppBar(
                 chapterData: widget.chapterData,
                 shlokList: widget.shlokList,
                 controller: controller,
                 adhyayName: widget.adhyayName,
                 adhyayNumber: widget.title,
+                deviceSize: _deviceSize,
               )),
           body: 
           // widget.shlokList != null && widget.chapterData != null
@@ -129,8 +131,9 @@ class BuildAppBar extends StatelessWidget {
     @required this.adhyayNumber,
     @required this.chapterData,
     @required this.shlokList,
+    this.deviceSize,
   });
-
+final deviceSize;
   final String adhyayName;
   final String adhyayNumber;
   final List<Map<String, dynamic>> chapterData;
@@ -138,32 +141,33 @@ class BuildAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _deviceSize = MediaQuery.of(context).size;
+    
 
     return AppBar(
-      iconTheme: const IconThemeData(
-        color: Colors.orange, //change your color here
-      ),
+      iconTheme: IconThemeData(color: Colors.orange), //change your color here
       elevation: 0,
       backgroundColor: Colors.orange.shade50,
       title: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-              padding: EdgeInsets.only(
-                left: _deviceSize.width * 0.05,
-                top: _deviceSize.height * 0.01,
-                bottom: 0,
+            padding: EdgeInsets.only(
+              left: deviceSize.width * 0.02,
+              top: deviceSize.height * 0.01,
+            ),
+            child: Text(
+              adhyayName,
+              style: TextStyle(
+                fontSize: deviceSize.height * 0.022,
+                color: Colors.orange[700],
+                fontWeight: FontWeight.bold,
               ),
-              child: Text(
-                adhyayName,
-                style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.orange[700],
-                    fontWeight: FontWeight.bold),
-              )),
+            ),
+          ),
           Padding(
+<<<<<<< HEAD
               padding: EdgeInsets.only(
                 top: 0,
                 left: _deviceSize.width * 0.05,
@@ -175,12 +179,27 @@ class BuildAppBar extends StatelessWidget {
                     color: Colors.orange,
                     fontWeight: FontWeight.bold),
               )),
+=======
+            padding: EdgeInsets.only(left: deviceSize.width * 0.02),
+            child: Text(
+              adhyayNumber.substring(0, 7) + " " + adhyayNumber.substring(7),
+              style: TextStyle(
+                  fontSize: deviceSize.height * 0.017,
+                  color: Colors.orange[600],
+                  fontWeight: FontWeight.w600),
+            ),
+          ),
+>>>>>>> 83174b09839a145283ab1fd143686b3b1113acfd
         ],
       ),
       actions: [
         Padding(
           padding: EdgeInsets.only(
+<<<<<<< HEAD
             right: _deviceSize.width * 0.03,
+=======
+            right: deviceSize.width * 0.03,
+>>>>>>> 83174b09839a145283ab1fd143686b3b1113acfd
           ),
           child: IconButton(
               onPressed: () {

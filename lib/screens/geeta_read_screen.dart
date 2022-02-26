@@ -40,6 +40,8 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
 
   @override
   Widget build(BuildContext context) {
+        var _deivceSize =MediaQuery.of(context).size;
+
     return Scaffold(
       // floatingActionButton: ElevatedButton(
       //   child: const Icon(Icons.bookmark, color: Colors.orange,),
@@ -59,7 +61,11 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
       ),
       backgroundColor: Colors.orange.shade50,
       body: FutureBuilder(
+<<<<<<< HEAD
         future: Future.delayed(Duration(seconds: 2)),
+=======
+        future: Future.delayed(Duration(milliseconds:800)),
+>>>>>>> 83174b09839a145283ab1fd143686b3b1113acfd
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return SpinKitFadingCircle(
@@ -69,10 +75,10 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
           return GridView.builder(
             clipBehavior: Clip.none,
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              mainAxisSpacing: 3,
-              maxCrossAxisExtent: 300,
-              mainAxisExtent: 275,
-              crossAxisSpacing: 0.1,
+              // mainAxisSpacing: 3,
+              maxCrossAxisExtent: _deivceSize.width * 0.76,
+              mainAxisExtent: _deivceSize.height* 0.32,
+              // crossAxisSpacing: 0.1,
             ),
             itemCount: geetaChapters.length,
             itemBuilder: (_, index) => Adhyay(
