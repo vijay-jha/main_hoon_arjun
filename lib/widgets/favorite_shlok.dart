@@ -177,35 +177,3 @@ class ShlokCard extends StatelessWidget {
   }
 }
 
-// class CommentsButton extends StatelessWidget {
-//   CommentsButton({this.deviceSize});
-//   final deviceSize;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return InkWell(
-//       onTap: () {},
-//       child: Container(
-//         width: deviceSize.width * 0.140, // 55
-//         alignment: Alignment.bottomCenter,
-//         padding: EdgeInsets.only(
-//           top: deviceSize.height * 0.009, // 8
-//           right: deviceSize.width * 0.020, //8,
-//           left: deviceSize.width * 0.020, //8,
-//           bottom: deviceSize.height * 0.005, //5,
-//         ),
-//         decoration: const BoxDecoration(
-//           // color: Colors.amber,
-//           borderRadius: BorderRadius.all(
-//             Radius.circular(16),
-//           ),
-//         ),
-//         child: const Icon(
-//           Icons.comment_rounded,
-//           color: Colors.black87,
-//           size: 28,
-//         ),
-//       ),
-//     );
-//   }
-// }

@@ -13,6 +13,7 @@ class VersePage extends StatefulWidget {
   final Map<String, dynamic> translation;
   final Map<String, dynamic> meaning;
   final String currentShlok;
+  bool isLastPage = false;
 
   VersePage({
     @required this.verseNumber,
@@ -22,6 +23,7 @@ class VersePage extends StatefulWidget {
     this.shlokText,
     this.translation,
     this.meaning,
+    this.isLastPage,
   });
 
   @override
@@ -222,38 +224,39 @@ class _VersePageState extends State<VersePage> {
                     ),
                   ),
                 ),
-              GestureDetector(
-                onTap: () {
-                  widget.pageController.animateToPage(widget.verseNumber,
-                      duration: const Duration(milliseconds: 250),
-                      curve: Curves.bounceInOut);
-                },
-                child: Container(
-                    margin: EdgeInsets.only(
-                      right: _deviceSize.width * 0.1,
-                      top: _deviceSize.height * 0.01,
-                      bottom: _deviceSize.height * 0.02,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      children: const [
-                        //arrow
-                        Text(
-                          "Next",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
+              if (widget.isLastPage == false)
+                GestureDetector(
+                  onTap: () {
+                    widget.pageController.animateToPage(widget.verseNumber,
+                        duration: const Duration(milliseconds: 250),
+                        curve: Curves.bounceInOut);
+                  },
+                  child: Container(
+                      margin: EdgeInsets.only(
+                        right: _deviceSize.width * 0.1,
+                        top: _deviceSize.height * 0.01,
+                        bottom: _deviceSize.height * 0.02,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        children: const [
+                          //arrow
+                          Text(
+                            "Next",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.orange,
+                            ),
+                          ),
+                          Icon(
+                            Icons.keyboard_arrow_right_outlined,
                             color: Colors.orange,
                           ),
-                        ),
-                        Icon(
-                          Icons.keyboard_arrow_right_outlined,
-                          color: Colors.orange,
-                        ),
-                      ],
-                    )),
-              ),
+                        ],
+                      )),
+                ),
             ],
           ),
         ],
@@ -362,23 +365,14 @@ class CustomWidget extends StatelessWidget {
     final _deviceSize = MediaQuery.of(context).size;
 
     return Container(
-      // margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        // boxShadow: const [
-        //   BoxShadow(
-        //     color: Colors.grey,
-        //     offset: Offset(0.0, 1.0), //(x,y)
-        //     blurRadius: 6.0,
-        //   ),
-        // ],
         color: Colors.orange.shade50,
-        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         children: [
           Container(
             padding: EdgeInsets.symmetric(
-              vertical: _deviceSize.height * 0.02,
+              vertical: _deviceSize.height * 0.015,
               horizontal: _deviceSize.width * 0.05,
             ),
             margin: EdgeInsets.only(
@@ -413,12 +407,12 @@ class CustomWidget extends StatelessWidget {
               color: Colors.white,
             ),
             padding: EdgeInsets.symmetric(
-              horizontal: _deviceSize.width * 0.05,
-              vertical: _deviceSize.height * 0.03,
+              horizontal: _deviceSize.width * 0.03,
+              vertical: _deviceSize.height * 0.025,
             ),
             margin: EdgeInsets.only(
               bottom: _deviceSize.height * 0.02,
-              top: _deviceSize.height * 0.015,
+              
               left: _deviceSize.width * 0.05,
               right: _deviceSize.width * 0.05,
             ),

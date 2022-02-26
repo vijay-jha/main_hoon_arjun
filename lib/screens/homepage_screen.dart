@@ -62,7 +62,7 @@ class _HomepageScreenState extends State<HomepageScreen>
               ),
               if (!isLoading)
                 Container(
-                  margin: EdgeInsets.only(top: _deviceSize.height * 0.08),
+                  margin: EdgeInsets.only(top: _deviceSize.height * 0.04),
                   child: HandWave(),
                 ),
               if (isLoading)
@@ -205,25 +205,25 @@ class _HandWaveState extends State<HandWave> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 80),
-          child: Lottie.asset(
-            'assets/lottie/HandWave.json',
-            height: MediaQuery.of(context).size.height * 0.30,
-            controller: _controller,
-            animate: true,
-            onLoaded: (composition) {
-              _controller
-                ..duration = composition.duration
-                ..forward();
-            },
-          ),
-        ),
-        KeyboardVisibilityBuilder(builder: (context, visible) {
-          return !visible
-              ? Container(
+    return KeyboardVisibilityBuilder(builder: (context, visible) {
+      return !visible
+          ? Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 80),
+                  child: Lottie.asset(
+                    'assets/lottie/HandWave.json',
+                    height: MediaQuery.of(context).size.height * 0.30,
+                    controller: _controller,
+                    animate: true,
+                    onLoaded: (composition) {
+                      _controller
+                        ..duration = composition.duration
+                        ..forward();
+                    },
+                  ),
+                ),
+                Container(
                   alignment: Alignment.center,
                   child: username == null
                       ? FutureBuilder(
@@ -268,9 +268,9 @@ How are you feeling now ?
                                   MediaQuery.of(context).size.height * 0.025),
                         ),
                 )
-              : Center();
-        }),
-      ],
-    );
+              ],
+            )
+          : Center();
+    });
   }
 }

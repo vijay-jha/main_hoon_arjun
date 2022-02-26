@@ -79,7 +79,18 @@ class _AdhyayOverviewScreenState extends State<AdhyayOverviewScreen> {
                 controller: controller,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return VersePage(
+                  return index == widget.shlokList.length-1 ? VersePage(
+                    isLastPage: true,
+                    currentShlok:
+                        "Chapter${widget.chapterData[index]['chapter']}_${widget.shlokList[index]}",
+                    verseNumber: index + 1,
+                    shlokTitle: widget.chapterData[index]['shlok'],
+                    pageController: controller,
+                    shlokText: widget.chapterData[index]['text'],
+                    meaning: widget.chapterData[index]['meaning'],
+                    translation: widget.chapterData[index]['translation'],
+                  ) : VersePage(
+                    isLastPage: false,
                     currentShlok:
                         "Chapter${widget.chapterData[index]['chapter']}_${widget.shlokList[index]}",
                     verseNumber: index + 1,
@@ -126,6 +137,7 @@ final deviceSize;
       elevation: 0,
       backgroundColor: Colors.orange.shade50,
       title: Column(
+
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

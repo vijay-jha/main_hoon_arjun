@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:main_hoon_arjun/screens/bookmark_screen.dart';
 
 import '../adhyay_detail.dart';
 import '../widgets/profile_picture.dart';
