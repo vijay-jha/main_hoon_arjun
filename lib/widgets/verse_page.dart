@@ -351,28 +351,20 @@ class CustomWidget extends StatelessWidget {
     final _deviceSize = MediaQuery.of(context).size;
 
     return Container(
-      // margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        // boxShadow: const [
-        //   BoxShadow(
-        //     color: Colors.grey,
-        //     offset: Offset(0.0, 1.0), //(x,y)
-        //     blurRadius: 6.0,
-        //   ),
-        // ],
         color: Colors.orange.shade50,
-        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         children: [
           Container(
             padding: EdgeInsets.symmetric(
-              vertical: _deviceSize.height * 0.02,
+              vertical: _deviceSize.height * 0.015,
               horizontal: _deviceSize.width * 0.05,
             ),
-            margin: EdgeInsets.symmetric(
-              vertical: _deviceSize.height * 0.02,
-              horizontal: _deviceSize.width * 0.05,
+            margin: EdgeInsets.only(
+              top: _deviceSize.height * 0.02,
+              left: _deviceSize.width * 0.05,
+              right: _deviceSize.width * 0.05,
             ),
             width: double.infinity,
             decoration: const BoxDecoration(
@@ -394,16 +386,20 @@ class CustomWidget extends StatelessWidget {
           ),
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: Colors.orange.shade50,
+               borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(10),
+                bottomRight: Radius.circular(10),
+              ),
+              color: Colors.white,
             ),
             padding: EdgeInsets.symmetric(
               horizontal: _deviceSize.width * 0.03,
-              vertical: _deviceSize.height * 0.001,
+              vertical: _deviceSize.height * 0.025,
             ),
-            margin: EdgeInsets.symmetric(
-              vertical: _deviceSize.height * 0.01,
-              horizontal: _deviceSize.width * 0.05,
+            margin: EdgeInsets.only(
+              bottom: _deviceSize.height * 0.02,
+              left: _deviceSize.width * 0.05,
+              right: _deviceSize.width * 0.05,
             ),
             child: Consumer<Translation>(builder: (_, tanslation, ch) {
               return Text(
