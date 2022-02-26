@@ -13,6 +13,7 @@ class VersePage extends StatefulWidget {
   final Map<String, dynamic> translation;
   final Map<String, dynamic> meaning;
   final String currentShlok;
+  bool isLastPage = false;
 
   VersePage({
     @required this.verseNumber,
@@ -22,6 +23,7 @@ class VersePage extends StatefulWidget {
     this.shlokText,
     this.translation,
     this.meaning,
+    this.isLastPage,
   });
 
   @override
@@ -211,38 +213,39 @@ class _VersePageState extends State<VersePage> {
                     ),
                   ),
                 ),
-              GestureDetector(
-                onTap: () {
-                  widget.pageController.animateToPage(widget.verseNumber,
-                      duration: const Duration(milliseconds: 250),
-                      curve: Curves.bounceInOut);
-                },
-                child: Container(
-                    margin: EdgeInsets.only(
-                      right: _deviceSize.width * 0.1,
-                      top: _deviceSize.height * 0.01,
-                      bottom: _deviceSize.height * 0.02,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      children: const [
-                        //arrow
-                        Text(
-                          "Next",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
+              if (widget.isLastPage == false)
+                GestureDetector(
+                  onTap: () {
+                    widget.pageController.animateToPage(widget.verseNumber,
+                        duration: const Duration(milliseconds: 250),
+                        curve: Curves.bounceInOut);
+                  },
+                  child: Container(
+                      margin: EdgeInsets.only(
+                        right: _deviceSize.width * 0.1,
+                        top: _deviceSize.height * 0.01,
+                        bottom: _deviceSize.height * 0.02,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        children: const [
+                          //arrow
+                          Text(
+                            "Next",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.orange,
+                            ),
+                          ),
+                          Icon(
+                            Icons.keyboard_arrow_right_outlined,
                             color: Colors.orange,
                           ),
-                        ),
-                        Icon(
-                          Icons.keyboard_arrow_right_outlined,
-                          color: Colors.orange,
-                        ),
-                      ],
-                    )),
-              ),
+                        ],
+                      )),
+                ),
             ],
           ),
         ],
@@ -368,7 +371,7 @@ class CustomWidget extends StatelessWidget {
               horizontal: _deviceSize.width * 0.05,
             ),
             margin: EdgeInsets.symmetric(
-              vertical: _deviceSize.height * 0.01,
+              vertical: _deviceSize.height * 0.02,
               horizontal: _deviceSize.width * 0.05,
             ),
             width: double.infinity,
@@ -392,14 +395,14 @@ class CustomWidget extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              color: Colors.white,
+              color: Colors.orange.shade50,
             ),
             padding: EdgeInsets.symmetric(
-              horizontal: _deviceSize.width * 0.05,
-              vertical: _deviceSize.height * 0.03,
+              horizontal: _deviceSize.width * 0.03,
+              vertical: _deviceSize.height * 0.001,
             ),
             margin: EdgeInsets.symmetric(
-              vertical: _deviceSize.height * 0.02,
+              vertical: _deviceSize.height * 0.01,
               horizontal: _deviceSize.width * 0.05,
             ),
             child: Consumer<Translation>(builder: (_, tanslation, ch) {
