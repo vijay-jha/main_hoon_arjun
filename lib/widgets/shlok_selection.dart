@@ -56,11 +56,11 @@ class _ShlokSelectionState extends State<ShlokSelection>
               color: Colors.orange.shade50,
               borderRadius: BorderRadius.circular(12)),
           margin: const EdgeInsets.symmetric(horizontal: 20),
-          height: _deviceSize.height / 1.6,
+          height: _deviceSize.height / 1.67,
           child: Column(children: [
             Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.only(top: 10, bottom: 6),
                 decoration: BoxDecoration(
                     color: Colors.orange.shade50,
                     borderRadius: BorderRadius.only(
@@ -75,13 +75,22 @@ class _ShlokSelectionState extends State<ShlokSelection>
                         fontSize: 22),
                   ),
                 )),
+            Padding(
+                padding: EdgeInsets.only(
+                    bottom: 10,
+                    left: _deviceSize.width * 0.25,
+                    right: _deviceSize.width * 0.25),
+                child: Divider(
+                  thickness: 1,
+                  height: 1,
+                )),
             Container(
               height: _deviceSize.height / 2.3,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 72,
-                    mainAxisExtent: 50,
+                  gridDelegate:  SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: _deviceSize.width * 0.19,
+                    mainAxisExtent: _deviceSize.height * 0.058,
                   ),
                   itemCount: widget.shlokList.length,
                   itemBuilder: (context, index) {
@@ -115,6 +124,7 @@ class _ShlokSelectionState extends State<ShlokSelection>
             ),
             GestureDetector(
               onTap: () {
+                print(_deviceSize);
                 Navigator.pop(context);
                 //page change animation
                 if (selectedItem != -1) {
@@ -126,20 +136,22 @@ class _ShlokSelectionState extends State<ShlokSelection>
               },
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.red[600],
-                ),
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.orange[100],
+                    border: Border.all(width: 1, color: Colors.orange[300])),
                 alignment: Alignment.center,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                margin: EdgeInsets.symmetric(
-                    horizontal: _deviceSize.width / 3.2, vertical: 20),
+                  EdgeInsets.symmetric(horizontal: _deviceSize.width*0.04, vertical: 5),
+                margin: EdgeInsets.only(
+                    left: _deviceSize.width / 3.4,
+                    right: _deviceSize.width / 3.4,
+                    top: _deviceSize.height / 46),
                 child: const Text(
                   "OK",
                   style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.orange,
                       fontWeight: FontWeight.w600,
-                      fontSize: 16),
+                      fontSize: 18),
                 ),
               ),
             ),

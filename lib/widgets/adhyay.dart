@@ -76,7 +76,7 @@ class Adhyay extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.only(left: 4, top :5),
+                padding: const EdgeInsets.only(left: 4, top :3),
                 width: double.infinity,
                 child: Text(
                   name,
@@ -84,7 +84,7 @@ class Adhyay extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.orange[800],
                     fontFamily: 'NotoSansMono',
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
