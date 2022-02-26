@@ -62,7 +62,7 @@ class _HomepageScreenState extends State<HomepageScreen>
               ),
               if (!isLoading)
                 Container(
-                  margin: EdgeInsets.only(top: _deviceSize.height * 0.04),
+                  margin: EdgeInsets.only(top: _deviceSize.height * 0.08),
                   child: HandWave(),
                 ),
               if (isLoading)

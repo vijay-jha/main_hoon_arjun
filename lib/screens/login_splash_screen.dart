@@ -44,8 +44,8 @@ class _LoginSplashState extends State<LoginSplash>
       backgroundColor: Colors.orange.shade50,
       body: Stack(children: [
         Positioned(
-          top: -50,
-          left: -50,
+          top: -(_deviceSize.height * 0.058),
+          left: -(_deviceSize.width * 0.127),
           child: Container(
             width: _deviceSize.width * 0.5,
             height: _deviceSize.height * 0.25,
@@ -57,7 +57,7 @@ class _LoginSplashState extends State<LoginSplash>
         ),
         Positioned(
             top: _deviceSize.height * 0.14,
-            right: -50,
+            right: -(_deviceSize.width * 0.127),
             child: Container(
               width: _deviceSize.width * 0.28,
               height: _deviceSize.height * 0.13,
@@ -67,14 +67,13 @@ class _LoginSplashState extends State<LoginSplash>
               ),
             )),
         Positioned(
-            bottom: -240,
-            right: 0,
+            bottom: -(_deviceSize.height * 0.35),
             child: Container(
               width: _deviceSize.width * 1,
               height: _deviceSize.height * 0.5,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(150),
-                color: const Color(0xFFFF521B),
+                borderRadius: BorderRadius.circular(200),
+                color: Color(0xFFFF521B),
               ),
             )),
         Stack(
@@ -102,7 +101,7 @@ class _LoginSplashState extends State<LoginSplash>
               margin: EdgeInsets.only(
                 left: MediaQuery.of(context).size.width * 0.1,
                 right: MediaQuery.of(context).size.width * 0.1,
-                top: MediaQuery.of(context).size.height * 0.47,
+                top: MediaQuery.of(context).size.height * 0.42,
               ),
               child: const Text(
                 "You have successfully logged in!",
