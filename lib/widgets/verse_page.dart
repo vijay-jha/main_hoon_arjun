@@ -138,10 +138,6 @@ class _VersePageState extends State<VersePage> {
 
           Center(
             child: Container(
-              padding: EdgeInsets.symmetric(
-                vertical: _deviceSize.height * 0.02,
-                horizontal: _deviceSize.width * 0.05,
-              ),
               margin: EdgeInsets.symmetric(
                 vertical: _deviceSize.height * 0.02,
                 horizontal: _deviceSize.width * 0.1,
@@ -154,16 +150,31 @@ class _VersePageState extends State<VersePage> {
                     blurRadius: 6.0,
                   ),
                 ],
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
+                color: Colors.orange.shade100,
+                borderRadius: BorderRadius.circular(15),
               ),
-              child: Text(
-                widget.shlokText,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 23,
-                  color: Colors.orange[700],
-                  fontWeight: FontWeight.w500,
+              child: Container(
+                margin: EdgeInsets.symmetric(
+                  vertical: _deviceSize.height * 0.025,
+                  horizontal: _deviceSize.width * 0.055,
+                ),
+                padding: EdgeInsets.symmetric(
+                  vertical: _deviceSize.height * 0.02,
+                  horizontal: _deviceSize.width * 0.05,
+                ),
+                decoration: BoxDecoration(
+                 
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Text(
+                  widget.shlokText.trim(),
+                  style: TextStyle(
+                    fontSize: _deviceSize.height * 0.025,
+                    color: Colors.orange[700],
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
@@ -273,10 +284,13 @@ class _BookmarkButtonState extends State<BookmarkButton> {
         });
       },
       icon: widget.isBookmark
-          ? const Icon(Icons.bookmark)
-          : const Icon(
+          ? Icon(
+              Icons.bookmark,
+              size: MediaQuery.of(context).size.height * 0.030,
+            )
+          : Icon(
               Icons.bookmark_add_outlined,
-              size: 26,
+              size: MediaQuery.of(context).size.height * 0.030,
             ),
       color: Colors.orange[600],
     );
@@ -367,9 +381,10 @@ class CustomWidget extends StatelessWidget {
               vertical: _deviceSize.height * 0.02,
               horizontal: _deviceSize.width * 0.05,
             ),
-            margin: EdgeInsets.symmetric(
-              vertical: _deviceSize.height * 0.01,
-              horizontal: _deviceSize.width * 0.05,
+            margin: EdgeInsets.only(
+              top: _deviceSize.height * 0.01,
+              left: _deviceSize.width * 0.05,
+              right: _deviceSize.width * 0.05,
             ),
             width: double.infinity,
             decoration: const BoxDecoration(
@@ -391,22 +406,27 @@ class CustomWidget extends StatelessWidget {
           ),
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.only(
+                bottomRight: Radius.circular(15),
+                bottomLeft: Radius.circular(15),
+              ),
               color: Colors.white,
             ),
             padding: EdgeInsets.symmetric(
               horizontal: _deviceSize.width * 0.05,
               vertical: _deviceSize.height * 0.03,
             ),
-            margin: EdgeInsets.symmetric(
-              vertical: _deviceSize.height * 0.02,
-              horizontal: _deviceSize.width * 0.05,
+            margin: EdgeInsets.only(
+              bottom: _deviceSize.height * 0.02,
+              top: _deviceSize.height * 0.015,
+              left: _deviceSize.width * 0.05,
+              right: _deviceSize.width * 0.05,
             ),
             child: Consumer<Translation>(builder: (_, tanslation, ch) {
               return Text(
                 Provider.of<Translation>(context, listen: true).getIsEnglish()
-                    ? content['english']
-                    : content['hindi'],
+                    ? content['english'].toString().trim()
+                    : content['hindi'].toString().trim(),
                 style: TextStyle(
                   fontSize: 19,
                   color: Colors.orange[700],

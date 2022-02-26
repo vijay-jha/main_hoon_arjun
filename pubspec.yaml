@@ -54,6 +54,7 @@ dependencies:
   flutter_spinkit: ^5.1.0
   http:
   just_audio: ^0.9.20
+  flutter_keyboard_visibility: ^5.2.0
   
   
 
@@ -103,7 +104,6 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/audio/
     - assets/images/
     - assets/lottie/
   # - images/a_dot_burr.jpeg

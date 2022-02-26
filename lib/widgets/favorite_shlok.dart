@@ -111,7 +111,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
                       child: Icon(
                         Icons.offline_share_rounded,
                         color: Colors.orange.shade800,
-                        size: 23,
+                        size: _deviceSize.height * 0.027,
                       ),
                     ),
                   ],
