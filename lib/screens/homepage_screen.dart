@@ -240,7 +240,7 @@ How are you feeling now ?
 """
                                       .trim()
                                   : """
-Hi User
+Hi
 How are you feeling now ?
 """
                                       .trim(),
