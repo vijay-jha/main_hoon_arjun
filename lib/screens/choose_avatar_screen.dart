@@ -77,7 +77,7 @@ class _DisplayAvatarState extends State<DisplayAvatar> {
             ),
           ),
           SizedBox(
-            height: _deviceSize.height * 0.02,
+            height: _deviceSize.height * 0.01,
           ),
           ElevatedButton(
             style: ButtonStyle(
