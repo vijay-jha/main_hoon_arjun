@@ -167,19 +167,6 @@ final deviceSize;
             ),
           ),
           Padding(
-<<<<<<< HEAD
-              padding: EdgeInsets.only(
-                top: 0,
-                left: _deviceSize.width * 0.05,
-              ),
-              child: Text(
-                adhyayNumber,
-                style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.orange,
-                    fontWeight: FontWeight.bold),
-              )),
-=======
             padding: EdgeInsets.only(left: deviceSize.width * 0.02),
             child: Text(
               adhyayNumber.substring(0, 7) + " " + adhyayNumber.substring(7),
@@ -189,17 +176,12 @@ final deviceSize;
                   fontWeight: FontWeight.w600),
             ),
           ),
->>>>>>> 83174b09839a145283ab1fd143686b3b1113acfd
         ],
       ),
       actions: [
         Padding(
           padding: EdgeInsets.only(
-<<<<<<< HEAD
-            right: _deviceSize.width * 0.03,
-=======
             right: deviceSize.width * 0.03,
->>>>>>> 83174b09839a145283ab1fd143686b3b1113acfd
           ),
           child: IconButton(
               onPressed: () {

@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,29 +42,13 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
         var _deivceSize =MediaQuery.of(context).size;
 
     return Scaffold(
-      // floatingActionButton: ElevatedButton(
-      //   child: const Icon(Icons.bookmark, color: Colors.orange,),
-      //   style: ButtonStyle(
-      //       shape: MaterialStateProperty.all<CircleBorder>(
-      //         const CircleBorder(),
-      //       ),
-      //       backgroundColor: MaterialStateProperty.all<Color>(Colors.orange.shade100)),
-      //   onPressed: () {
-      //     Navigator.push(context,
-      //         MaterialPageRoute(builder: (context) => BookmarkScreen()));
-      //   },
-      // ),
       appBar: AppBar(
         title: const Text("Shrimad Bhagavad Geeta"),
         actions: [ProfilePicture()],
       ),
       backgroundColor: Colors.orange.shade50,
       body: FutureBuilder(
-<<<<<<< HEAD
-        future: Future.delayed(Duration(seconds: 2)),
-=======
         future: Future.delayed(Duration(milliseconds:800)),
->>>>>>> 83174b09839a145283ab1fd143686b3b1113acfd
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return SpinKitFadingCircle(
