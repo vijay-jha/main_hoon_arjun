@@ -56,7 +56,7 @@ class _ShlokSelectionState extends State<ShlokSelection>
               color: Colors.orange.shade50,
               borderRadius: BorderRadius.circular(12)),
           margin: const EdgeInsets.symmetric(horizontal: 20),
-          height: _deviceSize.height / 1.67,
+          height: _deviceSize.height / 1.65,
           child: Column(children: [
             Container(
                 width: double.infinity,
@@ -71,13 +71,13 @@ class _ShlokSelectionState extends State<ShlokSelection>
                     "Jump to Shlok",
                     style: TextStyle(
                         color: Colors.orange[800],
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                         fontSize: 22),
                   ),
                 )),
             Padding(
                 padding: EdgeInsets.only(
-                    bottom: 10,
+                    bottom: _deviceSize.height * 0.011,
                     left: _deviceSize.width * 0.25,
                     right: _deviceSize.width * 0.25),
                 child: Divider(
@@ -88,7 +88,7 @@ class _ShlokSelectionState extends State<ShlokSelection>
               height: _deviceSize.height / 2.3,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: GridView.builder(
-                  gridDelegate:  SliverGridDelegateWithMaxCrossAxisExtent(
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: _deviceSize.width * 0.19,
                     mainAxisExtent: _deviceSize.height * 0.058,
                   ),
@@ -140,12 +140,14 @@ class _ShlokSelectionState extends State<ShlokSelection>
                     color: Colors.orange[100],
                     border: Border.all(width: 1, color: Colors.orange[300])),
                 alignment: Alignment.center,
-                padding:
-                  EdgeInsets.symmetric(horizontal: _deviceSize.width*0.04, vertical: 5),
+                padding: EdgeInsets.symmetric(
+                    horizontal: _deviceSize.width * 0.04,
+                    vertical: _deviceSize.height * 0.005),
                 margin: EdgeInsets.only(
                     left: _deviceSize.width / 3.4,
                     right: _deviceSize.width / 3.4,
-                    top: _deviceSize.height / 46),
+                    top: _deviceSize.height * 0.023,
+                    bottom: _deviceSize.height * 0.013),
                 child: const Text(
                   "OK",
                   style: TextStyle(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AboutScreen extends StatelessWidget {
   static const routeName = '/about-screen';
-
+  var name = "४"; 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +79,7 @@ Our misssion is to spread the learnings from 'Shrimad Bhagvad Geeta' and make pe
                 children: [
                   Center(
                     child: Container(
-                        margin: EdgeInsets.only(top: 4, bottom: 4),
+                        margin: EdgeInsets.only(top: 4, bottom: 2),
                         child: Text(
                           " Developed by",
                           style: TextStyle(
@@ -88,11 +88,12 @@ Our misssion is to spread the learnings from 'Shrimad Bhagvad Geeta' and make pe
                               fontWeight: FontWeight.w600),
                         )),
                   ),
+                   
                   Center(
                     child: Container(
                         margin: EdgeInsets.only(top: 0),
                         child: Text(
-                          "४izhad",
+                          "${name}izhad",
                           style: TextStyle(
                               color: Colors.orange[500],
                               fontSize: 20,

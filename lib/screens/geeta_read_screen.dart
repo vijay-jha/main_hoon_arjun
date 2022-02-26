@@ -37,6 +37,7 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
     }();
   }
 
+
   @override
   Widget build(BuildContext context) {
         var _deivceSize =MediaQuery.of(context).size;
@@ -77,8 +78,8 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
             ),
             itemCount: geetaChapters.length,
             itemBuilder: (_, index) => Adhyay(
-              geetaChapters[index]['number'],
-              geetaChapters[index]['name'],
+               geetaChapters[index]['number'],
+               geetaChapters[index]['name'],
             ),
           );
         },
