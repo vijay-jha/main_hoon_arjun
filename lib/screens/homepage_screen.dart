@@ -116,13 +116,9 @@ class _SearchBarState extends State<SearchBar> {
               builder: (context) => DesiredShlokScreen(emotions: decodedData),
             ),
           );
-          // setState(() {
           widget.isLoading(false);
-          // });
         } else {
-          // setState(() {
           widget.isLoading(false);
-          // });
           showDialog(
             context: context,
             builder: (_) => AlertDialog(
