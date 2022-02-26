@@ -37,6 +37,7 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
     }();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +59,7 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
       ),
       backgroundColor: Colors.orange.shade50,
       body: FutureBuilder(
-        future: Future.delayed(Duration(seconds: 1)),
+        future: Future.delayed(Duration(seconds: 2)),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return SpinKitFadingCircle(
@@ -75,8 +76,8 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
             ),
             itemCount: geetaChapters.length,
             itemBuilder: (_, index) => Adhyay(
-              geetaChapters[index]['number'],
-              geetaChapters[index]['name'],
+               geetaChapters[index]['number'],
+               geetaChapters[index]['name'],
             ),
           );
         },

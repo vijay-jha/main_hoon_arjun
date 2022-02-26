@@ -107,10 +107,11 @@ class _HomepageScreenState extends State<HomepageScreen>
         ),
         if (isLoading)
           SizedBox(
-            height: _deviceSize.height / 6.5,
+           height: _deviceSize.height * 0.2,       
           ),
         if (isLoading)
           SpinKitFadingCircle(
+             
             color: Colors.orange,
           ),
       ]),

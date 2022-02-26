@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:main_hoon_arjun/providers/translation.dart';
 import 'package:provider/provider.dart';
 
@@ -68,41 +69,51 @@ class _AdhyayOverviewScreenState extends State<AdhyayOverviewScreen> {
                 adhyayName: widget.adhyayName,
                 adhyayNumber: widget.title,
               )),
-          body: Stack(
-            children: [
-              PageView.builder(
-                onPageChanged: (index) {
-                  pagechanged = index + 1;
-                },
-                controller: controller,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return index == widget.shlokList.length-1 ? VersePage(
-                    isLastPage: true,
-                    currentShlok:
-                        "Chapter${widget.chapterData[index]['chapter']}_${widget.shlokList[index]}",
-                    verseNumber: index + 1,
-                    shlokTitle: widget.chapterData[index]['shlok'],
-                    pageController: controller,
-                    shlokText: widget.chapterData[index]['text'],
-                    meaning: widget.chapterData[index]['meaning'],
-                    translation: widget.chapterData[index]['translation'],
-                  ) : VersePage(
-                    isLastPage: false,
-                    currentShlok:
-                        "Chapter${widget.chapterData[index]['chapter']}_${widget.shlokList[index]}",
-                    verseNumber: index + 1,
-                    shlokTitle: widget.chapterData[index]['shlok'],
-                    pageController: controller,
-                    shlokText: widget.chapterData[index]['text'],
-                    meaning: widget.chapterData[index]['meaning'],
-                    translation: widget.chapterData[index]['translation'],
-                  );
-                },
-                itemCount: widget.shlokList.length,
-              ),
-            ],
-          ),
+          body: 
+          // widget.shlokList != null && widget.chapterData != null
+          //     ? SpinKitFadingCircle(
+          //         color: Colors.orange,
+          //       )
+              // :
+               Stack(
+                  children: [
+                    PageView.builder(
+                      onPageChanged: (index) {
+                        pagechanged = index + 1;
+                      },
+                      controller: controller,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return index == widget.shlokList.length - 1
+                            ? VersePage(
+                                isLastPage: true,
+                                currentShlok:
+                                    "Chapter${widget.chapterData[index]['chapter']}_${widget.shlokList[index]}",
+                                verseNumber: index + 1,
+                                shlokTitle: widget.chapterData[index]['shlok'],
+                                pageController: controller,
+                                shlokText: widget.chapterData[index]['text'],
+                                meaning: widget.chapterData[index]['meaning'],
+                                translation: widget.chapterData[index]
+                                    ['translation'],
+                              )
+                            : VersePage(
+                                isLastPage: false,
+                                currentShlok:
+                                    "Chapter${widget.chapterData[index]['chapter']}_${widget.shlokList[index]}",
+                                verseNumber: index + 1,
+                                shlokTitle: widget.chapterData[index]['shlok'],
+                                pageController: controller,
+                                shlokText: widget.chapterData[index]['text'],
+                                meaning: widget.chapterData[index]['meaning'],
+                                translation: widget.chapterData[index]
+                                    ['translation'],
+                              );
+                      },
+                      itemCount: widget.shlokList.length,
+                    ),
+                  ],
+                ),
         ),
       ),
     );
@@ -134,7 +145,7 @@ class BuildAppBar extends StatelessWidget {
         color: Colors.orange, //change your color here
       ),
       elevation: 0,
-      backgroundColor:  Colors.orange.shade50,
+      backgroundColor: Colors.orange.shade50,
       title: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,7 +164,6 @@ class BuildAppBar extends StatelessWidget {
                     fontWeight: FontWeight.bold),
               )),
           Padding(
-            
               padding: EdgeInsets.only(
                 top: 0,
                 left: _deviceSize.width * 0.05,
@@ -169,7 +179,9 @@ class BuildAppBar extends StatelessWidget {
       ),
       actions: [
         Padding(
-          padding:  EdgeInsets.only(right: _deviceSize.width * 0.03,),
+          padding: EdgeInsets.only(
+            right: _deviceSize.width * 0.03,
+          ),
           child: IconButton(
               onPressed: () {
                 showDialog(
