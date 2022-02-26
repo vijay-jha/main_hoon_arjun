@@ -76,7 +76,7 @@ class _VerifyScreenState extends State<VerifyScreen>
 
   @override
   Widget build(BuildContext context) {
-     Size _deviceSize = MediaQuery.of(context).size;
+    Size _deviceSize = MediaQuery.of(context).size;
 
     Timer(Duration(minutes: 1), () async {
       await user.reload();
@@ -93,14 +93,14 @@ class _VerifyScreenState extends State<VerifyScreen>
     });
 
     return Scaffold(
-backgroundColor: Colors.orange.shade50,
+      backgroundColor: Colors.orange.shade50,
       body: Stack(children: [
         Positioned(
             top: -(_deviceSize.height * 0.058),
             left: -(_deviceSize.width * 0.127),
             child: Container(
               width: _deviceSize.width * 0.5,
-            height: _deviceSize.height * 0.25,
+              height: _deviceSize.height * 0.25,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
                 color: Color(0xFFFF521B),
@@ -118,8 +118,7 @@ backgroundColor: Colors.orange.shade50,
               ),
             )),
         Positioned(
-            bottom: -(_deviceSize.height * 0.282),
-
+            bottom: -(_deviceSize.height * 0.35),
             child: Container(
               width: _deviceSize.width * 1,
               height: _deviceSize.height * 0.5,
@@ -135,8 +134,9 @@ backgroundColor: Colors.orange.shade50,
               margin: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.33),
               // decoration: BoxDecoration(border: Border.all(width: 1)),
-              padding:
-                  !isVerified ? null : EdgeInsets.symmetric(horizontal: _deviceSize.width * 0.203),
+              padding: !isVerified
+                  ? null
+                  : EdgeInsets.symmetric(horizontal: _deviceSize.width * 0.203),
               child: !isVerified
                   ? Lottie.asset(
                       'assets/lottie/verify_loading.json', //change the path here
@@ -167,7 +167,7 @@ backgroundColor: Colors.orange.shade50,
               margin: EdgeInsets.only(
                 left: _deviceSize.height * 0.1,
                 right: _deviceSize.height * 0.1,
-                top: _deviceSize.height * 0.47,
+                top: _deviceSize.height * 0.42,
               ),
               child: Text(
                 !isVerified
@@ -197,7 +197,7 @@ backgroundColor: Colors.orange.shade50,
       });
       Provider.of<MahabharatCharacters>(context, listen: false)
           .saveAvatarTolocal();
-          
+
       setState(() {
         isVerified = true;
       });

@@ -54,6 +54,8 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
     isFavorite = !isFavorite;
   }
 
+  bool itExists;
+
   @override
   void initState() {
     super.initState();
@@ -63,6 +65,8 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
           .collection('user_favorites')
           .doc(_user.uid)
           .get();
+
+      itExists = doc.exists;
     }();
   }
 
@@ -100,6 +104,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   }
 
   bool isShareVisible = true;
+
   @override
   Widget build(BuildContext context) {
     final _deviceSize = MediaQuery.of(context).size;
@@ -136,10 +141,12 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
             shlokNo = currentShlok.substring(15);
           }
 
-          var docData = doc.data();
-          var favoriteShloks = docData['fav_sholks'];
-          if (favoriteShloks.contains(currentShlok)) {
-            isFavorite = true;
+          if (itExists) {
+            var docData = doc.data();
+            var favoriteShloks = docData['fav_sholks'];
+            if (favoriteShloks.contains(currentShlok)) {
+              isFavorite = true;
+            }
           }
         }
         return Scaffold(
@@ -167,8 +174,8 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                 height: _deviceSize.height * 0.03,
               ),
               Container(
-                margin: EdgeInsets.symmetric(
-                    horizontal: _deviceSize.width * 0.42),
+                margin:
+                    EdgeInsets.symmetric(horizontal: _deviceSize.width * 0.42),
                 child: ChangeNotifierProvider(
                   create: (ctx) => PlayingShlok(),
                   child: SpeakerIcnBtn(

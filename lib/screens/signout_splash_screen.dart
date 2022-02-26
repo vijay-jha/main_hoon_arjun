@@ -47,8 +47,8 @@ class _SignOutSplashScreenState extends State<SignOutSplashScreen>
       backgroundColor: Colors.orange.shade50,
       body: Stack(children: [
         Positioned(
-          top: -50,
-          left: -50,
+          top: -(_deviceSize.height * 0.058),
+            left: -(_deviceSize.width * 0.127),
           child: Container(
             width: _deviceSize.width * 0.5,
             height: _deviceSize.height * 0.25,
@@ -60,7 +60,7 @@ class _SignOutSplashScreenState extends State<SignOutSplashScreen>
         ),
         Positioned(
             top: _deviceSize.height * 0.14,
-            right: -50,
+            right: -(_deviceSize.width * 0.127),
             child: Container(
               width: _deviceSize.width * 0.28,
               height: _deviceSize.height * 0.13,
@@ -70,14 +70,13 @@ class _SignOutSplashScreenState extends State<SignOutSplashScreen>
               ),
             )),
         Positioned(
-            bottom: -240,
-            right: 0,
+            bottom: -(_deviceSize.height * 0.35),
             child: Container(
               width: _deviceSize.width * 1,
               height: _deviceSize.height * 0.5,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(150),
-                color: const Color(0xFFFF521B),
+                borderRadius: BorderRadius.circular(200),
+                color: Color(0xFFFF521B),
               ),
             )),
         Stack(
@@ -85,7 +84,9 @@ class _SignOutSplashScreenState extends State<SignOutSplashScreen>
             Container(
               margin: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.33),
-              padding: const EdgeInsets.symmetric(horizontal: 80),
+              padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.203,
+              ),
               child: Lottie.asset(
                 'assets/lottie/signout_namaste.json',
                 height: MediaQuery.of(context).size.height * 0.35,
@@ -103,7 +104,7 @@ class _SignOutSplashScreenState extends State<SignOutSplashScreen>
               margin: EdgeInsets.only(
                 left: _deviceSize.height * 0.1,
                 right: _deviceSize.height * 0.1,
-                top: _deviceSize.height * 0.47,
+                top: _deviceSize.height * 0.42,
               ),
               child: const Text(
                 "धन्यवाद!",
