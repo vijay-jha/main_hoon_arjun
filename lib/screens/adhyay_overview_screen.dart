@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:main_hoon_arjun/providers/translation.dart';
 import 'package:provider/provider.dart';
 
@@ -70,41 +71,51 @@ class _AdhyayOverviewScreenState extends State<AdhyayOverviewScreen> {
                 adhyayNumber: widget.title,
                 deviceSize: _deviceSize,
               )),
-          body: Stack(
-            children: [
-              PageView.builder(
-                onPageChanged: (index) {
-                  pagechanged = index + 1;
-                },
-                controller: controller,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return index == widget.shlokList.length-1 ? VersePage(
-                    isLastPage: true,
-                    currentShlok:
-                        "Chapter${widget.chapterData[index]['chapter']}_${widget.shlokList[index]}",
-                    verseNumber: index + 1,
-                    shlokTitle: widget.chapterData[index]['shlok'],
-                    pageController: controller,
-                    shlokText: widget.chapterData[index]['text'],
-                    meaning: widget.chapterData[index]['meaning'],
-                    translation: widget.chapterData[index]['translation'],
-                  ) : VersePage(
-                    isLastPage: false,
-                    currentShlok:
-                        "Chapter${widget.chapterData[index]['chapter']}_${widget.shlokList[index]}",
-                    verseNumber: index + 1,
-                    shlokTitle: widget.chapterData[index]['shlok'],
-                    pageController: controller,
-                    shlokText: widget.chapterData[index]['text'],
-                    meaning: widget.chapterData[index]['meaning'],
-                    translation: widget.chapterData[index]['translation'],
-                  );
-                },
-                itemCount: widget.shlokList.length,
-              ),
-            ],
-          ),
+          body: 
+          // widget.shlokList != null && widget.chapterData != null
+          //     ? SpinKitFadingCircle(
+          //         color: Colors.orange,
+          //       )
+              // :
+               Stack(
+                  children: [
+                    PageView.builder(
+                      onPageChanged: (index) {
+                        pagechanged = index + 1;
+                      },
+                      controller: controller,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return index == widget.shlokList.length - 1
+                            ? VersePage(
+                                isLastPage: true,
+                                currentShlok:
+                                    "Chapter${widget.chapterData[index]['chapter']}_${widget.shlokList[index]}",
+                                verseNumber: index + 1,
+                                shlokTitle: widget.chapterData[index]['shlok'],
+                                pageController: controller,
+                                shlokText: widget.chapterData[index]['text'],
+                                meaning: widget.chapterData[index]['meaning'],
+                                translation: widget.chapterData[index]
+                                    ['translation'],
+                              )
+                            : VersePage(
+                                isLastPage: false,
+                                currentShlok:
+                                    "Chapter${widget.chapterData[index]['chapter']}_${widget.shlokList[index]}",
+                                verseNumber: index + 1,
+                                shlokTitle: widget.chapterData[index]['shlok'],
+                                pageController: controller,
+                                shlokText: widget.chapterData[index]['text'],
+                                meaning: widget.chapterData[index]['meaning'],
+                                translation: widget.chapterData[index]
+                                    ['translation'],
+                              );
+                      },
+                      itemCount: widget.shlokList.length,
+                    ),
+                  ],
+                ),
         ),
       ),
     );
@@ -156,6 +167,19 @@ final deviceSize;
             ),
           ),
           Padding(
+<<<<<<< HEAD
+              padding: EdgeInsets.only(
+                top: 0,
+                left: _deviceSize.width * 0.05,
+              ),
+              child: Text(
+                adhyayNumber,
+                style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.orange,
+                    fontWeight: FontWeight.bold),
+              )),
+=======
             padding: EdgeInsets.only(left: deviceSize.width * 0.02),
             child: Text(
               adhyayNumber.substring(0, 7) + " " + adhyayNumber.substring(7),
@@ -165,12 +189,17 @@ final deviceSize;
                   fontWeight: FontWeight.w600),
             ),
           ),
+>>>>>>> 83174b09839a145283ab1fd143686b3b1113acfd
         ],
       ),
       actions: [
         Padding(
           padding: EdgeInsets.only(
+<<<<<<< HEAD
+            right: _deviceSize.width * 0.03,
+=======
             right: deviceSize.width * 0.03,
+>>>>>>> 83174b09839a145283ab1fd143686b3b1113acfd
           ),
           child: IconButton(
               onPressed: () {
