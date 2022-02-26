@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:main_hoon_arjun/screens/bookmark_screen.dart';
 
 import '../adhyay_detail.dart';
 import '../widgets/profile_picture.dart';
@@ -41,21 +40,18 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: ElevatedButton(
-        child: const Icon(
-          Icons.bookmark,
-          color: Colors.orange,
-        ),
-        style: ButtonStyle(
-            shape:
-                MaterialStateProperty.all<CircleBorder>(const CircleBorder()),
-            backgroundColor:
-                MaterialStateProperty.all<Color>(Colors.orange.shade100)),
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => BookmarkScreen()));
-        },
-      ),
+      // floatingActionButton: ElevatedButton(
+      //   child: const Icon(Icons.bookmark, color: Colors.orange,),
+      //   style: ButtonStyle(
+      //       shape: MaterialStateProperty.all<CircleBorder>(
+      //         const CircleBorder(),
+      //       ),
+      //       backgroundColor: MaterialStateProperty.all<Color>(Colors.orange.shade100)),
+      //   onPressed: () {
+      //     Navigator.push(context,
+      //         MaterialPageRoute(builder: (context) => BookmarkScreen()));
+      //   },
+      // ),
       appBar: AppBar(
         title: const Text("Shrimad Bhagavad Geeta"),
         actions: [ProfilePicture()],
@@ -73,9 +69,8 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
             clipBehavior: Clip.none,
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               mainAxisSpacing: 3,
-              maxCrossAxisExtent: 197,
-              childAspectRatio: (MediaQuery.of(context).size.width / 0.62) /
-                  (MediaQuery.of(context).size.height / 0.9),
+              maxCrossAxisExtent: 300,
+              mainAxisExtent: 275,
               crossAxisSpacing: 0.1,
             ),
             itemCount: geetaChapters.length,

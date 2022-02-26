@@ -77,7 +77,18 @@ class _AdhyayOverviewScreenState extends State<AdhyayOverviewScreen> {
                 controller: controller,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return VersePage(
+                  return index == widget.shlokList.length-1 ? VersePage(
+                    isLastPage: true,
+                    currentShlok:
+                        "Chapter${widget.chapterData[index]['chapter']}_${widget.shlokList[index]}",
+                    verseNumber: index + 1,
+                    shlokTitle: widget.chapterData[index]['shlok'],
+                    pageController: controller,
+                    shlokText: widget.chapterData[index]['text'],
+                    meaning: widget.chapterData[index]['meaning'],
+                    translation: widget.chapterData[index]['translation'],
+                  ) : VersePage(
+                    isLastPage: false,
                     currentShlok:
                         "Chapter${widget.chapterData[index]['chapter']}_${widget.shlokList[index]}",
                     verseNumber: index + 1,
@@ -123,14 +134,16 @@ class BuildAppBar extends StatelessWidget {
         color: Colors.orange, //change your color here
       ),
       elevation: 0,
-      backgroundColor: Colors.white,
+      backgroundColor:  Colors.orange.shade50,
       title: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
               padding: EdgeInsets.only(
                 left: _deviceSize.width * 0.05,
                 top: _deviceSize.height * 0.01,
+                bottom: 0,
               ),
               child: Text(
                 adhyayName,
@@ -140,7 +153,9 @@ class BuildAppBar extends StatelessWidget {
                     fontWeight: FontWeight.bold),
               )),
           Padding(
+            
               padding: EdgeInsets.only(
+                top: 0,
                 left: _deviceSize.width * 0.05,
               ),
               child: Text(
