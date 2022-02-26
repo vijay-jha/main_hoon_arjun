@@ -6,7 +6,7 @@ class Adhyay extends StatelessWidget {
   final String title;
   final String name;
   Adhyay(this.title, this.name);
-  
+
   var chapterdata = <Map<String, dynamic>>[];
   var shlokList = <String>[];
 
@@ -25,9 +25,10 @@ class Adhyay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var _deivceSize = MediaQuery.of(context).size;
     print(title);
     getChapterData(title);
-    
+
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
@@ -42,71 +43,78 @@ class Adhyay extends StatelessWidget {
         ),
       ),
       child: Container(
-        padding:
-            const EdgeInsets.only(left: 11, top: 10, bottom: 10, right: 11),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.grey,
-                offset: Offset(0.0, 1.0), //(x,y)
-                blurRadius: 6.0,
+        margin: EdgeInsets.symmetric(
+            vertical: _deivceSize.height * 0.011,
+            horizontal: _deivceSize.width * 0.027),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.grey,
+              offset: Offset(0.0, 1.0), //(x,y)
+              blurRadius: 7.0,
+            ),
+          ],
+        ),
+        // width: 170,
+        // // height: 200,
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(
+                left: _deivceSize.width * 0.0075,
+                right: _deivceSize.width * 0.0075,
+                top: _deivceSize.height * 0.0035,
+                bottom: _deivceSize.height * 0.0058,
               ),
-            ],
-          ),
-          width: 170,
-          height: 300,
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.only(
-                    top: 2, left: 2, right: 2, bottom: 5),
-                // padding: EdgeInsets.all(2),
-                height: 190,
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(12),
-                      topRight: Radius.circular(12)),
-                  child: Image.asset(
-                    "assets/images/Geeta.jfif",
-                    fit: BoxFit.cover,
-                  ),
+              // padding: EdgeInsets.all(2),
+              height: _deivceSize.height * 0.223,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                  bottomLeft: Radius.circular(5),
+                  bottomRight: Radius.circular(5),
+                ),
+                child: Image.asset(
+                  "assets/images/Geeta.jfif",
+                  fit: BoxFit.cover,
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.only(left: 4, top :3),
-                width: double.infinity,
-                child: Text(
-                  name,
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    color: Colors.orange[800],
-                    fontFamily: 'NotoSansMono',
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+            ),
+            Container(
+              padding: EdgeInsets.only(
+                  left: _deivceSize.width * 0.018,
+                  top: _deivceSize.height * 0.005),
+              width: double.infinity,
+              child: Text(
+                name,
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  color: Colors.orange[800],
+                  fontFamily: 'NotoSansMono',
+                  fontSize: _deivceSize.height * 0.022,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.only(
-                  left: 3,
-                ),
-                width: double.infinity,
-                child: Text(
-                  ' $title ',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    color: Colors.orange[800],
-                    fontFamily: 'NotoSansMono',
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                  ),
+            ),
+            Container(
+              padding: EdgeInsets.only(left: _deivceSize.width * 0.018),
+              width: double.infinity,
+              child: Text(
+                title.substring(0, 7) + " " + title.substring(7),
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  color: Colors.orange[800],
+                  fontFamily: 'NotoSansMono',
+                  fontSize: _deivceSize.height * 0.015,
+                  fontWeight: FontWeight.w500,
+                  overflow: TextOverflow.fade,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

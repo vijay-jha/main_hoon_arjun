@@ -42,14 +42,14 @@ class _ShlokCardState extends State<ShlokCard> {
                 borderRadius: BorderRadius.circular(15),
               ),
               margin: EdgeInsets.only(
-                top: _deviceSize.height * 0.07,
+                top: _deviceSize.height * 0.05,
                 left: _deviceSize.width * 0.09,
                 right: _deviceSize.width * 0.09,
               ),
               child: shlokCard(_deviceSize, snapshot),
             ),
             Positioned(
-              top: _deviceSize.height * 0.047,
+              top: _deviceSize.height * 0.027,
               right: _deviceSize.width * 0.042,
               child: CircleAvatar(
                 backgroundColor: Colors.white,
@@ -60,9 +60,11 @@ class _ShlokCardState extends State<ShlokCard> {
                     isLiked: widget.isFavorite,
                     likeBuilder: (isLiked) {
                       final color = isLiked ? Colors.red : Colors.grey;
-                      return Icon(Icons.favorite_outlined,
-                          color: color, size: 25,
-                    );
+                      return Icon(
+                        Icons.favorite_outlined,
+                        color: color,
+                        size: 25,
+                      );
                     },
                     onTap: (isLiked) async {
                       setState(() {
@@ -98,12 +100,12 @@ class _ShlokCardState extends State<ShlokCard> {
         padding: const EdgeInsets.all(17),
         alignment: Alignment.center,
         margin: EdgeInsets.symmetric(
-          vertical: _deviceSize.height * 0.05,
-          horizontal: _deviceSize.width * 0.09,
+          vertical: _deviceSize.height * 0.04,
+          horizontal: _deviceSize.width * 0.08,
         ),
         child: Text(
           snapshot.hasData
-              ? snapshot.data['Shlok${widget.shlokNo}']['text']
+              ? snapshot.data['Shlok${widget.shlokNo}']['text'].toString().trim()
               : '''
 ........
 ........
@@ -113,7 +115,7 @@ class _ShlokCardState extends State<ShlokCard> {
           style: TextStyle(
             color: Colors.orange.shade900,
             fontSize: 20,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w700,
           ),
           textAlign: TextAlign.center,
           softWrap: true,

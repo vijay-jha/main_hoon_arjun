@@ -90,14 +90,14 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
 
     return Consumer<PlayingShlok>(builder: (_, playingShlok, ch) {
       return Card(
-        elevation: widget.isDesired ? 4 : 0,
+        elevation: widget.isDesired ? 10 : 0,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25)),
         ),
         child: InkWell(
           onTap: _onTap,
           child: Container(
-            width: 55,
+            width: _deviceSize.width * 0.14,
             padding: EdgeInsets.symmetric(
               vertical: _deviceSize.height * 0.0089,
               horizontal: _deviceSize.width * 0.020,
@@ -118,7 +118,7 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
                 : Icon(
                     Icons.volume_up_sharp,
                     color: Colors.orange.shade900,
-                    size: 33,
+                    size: _deviceSize.height * 0.038,
                   ),
           ),
         ),

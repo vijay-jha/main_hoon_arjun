@@ -58,7 +58,7 @@ class BookmarkCard extends StatelessWidget {
                 right: _deviceSize.width * 0.05, // 18
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                     alignment: Alignment.centerLeft,
