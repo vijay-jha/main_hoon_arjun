@@ -394,7 +394,7 @@ class CustomWidget extends StatelessWidget {
             ),
             padding: EdgeInsets.symmetric(
               horizontal: _deviceSize.width * 0.03,
-              vertical: _deviceSize.height * 0.001,
+              vertical: _deviceSize.height * 0.025,
             ),
             margin: EdgeInsets.only(
               bottom: _deviceSize.height * 0.02,
