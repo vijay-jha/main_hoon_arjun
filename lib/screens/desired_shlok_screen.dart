@@ -73,7 +73,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   @override
   Future<void> dispose() async {
     super.dispose();
-    SpeakerIcnBtn.player.dispose();
+    SpeakerIcnBtn.player.stop();
 
     if (!doc.exists) {
       await FirebaseFirestore.instance

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 
@@ -33,8 +32,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
         widget.shlok["ShlokNo"] +
         '.mp3';
     () {}();
-    // print("--------------");
-    // print(url);
+    
   }
 
   Future<String> getshlokUrl() async {
@@ -129,7 +127,6 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
                     left: _deviceSize.width * 0.035, //14
                     top: _deviceSize.height * 0.005, //5,
                     right: _deviceSize.width * 0.035, //14
-                    // bottom: _deviceSize.height * 0.005, //5,
                   ),
                   child: ShlokCard(
                     shlok: widget.shlok["Shlok"],

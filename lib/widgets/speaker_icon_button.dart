@@ -75,10 +75,6 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
         });
   }
 
-  // });
-  // }
-  //
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -86,24 +82,15 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
     final _deviceSize = MediaQuery.of(context).size;
 
     void _onTap() {
-      // if (url == null) {
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(
-      //       content: Text("Audio is loading...Please try again🙏🏻"),
-      //       backgroundColor: Theme.of(context).errorColor,
-      //     ),
-      //   );
-        
-      // }else{
+    
       if (playingShlok.getCureentShlokPlay() != widget.shlokIndex) {
         SpeakerIcnBtn.player.stop();
         playingShlok.setCurrentshlokPlaying(widget.shlokIndex);
-        print('+++++++++');
+        
       } else {
         playingShlok.setCurrentshlokPlaying(-1);
         SpeakerIcnBtn.player.stop();
       }}
-    // }
 
     return Consumer<PlayingShlok>(builder: (_, playingShlok, ch) {
       return Card(
@@ -130,7 +117,7 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
             ),
             child: Provider.of<PlayingShlok>(context, listen: true)
                         .getCureentShlokPlay() ==
-                    widget.shlokIndex
+                    widget.shlokIndex 
                 ? playingAudio()
                 : Icon(
                     Icons.volume_up_sharp,

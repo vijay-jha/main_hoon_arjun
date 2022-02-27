@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:main_hoon_arjun/screens/adhyay_overview_screen.dart';
-import 'dart:convert';
+
+import '../screens/adhyay_overview_screen.dart';
 
 class Adhyay extends StatelessWidget {
   final String title;
@@ -30,9 +30,7 @@ class Adhyay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var _deivceSize = MediaQuery.of(context).size;
-    print(title);
     getChapterData(title);
-
 
     return FutureBuilder(
         future: getChapterData(title),
@@ -54,7 +52,6 @@ class Adhyay extends StatelessWidget {
                     adhyayName: name,
                     initialPage: 0,
                   ),
-
                 ),
               ),
               child: Container(
@@ -138,6 +135,5 @@ class Adhyay extends StatelessWidget {
             color: Colors.orange,
           );
         });
-
   }
 }

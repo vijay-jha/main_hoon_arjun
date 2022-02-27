@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,18 +42,6 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
         var _deivceSize =MediaQuery.of(context).size;
 
     return Scaffold(
-      // floatingActionButton: ElevatedButton(
-      //   child: const Icon(Icons.bookmark, color: Colors.orange,),
-      //   style: ButtonStyle(
-      //       shape: MaterialStateProperty.all<CircleBorder>(
-      //         const CircleBorder(),
-      //       ),
-      //       backgroundColor: MaterialStateProperty.all<Color>(Colors.orange.shade100)),
-      //   onPressed: () {
-      //     Navigator.push(context,
-      //         MaterialPageRoute(builder: (context) => BookmarkScreen()));
-      //   },
-      // ),
       appBar: AppBar(
         title: const Text("Shrimad Bhagavad Geeta"),
         actions: [ProfilePicture()],
