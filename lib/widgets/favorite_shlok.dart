@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 
@@ -21,6 +22,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
   final _controller = ScreenshotController();
   var firestore = FirebaseFirestore.instance;
   String shlokName;
+  String url;
 
   @override
   void initState() {
@@ -30,15 +32,18 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
         '_' +
         widget.shlok["ShlokNo"] +
         '.mp3';
+    () {}();
+    // print("--------------");
+    // print(url);
   }
 
   Future<String> getshlokUrl() async {
-    return (await FirebaseStorage.instance
+    return await FirebaseStorage.instance
         .ref()
         .child('Shlok Audio Files')
         .child(widget.shlok["Chapter"])
         .child(shlokName)
-        .getDownloadURL());
+        .getDownloadURL();
   }
 
   void _onTapShlok() async {
@@ -136,7 +141,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
               SpeakerIcnBtn(
                 audioUrl: getshlokUrl(),
                 shlokIndex: widget.shlokIndex,
-              ),
+              )
             ],
           ),
         ),
@@ -176,4 +181,3 @@ class ShlokCard extends StatelessWidget {
     );
   }
 }
-

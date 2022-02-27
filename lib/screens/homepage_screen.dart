@@ -42,38 +42,40 @@ class _HomepageScreenState extends State<HomepageScreen>
         ),
         body: Container(
           height: double.infinity,
-          child: Column(
-            children: [
-              Container(
-                alignment: Alignment.center,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  // shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                padding: EdgeInsets.only(top: 15),
-                margin: EdgeInsets.symmetric(
-                  vertical: _deviceSize.height * 0.05,
-                  horizontal: _deviceSize.width * 0.05,
-                ),
-                // padding: EdgeInsets.only(top: ),
-                child: SearchBar(setLoading),
-              ),
-              if (!isLoading)
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
                 Container(
-                  margin: EdgeInsets.only(top: _deviceSize.height * 0.08),
-                  child: HandWave(),
+                  alignment: Alignment.center,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    // shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  padding: EdgeInsets.only(top: 15),
+                  margin: EdgeInsets.symmetric(
+                    vertical: _deviceSize.height * 0.05,
+                    horizontal: _deviceSize.width * 0.05,
+                  ),
+                  // padding: EdgeInsets.only(top: ),
+                  child: SearchBar(setLoading),
                 ),
-              if (isLoading)
-                SizedBox(
-                  height: _deviceSize.height * 0.2,
-                ),
-              if (isLoading)
-                SpinKitFadingCircle(
-                  color: Colors.orange,
-                ),
-            ],
+                if (!isLoading)
+                  Container(
+                    margin: EdgeInsets.only(top: _deviceSize.height * 0.08),
+                    child: HandWave(),
+                  ),
+                if (isLoading)
+                  SizedBox(
+                    height: _deviceSize.height * 0.2,
+                  ),
+                if (isLoading)
+                  SpinKitFadingCircle(
+                    color: Colors.orange,
+                  ),
+              ],
+            ),
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -98,64 +100,73 @@ class _SearchBarState extends State<SearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      onSubmitted: (feeling) async {
-        FocusScope.of(context).unfocus();
-        await Future.delayed(const Duration(milliseconds: 500), () {});
-        // setState(() {
-        widget.isLoading(true);
-        // });
-        if (feeling.isNotEmpty) {
-          var url = Uri.parse('$FEELING_API/feeling?query=' + feeling.trim());
-          var data = await api.getData(url);
-          var decodedData = json.decode(data);
+    try {
+      return TextField(
+        onSubmitted: (feeling) async {
+          FocusScope.of(context).unfocus();
+          await Future.delayed(const Duration(milliseconds: 500), () {});
+          // setState(() {
+          widget.isLoading(true);
+          // });
+          if (feeling.isNotEmpty) {
+            var url = Uri.parse('$FEELING_API/feeling?query=' + feeling.trim());
+            var data = await api.getData(url);
+            var decodedData = json.decode(data);
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DesiredShlokScreen(emotions: decodedData),
-            ),
-          );
-          widget.isLoading(false);
-        } else {
-          widget.isLoading(false);
-          showDialog(
-            context: context,
-            builder: (_) => AlertDialog(
-              backgroundColor: Colors.orange.shade50,
-              content: Text("Please enter something about your feeling."),
-              actions: [
-                OutlinedButton(
-                    onPressed: () async {
-                      await Future.delayed(Duration(milliseconds: 200));
-                      Navigator.of(context).pop();
-                    },
-                    child: Text("Okay")),
-              ],
-            ),
-          );
-        }
-      },
-      focusNode: inputNode,
-      textAlign: TextAlign.start,
-      decoration: InputDecoration(
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 1.0),
-          borderRadius: BorderRadius.circular(25),
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DesiredShlokScreen(emotions: decodedData),
+              ),
+            );
+            widget.isLoading(false);
+          } else {
+            widget.isLoading(false);
+            showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                backgroundColor: Colors.orange.shade50,
+                content: Text("Please enter something about your feeling."),
+                actions: [
+                  OutlinedButton(
+                      onPressed: () async {
+                        await Future.delayed(Duration(milliseconds: 200));
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("Okay")),
+                ],
+              ),
+            );
+          }
+        },
+        focusNode: inputNode,
+        textAlign: TextAlign.start,
+        decoration: InputDecoration(
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white, width: 1.0),
+            borderRadius: BorderRadius.circular(25),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white, width: 0.2),
+            borderRadius: BorderRadius.circular(25),
+          ),
+          hintText: " Search  ( e.g. I am Happy )",
+          hintStyle: TextStyle(
+            color: Colors.grey.shade400,
+            fontSize: 18,
+          ),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 0.2),
-          borderRadius: BorderRadius.circular(25),
+        // autofocus: true,
+        style: TextStyle(fontSize: 20, color: Colors.orange.shade400),
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Sorry, Failded to Load. Please try again🙏🏻"),
+          backgroundColor: Theme.of(context).errorColor,
         ),
-        hintText: " Search  ( e.g. I am Happy )",
-        hintStyle: TextStyle(
-          color: Colors.grey.shade400,
-          fontSize: 18,
-        ),
-      ),
-      // autofocus: true,
-      style: TextStyle(fontSize: 20, color: Colors.orange.shade400),
-    );
+      );
+    }
   }
 }
 

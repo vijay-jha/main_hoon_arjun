@@ -35,43 +35,50 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
   }
 
   Widget playingAudio() {
-    return FutureBuilder(
-        future: SpeakerIcnBtn.player.setUrl(url),
+    Duration time;
+    () async {
+      time = await SpeakerIcnBtn.player.setAudioSource(
+        AudioSource.uri(Uri.parse(url)),
+      );
+    }();
+  
+    return StreamBuilder(
+        stream: SpeakerIcnBtn.player.playerStateStream,
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting)
-            return CircularProgressIndicator();
-          return StreamBuilder(
-              stream: SpeakerIcnBtn.player.playerStateStream,
-              builder: (context, snapshot) {
-                final playerState = snapshot.data;
-                final processingState = playerState?.processingState;
-                final playing = playerState?.playing;
+          final playerState = snapshot.data;
+          final processingState = playerState?.processingState;
+          final playing = playerState?.playing;
 
-                if (processingState == ProcessingState.loading ||
-                    processingState == ProcessingState.buffering)
-                  return CircularProgressIndicator();
-                if (playing != true) {
-                  SpeakerIcnBtn.player.play();
-                } else if (processingState == ProcessingState.ready) {
-                  return Icon(
-                    Icons.pause_circle_outline_rounded,
-                    color: Colors.orange.shade900,
-                    size: 33,
-                  );
-                } else if (playing == true &&
-                    processingState == ProcessingState.idle) {
-                  SpeakerIcnBtn.player.dispose();
-                  SpeakerIcnBtn.player = AudioPlayer();
-                  return playingAudio();
-                }
-                return Icon(
-                  Icons.pause_circle_outline_rounded,
-                  color: Colors.orange.shade900,
-                  size: 33,
-                );
-              });
+          if (processingState == ProcessingState.loading ||
+              processingState == ProcessingState.buffering)
+            return CircularProgressIndicator();
+
+          if (playing != true) {
+            SpeakerIcnBtn.player.play();
+          } else if (processingState == ProcessingState.ready) {
+            return Icon(
+              Icons.pause_circle_outline_rounded,
+              color: Colors.orange.shade900,
+              size: 33,
+            );
+          } else if (playing == true &&
+              processingState == ProcessingState.idle) {
+            SpeakerIcnBtn.player.dispose();
+            SpeakerIcnBtn.player = AudioPlayer();
+            return playingAudio();
+          }
+          return Icon(
+            Icons.pause_circle_outline_rounded,
+            color: Colors.orange.shade900,
+            size: 33,
+          );
         });
   }
+
+  // });
+  // }
+  //
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -79,14 +86,24 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
     final _deviceSize = MediaQuery.of(context).size;
 
     void _onTap() {
+      // if (url == null) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(
+      //       content: Text("Audio is loading...Please try again🙏🏻"),
+      //       backgroundColor: Theme.of(context).errorColor,
+      //     ),
+      //   );
+        
+      // }else{
       if (playingShlok.getCureentShlokPlay() != widget.shlokIndex) {
         SpeakerIcnBtn.player.stop();
         playingShlok.setCurrentshlokPlaying(widget.shlokIndex);
+        print('+++++++++');
       } else {
         playingShlok.setCurrentshlokPlaying(-1);
         SpeakerIcnBtn.player.stop();
-      }
-    }
+      }}
+    // }
 
     return Consumer<PlayingShlok>(builder: (_, playingShlok, ch) {
       return Card(

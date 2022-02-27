@@ -32,6 +32,7 @@ class FavoritesShlok with ChangeNotifier{
       });
     }
     _shlok = shlok;
+    notifyListeners();
   }
 
   List shlok() {
