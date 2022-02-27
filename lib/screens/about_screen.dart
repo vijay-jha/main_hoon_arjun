@@ -7,9 +7,6 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
-      // appBar: AppBar(
-      //   title: const Text("About Main Hoon Arjun"),
-      // ),
       body: SingleChildScrollView(
         child: Column(
           children: [

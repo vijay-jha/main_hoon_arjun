@@ -5,12 +5,11 @@ import 'package:just_audio/just_audio.dart';
 import '../providers/playing_shlok.dart';
 
 class SpeakerIcnBtn extends StatefulWidget {
-  const SpeakerIcnBtn({
-    Key key,
+  SpeakerIcnBtn({
     this.audioUrl,
     this.shlokIndex,
     this.isDesired = false,
-  }) : super(key: key);
+  });
 
   final bool isDesired;
   final int shlokIndex;
@@ -40,36 +39,48 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return CircularProgressIndicator();
-          return StreamBuilder(
+
+          if (snapshot.hasData) {
+            return StreamBuilder(
               stream: SpeakerIcnBtn.player.playerStateStream,
               builder: (context, snapshot) {
-                final playerState = snapshot.data;
-                final processingState = playerState?.processingState;
-                final playing = playerState?.playing;
-
-                if (processingState == ProcessingState.loading ||
-                    processingState == ProcessingState.buffering)
+                if (snapshot.connectionState == ConnectionState.waiting)
                   return CircularProgressIndicator();
-                if (playing != true) {
-                  SpeakerIcnBtn.player.play();
-                } else if (processingState == ProcessingState.ready) {
+
+                if (snapshot.hasData) {
+                  final playerState = snapshot.data;
+
+                  final processingState = playerState.processingState;
+                  final playing = playerState.playing;
+
+                  if (processingState == ProcessingState.loading ||
+                      processingState == ProcessingState.buffering)
+                    return CircularProgressIndicator();
+                  if (playing != true) {
+                    SpeakerIcnBtn.player.play();
+                  } else if (processingState == ProcessingState.ready) {
+                    return Icon(
+                      Icons.pause_circle_outline_rounded,
+                      color: Colors.orange.shade900,
+                      size: 33,
+                    );
+                  } else if (playing == true &&
+                      processingState == ProcessingState.idle) {
+                    SpeakerIcnBtn.player.dispose();
+                    SpeakerIcnBtn.player = AudioPlayer();
+                    return playingAudio();
+                  }
                   return Icon(
                     Icons.pause_circle_outline_rounded,
                     color: Colors.orange.shade900,
                     size: 33,
                   );
-                } else if (playing == true &&
-                    processingState == ProcessingState.idle) {
-                  SpeakerIcnBtn.player.dispose();
-                  SpeakerIcnBtn.player = AudioPlayer();
-                  return playingAudio();
                 }
-                return Icon(
-                  Icons.pause_circle_outline_rounded,
-                  color: Colors.orange.shade900,
-                  size: 33,
-                );
-              });
+                return CircularProgressIndicator();
+              },
+            );
+          }
+          return CircularProgressIndicator();
         });
   }
 
@@ -79,6 +90,19 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
     final _deviceSize = MediaQuery.of(context).size;
 
     void _onTap() {
+      if (url == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Audio is Loding. Please Try Again.',
+              style: TextStyle(color: Colors.orange),
+            ),
+            backgroundColor: Colors.black,
+          ),
+        );
+        return;
+      }
+
       if (playingShlok.getCureentShlokPlay() != widget.shlokIndex) {
         SpeakerIcnBtn.player.stop();
         playingShlok.setCurrentshlokPlaying(widget.shlokIndex);
@@ -111,9 +135,10 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
                 Radius.circular(25),
               ),
             ),
-            child: Provider.of<PlayingShlok>(context, listen: true)
-                        .getCureentShlokPlay() ==
-                    widget.shlokIndex
+            child: Provider.of<PlayingShlok>(context, listen: false)
+                            .getCureentShlokPlay() ==
+                        widget.shlokIndex &&
+                    url != null
                 ? playingAudio()
                 : Icon(
                     Icons.volume_up_sharp,
