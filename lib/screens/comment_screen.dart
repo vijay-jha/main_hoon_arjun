@@ -161,10 +161,7 @@ class _CommentScreenState extends State<CommentScreen> {
             commentController.clear();
             FocusScope.of(context).unfocus();
           } else {
-<<<<<<< HEAD
-=======
             
->>>>>>> f2c7b4852b23b8dc70b2d2448ac13e4d2f21eb92
           }
         },
         formKey: formKey,
