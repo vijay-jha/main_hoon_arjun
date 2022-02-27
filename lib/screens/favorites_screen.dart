@@ -44,7 +44,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     ),
                   ),
                   background: Image.asset(
-                    "assets/images/shrikrushnaArjun.jpg",
+                    "assets/images/ShriKrushnaArjun.jpeg",
                     fit: BoxFit.cover,
                   ),
                 ),

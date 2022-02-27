@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_restart/flutter_restart.dart';
 import 'package:main_hoon_arjun/providers/favorite.dart';
 import 'package:main_hoon_arjun/providers/playing_shlok.dart';
 import 'package:main_hoon_arjun/widgets/speaker_icon_button.dart';
@@ -26,6 +29,24 @@ import './screens/introduction_screen.dart';
 import './screens/one_time_intro_screen.dart';
 
 void main() async {
+  ErrorWidget.builder = (FlutterErrorDetails details) => Container(
+        child: AlertDialog(
+          backgroundColor: Colors.orange.shade50,
+          content: Text("Sorry for inconvienience!! Please Restart."),
+          actions: [
+            OutlinedButton(
+              onPressed: () async {
+                await Future.delayed(Duration(milliseconds: 200));
+                FlutterRestart.restartApp();
+              },
+              child: Text("Restart"),
+            ),
+          ],
+        ),
+      );
+  RenderErrorBox.backgroundColor = Colors.transparent;
+  RenderErrorBox.textStyle = ui.TextStyle(color: Colors.transparent);
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
