@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -58,7 +57,6 @@ class _HomepageScreenState extends State<HomepageScreen>
                     vertical: _deviceSize.height * 0.05,
                     horizontal: _deviceSize.width * 0.05,
                   ),
-                  // padding: EdgeInsets.only(top: ),
                   child: SearchBar(setLoading),
                 ),
                 if (!isLoading)
@@ -93,6 +91,7 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   FocusNode inputNode = FocusNode();
+  TextEditingController myController = TextEditingController();
 
   void openKeyboard() {
     FocusScope.of(context).requestFocus(inputNode);
@@ -102,12 +101,13 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     try {
       return TextField(
+        controller: myController,
         onSubmitted: (feeling) async {
           FocusScope.of(context).unfocus();
           await Future.delayed(const Duration(milliseconds: 500), () {});
-          // setState(() {
+
           widget.isLoading(true);
-          // });
+
           if (feeling.isNotEmpty) {
             var url = Uri.parse('$FEELING_API/feeling?query=' + feeling.trim());
             var data = await api.getData(url);
@@ -120,6 +120,7 @@ class _SearchBarState extends State<SearchBar> {
               ),
             );
             widget.isLoading(false);
+            myController.text = "";
           } else {
             widget.isLoading(false);
             showDialog(
