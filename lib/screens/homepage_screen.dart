@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -58,7 +57,6 @@ class _HomepageScreenState extends State<HomepageScreen>
                     vertical: _deviceSize.height * 0.05,
                     horizontal: _deviceSize.width * 0.05,
                   ),
-                  // padding: EdgeInsets.only(top: ),
                   child: SearchBar(setLoading),
                 ),
                 if (!isLoading)
@@ -93,6 +91,7 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   FocusNode inputNode = FocusNode();
+  TextEditingController myController = TextEditingController();
 
   void openKeyboard() {
     FocusScope.of(context).requestFocus(inputNode);
@@ -100,73 +99,77 @@ class _SearchBarState extends State<SearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    try{ return TextField(
-      onSubmitted: (feeling) async {
-        FocusScope.of(context).unfocus();
-        await Future.delayed(const Duration(milliseconds: 500), () {});
-        // setState(() {
-        widget.isLoading(true);
-        // });
-        if (feeling.isNotEmpty) {
-          var url = Uri.parse('$FEELING_API/feeling?query=' + feeling.trim());
-          var data = await api.getData(url);
-          var decodedData = json.decode(data);
+    try {
+      return TextField(
+        controller: myController,
+        onSubmitted: (feeling) async {
+          FocusScope.of(context).unfocus();
+          await Future.delayed(const Duration(milliseconds: 500), () {});
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DesiredShlokScreen(emotions: decodedData),
-            ),
-          );
-          widget.isLoading(false);
-        } else {
-          widget.isLoading(false);
-          showDialog(
-            context: context,
-            builder: (_) => AlertDialog(
-              backgroundColor: Colors.orange.shade50,
-              content: Text("Please enter something about your feeling."),
-              actions: [
-                OutlinedButton(
-                    onPressed: () async {
-                      await Future.delayed(Duration(milliseconds: 200));
-                      Navigator.of(context).pop();
-                    },
-                    child: Text("Okay")),
-              ],
-            ),
-          );
-        }
-      },
-      focusNode: inputNode,
-      textAlign: TextAlign.start,
-      decoration: InputDecoration(
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 1.0),
-          borderRadius: BorderRadius.circular(25),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 0.2),
-          borderRadius: BorderRadius.circular(25),
-        ),
-        hintText: " Search  ( e.g. I am Happy )",
-        hintStyle: TextStyle(
-          color: Colors.grey.shade400,
-          fontSize: 18,
-        ),
-      ),
-      // autofocus: true,
-      style: TextStyle(fontSize: 20, color: Colors.orange.shade400),
-    );} catch(error){
-       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Sorry, Failed to load. Please Try Again 🙏',
-              style: TextStyle(color: Colors.orange),
-            ),
-            backgroundColor: Colors.black,
+          widget.isLoading(true);
+
+          if (feeling.isNotEmpty) {
+            var url = Uri.parse('$FEELING_API/feeling?query=' + feeling.trim());
+            var data = await api.getData(url);
+            var decodedData = json.decode(data);
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DesiredShlokScreen(emotions: decodedData),
+              ),
+            );
+            widget.isLoading(false);
+            myController.text = "";
+          } else {
+            widget.isLoading(false);
+            showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                backgroundColor: Colors.orange.shade50,
+                content: Text("Please enter something about your feeling."),
+                actions: [
+                  OutlinedButton(
+                      onPressed: () async {
+                        await Future.delayed(Duration(milliseconds: 200));
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("Okay")),
+                ],
+              ),
+            );
+          }
+        },
+        focusNode: inputNode,
+        textAlign: TextAlign.start,
+        decoration: InputDecoration(
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white, width: 1.0),
+            borderRadius: BorderRadius.circular(25),
           ),
-        );
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white, width: 0.2),
+            borderRadius: BorderRadius.circular(25),
+          ),
+          hintText: " Search  ( e.g. I am Happy )",
+          hintStyle: TextStyle(
+            color: Colors.grey.shade400,
+            fontSize: 18,
+          ),
+        ),
+        // autofocus: true,
+        style: TextStyle(fontSize: 20, color: Colors.orange.shade400),
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Sorry, Failed to load. Please Try Again 🙏',
+            style: TextStyle(color: Colors.orange),
+          ),
+          backgroundColor: Colors.black,
+        ),
+      );
     }
   }
 }

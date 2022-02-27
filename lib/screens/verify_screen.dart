@@ -51,11 +51,14 @@ class _VerifyScreenState extends State<VerifyScreen>
         Navigator.of(context).pushReplacementNamed(NavigationFile.routeName);
       }
     });
+
     user = _auth.currentUser;
     user.sendEmailVerification();
+
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       checkEmailVerification();
     });
+
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         count++;
@@ -69,25 +72,20 @@ class _VerifyScreenState extends State<VerifyScreen>
 
   @override
   void dispose() {
-    _controller.dispose();
-    timer.cancel();
     super.dispose();
+    _controller.dispose();
+    _controllerEmailVerified.dispose();
+    timer.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
     Size _deviceSize = MediaQuery.of(context).size;
 
-    Timer(Duration(minutes: 1), () async {
+    Timer(Duration(seconds: 60), () async {
+      timer.cancel();
       await user.reload();
       if (!user.emailVerified) {
-        timer.cancel();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("You didn't verify the email. Try again."),
-            backgroundColor: Theme.of(context).errorColor,
-          ),
-        );
         Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
       }
     });
