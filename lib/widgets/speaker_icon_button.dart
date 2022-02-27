@@ -41,7 +41,7 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
         AudioSource.uri(Uri.parse(url)),
       );
     }();
-  
+
     return StreamBuilder(
         stream: SpeakerIcnBtn.player.playerStateStream,
         builder: (context, snapshot) {
@@ -86,11 +86,15 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
       if (playingShlok.getCureentShlokPlay() != widget.shlokIndex) {
         SpeakerIcnBtn.player.stop();
         playingShlok.setCurrentshlokPlaying(widget.shlokIndex);
+<<<<<<< HEAD
         
+=======
+>>>>>>> f2c7b4852b23b8dc70b2d2448ac13e4d2f21eb92
       } else {
         playingShlok.setCurrentshlokPlaying(-1);
         SpeakerIcnBtn.player.stop();
-      }}
+      }
+    }
 
     return Consumer<PlayingShlok>(builder: (_, playingShlok, ch) {
       return Card(
@@ -117,7 +121,7 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
             ),
             child: Provider.of<PlayingShlok>(context, listen: true)
                         .getCureentShlokPlay() ==
-                    widget.shlokIndex 
+                    widget.shlokIndex
                 ? playingAudio()
                 : Icon(
                     Icons.volume_up_sharp,

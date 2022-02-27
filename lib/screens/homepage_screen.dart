@@ -162,8 +162,11 @@ class _SearchBarState extends State<SearchBar> {
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Sorry, Failded to Load. Please try again🙏🏻"),
-          backgroundColor: Theme.of(context).errorColor,
+          content: Text(
+            'Sorry, Failed to load. Please Try Again 🙏',
+            style: TextStyle(color: Colors.orange),
+          ),
+          backgroundColor: Colors.black,
         ),
       );
     }
@@ -246,14 +249,14 @@ class _HandWaveState extends State<HandWave> with TickerProviderStateMixin {
                             return Text(
                               snapshot.hasData
                                   ? """
-Hi ${snapshot.data['username']}
-How are you feeling now ?
-"""
+    Hi ${snapshot.data['username']}
+    How are you feeling now ?
+    """
                                       .trim()
                                   : """
-Hi 
-How are you feeling now ?
-"""
+    Hi 
+    How are you feeling now ?
+    """
                                       .trim(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -265,8 +268,8 @@ How are you feeling now ?
                         )
                       : Text(
                           """
-Hi ${username}
-How are you feeling now ?
+    Hi ${username}
+    How are you feeling now ?
         """,
                           textAlign: TextAlign.center,
                           style: TextStyle(
