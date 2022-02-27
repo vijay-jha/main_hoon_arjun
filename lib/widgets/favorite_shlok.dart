@@ -33,12 +33,12 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
   }
 
   Future<String> getshlokUrl() async {
-    return (await FirebaseStorage.instance
+    return await FirebaseStorage.instance
         .ref()
         .child('Shlok Audio Files')
         .child(widget.shlok["Chapter"])
         .child(shlokName)
-        .getDownloadURL());
+        .getDownloadURL();
   }
 
   void _onTapShlok() async {
@@ -124,7 +124,6 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
                     left: _deviceSize.width * 0.035, //14
                     top: _deviceSize.height * 0.005, //5,
                     right: _deviceSize.width * 0.035, //14
-                    // bottom: _deviceSize.height * 0.005, //5,
                   ),
                   child: ShlokCard(
                     shlok: widget.shlok["Shlok"],
@@ -176,4 +175,3 @@ class ShlokCard extends StatelessWidget {
     );
   }
 }
-

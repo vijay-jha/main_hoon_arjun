@@ -5,12 +5,11 @@ import 'package:just_audio/just_audio.dart';
 import '../providers/playing_shlok.dart';
 
 class SpeakerIcnBtn extends StatefulWidget {
-  const SpeakerIcnBtn({
-    Key key,
+  SpeakerIcnBtn({
     this.audioUrl,
     this.shlokIndex = 0,
     this.isDesired = false,
-  }) : super(key: key);
+  });
 
   final bool isDesired;
   final int shlokIndex;
@@ -40,6 +39,7 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return CircularProgressIndicator();
+<<<<<<< HEAD
           if (snapshot.hasData) {
             return StreamBuilder(
                 stream: SpeakerIcnBtn.player.playerStateStream,
@@ -76,6 +76,48 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
                   }
                   return CircularProgressIndicator();
                 });
+=======
+
+          if (snapshot.hasData) {
+            return StreamBuilder(
+              stream: SpeakerIcnBtn.player.playerStateStream,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting)
+                  return CircularProgressIndicator();
+
+                if (snapshot.hasData) {
+                  final playerState = snapshot.data;
+
+                  final processingState = playerState.processingState;
+                  final playing = playerState.playing;
+
+                  if (processingState == ProcessingState.loading ||
+                      processingState == ProcessingState.buffering)
+                    return CircularProgressIndicator();
+                  if (playing != true) {
+                    SpeakerIcnBtn.player.play();
+                  } else if (processingState == ProcessingState.ready) {
+                    return Icon(
+                      Icons.pause_circle_outline_rounded,
+                      color: Colors.orange.shade900,
+                      size: 33,
+                    );
+                  } else if (playing == true &&
+                      processingState == ProcessingState.idle) {
+                    SpeakerIcnBtn.player.dispose();
+                    SpeakerIcnBtn.player = AudioPlayer();
+                    return playingAudio();
+                  }
+                  return Icon(
+                    Icons.pause_circle_outline_rounded,
+                    color: Colors.orange.shade900,
+                    size: 33,
+                  );
+                }
+                return CircularProgressIndicator();
+              },
+            );
+>>>>>>> adab7016f4a367023edfd358c513ac4553f2bf99
           }
           return CircularProgressIndicator();
         });
@@ -87,6 +129,19 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
     final _deviceSize = MediaQuery.of(context).size;
 
     void _onTap() {
+      if (url == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Audio is Loding. Please Try Again.',
+              style: TextStyle(color: Colors.orange),
+            ),
+            backgroundColor: Colors.black,
+          ),
+        );
+        return;
+      }
+
       if (playingShlok.getCureentShlokPlay() != widget.shlokIndex) {
         if (playingShlok.getCureentShlokPlay() != 0) {
           SpeakerIcnBtn.player.stop();
@@ -121,6 +176,7 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
                 Radius.circular(25),
               ),
             ),
+<<<<<<< HEAD
             child: Consumer<PlayingShlok>(builder: (_, playingShlok, ch) {
               return playingShlok.getCureentShlokPlay() == widget.shlokIndex
                   ? playingAudio()
@@ -130,6 +186,18 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
                       size: _deviceSize.height * 0.038,
                     );
             }),
+=======
+            child: Provider.of<PlayingShlok>(context, listen: false)
+                            .getCureentShlokPlay() ==
+                        widget.shlokIndex &&
+                    url != null
+                ? playingAudio()
+                : Icon(
+                    Icons.volume_up_sharp,
+                    color: Colors.orange.shade900,
+                    size: _deviceSize.height * 0.038,
+                  ),
+>>>>>>> adab7016f4a367023edfd358c513ac4553f2bf99
           ),
         ));
   }

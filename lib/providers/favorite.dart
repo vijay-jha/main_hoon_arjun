@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-class FavoritesShlok with ChangeNotifier{
+class FavoritesShlok with ChangeNotifier {
   List<Map<String, dynamic>> _shlok = [];
 
   Future<void> fetchFavoriteShlok(var userFavorite) async {
