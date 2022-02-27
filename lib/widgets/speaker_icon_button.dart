@@ -84,7 +84,6 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
       if (playingShlok.getCureentShlokPlay() != widget.shlokIndex) {
         SpeakerIcnBtn.player.stop();
         playingShlok.setCurrentshlokPlaying(widget.shlokIndex);
-        print('+++++++++');
       } else {
         playingShlok.setCurrentshlokPlaying(-1);
         SpeakerIcnBtn.player.stop();

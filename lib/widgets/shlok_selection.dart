@@ -124,7 +124,6 @@ class _ShlokSelectionState extends State<ShlokSelection>
             ),
             GestureDetector(
               onTap: () {
-                print(_deviceSize);
                 Navigator.pop(context);
                 //page change animation
                 if (selectedItem != -1) {
