@@ -12,7 +12,7 @@ import '../providers/playing_shlok.dart';
 class FavoriteShlokItem extends StatefulWidget {
   final Map<String, dynamic> shlok;
   final int shlokIndex;
-  FavoriteShlokItem(this.shlok, this.shlokIndex);
+  FavoriteShlokItem({this.shlok, this.shlokIndex=0});
   @override
   _FavoritesShlokState createState() => _FavoritesShlokState();
 }
@@ -44,7 +44,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
   void _onTapShlok() async {
     SpeakerIcnBtn.player.stop();
     Provider.of<PlayingShlok>(context, listen: false)
-        .setCurrentshlokPlaying(-1);
+        .setCurrentshlokPlaying(0);
     Navigator.push(
       context,
       MaterialPageRoute(

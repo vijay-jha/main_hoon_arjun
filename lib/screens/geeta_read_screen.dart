@@ -61,11 +61,7 @@ class _GeetaReadScreenState extends State<GeetaReadScreen> {
       ),
       backgroundColor: Colors.orange.shade50,
       body: FutureBuilder(
-<<<<<<< HEAD
-        future: Future.delayed(Duration(seconds: 2)),
-=======
         future: Future.delayed(Duration(milliseconds:800)),
->>>>>>> 83174b09839a145283ab1fd143686b3b1113acfd
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return SpinKitFadingCircle(

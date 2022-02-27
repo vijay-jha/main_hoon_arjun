@@ -42,38 +42,40 @@ class _HomepageScreenState extends State<HomepageScreen>
         ),
         body: Container(
           height: double.infinity,
-          child: Column(
-            children: [
-              Container(
-                alignment: Alignment.center,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  // shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                padding: EdgeInsets.only(top: 15),
-                margin: EdgeInsets.symmetric(
-                  vertical: _deviceSize.height * 0.05,
-                  horizontal: _deviceSize.width * 0.05,
-                ),
-                // padding: EdgeInsets.only(top: ),
-                child: SearchBar(setLoading),
-              ),
-              if (!isLoading)
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
                 Container(
-                  margin: EdgeInsets.only(top: _deviceSize.height * 0.08),
-                  child: HandWave(),
+                  alignment: Alignment.center,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    // shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  padding: EdgeInsets.only(top: 15),
+                  margin: EdgeInsets.symmetric(
+                    vertical: _deviceSize.height * 0.05,
+                    horizontal: _deviceSize.width * 0.05,
+                  ),
+                  // padding: EdgeInsets.only(top: ),
+                  child: SearchBar(setLoading),
                 ),
-              if (isLoading)
-                SizedBox(
-                  height: _deviceSize.height * 0.2,
-                ),
-              if (isLoading)
-                SpinKitFadingCircle(
-                  color: Colors.orange,
-                ),
-            ],
+                if (!isLoading)
+                  Container(
+                    margin: EdgeInsets.only(top: _deviceSize.height * 0.08),
+                    child: HandWave(),
+                  ),
+                if (isLoading)
+                  SizedBox(
+                    height: _deviceSize.height * 0.2,
+                  ),
+                if (isLoading)
+                  SpinKitFadingCircle(
+                    color: Colors.orange,
+                  ),
+              ],
+            ),
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -235,14 +237,14 @@ class _HandWaveState extends State<HandWave> with TickerProviderStateMixin {
                             return Text(
                               snapshot.hasData
                                   ? """
-Hi ${snapshot.data['username']}
-How are you feeling now ?
-"""
+    Hi ${snapshot.data['username']}
+    How are you feeling now ?
+    """
                                       .trim()
                                   : """
-Hi User
-How are you feeling now ?
-"""
+    Hi User
+    How are you feeling now ?
+    """
                                       .trim(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -254,8 +256,8 @@ How are you feeling now ?
                         )
                       : Text(
                           """
-Hi ${username}
-How are you feeling now ?
+    Hi ${username}
+    How are you feeling now ?
         """,
                           textAlign: TextAlign.center,
                           style: TextStyle(

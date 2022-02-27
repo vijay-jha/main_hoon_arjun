@@ -8,7 +8,7 @@ class SpeakerIcnBtn extends StatefulWidget {
   const SpeakerIcnBtn({
     Key key,
     this.audioUrl,
-    this.shlokIndex,
+    this.shlokIndex = 0,
     this.isDesired = false,
   }) : super(key: key);
 
@@ -29,9 +29,9 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
   void initState() {
     super.initState();
     SpeakerIcnBtn.player = AudioPlayer();
-    () async {
-      url = await widget.audioUrl;
-    }();
+    // () async {
+    //   url = await widget.audioUrl;
+    // }();
   }
 
   Widget playingAudio() {
@@ -40,36 +40,44 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return CircularProgressIndicator();
-          return StreamBuilder(
-              stream: SpeakerIcnBtn.player.playerStateStream,
-              builder: (context, snapshot) {
-                final playerState = snapshot.data;
-                final processingState = playerState?.processingState;
-                final playing = playerState?.playing;
+          if (snapshot.hasData) {
+            return StreamBuilder(
+                stream: SpeakerIcnBtn.player.playerStateStream,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting)
+                    return CircularProgressIndicator();
+                  if (snapshot.hasData) {
+                    final playerState = snapshot.data;
+                    final processingState = playerState.processingState;
+                    final playing = playerState.playing;
 
-                if (processingState == ProcessingState.loading ||
-                    processingState == ProcessingState.buffering)
+                    if (processingState == ProcessingState.loading ||
+                        processingState == ProcessingState.buffering)
+                      return CircularProgressIndicator();
+                    if (playing != true) {
+                      SpeakerIcnBtn.player.play();
+                    } else if (processingState == ProcessingState.ready) {
+                      return Icon(
+                        Icons.pause_circle_outline_rounded,
+                        color: Colors.orange.shade900,
+                        size: 33,
+                      );
+                    } else if (playing == true &&
+                        processingState == ProcessingState.idle) {
+                      SpeakerIcnBtn.player.dispose();
+                      SpeakerIcnBtn.player = AudioPlayer();
+                      return playingAudio();
+                    }
+                    return Icon(
+                      Icons.pause_circle_outline_rounded,
+                      color: Colors.orange.shade900,
+                      size: 33,
+                    );
+                  }
                   return CircularProgressIndicator();
-                if (playing != true) {
-                  SpeakerIcnBtn.player.play();
-                } else if (processingState == ProcessingState.ready) {
-                  return Icon(
-                    Icons.pause_circle_outline_rounded,
-                    color: Colors.orange.shade900,
-                    size: 33,
-                  );
-                } else if (playing == true &&
-                    processingState == ProcessingState.idle) {
-                  SpeakerIcnBtn.player.dispose();
-                  SpeakerIcnBtn.player = AudioPlayer();
-                  return playingAudio();
-                }
-                return Icon(
-                  Icons.pause_circle_outline_rounded,
-                  color: Colors.orange.shade900,
-                  size: 33,
-                );
-              });
+                });
+          }
+          return CircularProgressIndicator();
         });
   }
 
@@ -80,16 +88,18 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
 
     void _onTap() {
       if (playingShlok.getCureentShlokPlay() != widget.shlokIndex) {
-        SpeakerIcnBtn.player.stop();
+        if (playingShlok.getCureentShlokPlay() != 0) {
+          SpeakerIcnBtn.player.stop();
+        }
         playingShlok.setCurrentshlokPlaying(widget.shlokIndex);
       } else {
-        playingShlok.setCurrentshlokPlaying(-1);
+        playingShlok.setCurrentshlokPlaying(0);
         SpeakerIcnBtn.player.stop();
       }
     }
 
-    return Consumer<PlayingShlok>(builder: (_, playingShlok, ch) {
-      return Card(
+    //
+    return Card(
         elevation: widget.isDesired ? 10 : 0,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25)),
@@ -111,18 +121,16 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
                 Radius.circular(25),
               ),
             ),
-            child: Provider.of<PlayingShlok>(context, listen: true)
-                        .getCureentShlokPlay() ==
-                    widget.shlokIndex
-                ? playingAudio()
-                : Icon(
-                    Icons.volume_up_sharp,
-                    color: Colors.orange.shade900,
-                    size: _deviceSize.height * 0.038,
-                  ),
+            child: Consumer<PlayingShlok>(builder: (_, playingShlok, ch) {
+              return playingShlok.getCureentShlokPlay() == widget.shlokIndex
+                  ? playingAudio()
+                  : Icon(
+                      Icons.volume_up_sharp,
+                      color: Colors.orange.shade900,
+                      size: _deviceSize.height * 0.038,
+                    );
+            }),
           ),
-        ),
-      );
-    });
+        ));
   }
 }

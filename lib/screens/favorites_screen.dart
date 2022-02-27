@@ -40,7 +40,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   title: const Text(
                     "Favorites",
                     style: TextStyle(
-                      color: Colors.white, 
+                      color: Colors.white,
                     ),
                   ),
                   background: Image.asset(
@@ -94,8 +94,9 @@ class _FavoritesBodyState extends State<FavoritesBody> {
                     : Provider.of<FavoritesShlok>(context, listen: false)
                             .shlok()
                             .isEmpty
-                        ? 
-                            NoItemInList.noShloks(_deviceSize, )
+                        ? NoItemInList.noShloks(
+                            _deviceSize,
+                          )
                         : FavoritesItemList(
                             shlok: Provider.of<FavoritesShlok>(context,
                                     listen: false)
@@ -103,8 +104,7 @@ class _FavoritesBodyState extends State<FavoritesBody> {
               },
             );
           }
-          return 
-              NoItemInList.noShloks(_deviceSize);
+          return NoItemInList.noShloks(_deviceSize);
         });
   }
 }
@@ -121,13 +121,30 @@ class FavoritesItemList extends StatefulWidget {
 }
 
 class _FavoritesItemListState extends State<FavoritesItemList> {
+  List<Map<String, dynamic>> reverseShlok;
+  int shlokLenght;
+  @override
+  void initState() {
+    super.initState();
+    reverseShlok = [...widget.shlok.reversed];
+    shlokLenght = widget.shlok.length;
+    print("Shlok length ----");
+    print(shlokLenght);
+  }
+
   @override
   Widget build(BuildContext context) {
-    widget.shlok = [...widget.shlok.reversed];
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        (context, index) => FavoriteShlokItem(widget.shlok[index], index),
-        childCount: widget.shlok.length,
+        (context, index) {
+          print("Favorites----------->");
+          if (shlokLenght == 1) {
+            //  return 0;
+          }
+          return FavoriteShlokItem(
+              shlok: reverseShlok[index], shlokIndex: index + 1);
+        },
+        childCount: shlokLenght,
       ),
     );
   }
