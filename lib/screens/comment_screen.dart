@@ -58,7 +58,6 @@ class _CommentScreenState extends State<CommentScreen> {
         .doc(widget.currentShloK)
         .collection('comments').doc(_user.uid)
         .get()) as AsyncSnapshot;
-    print(snapshot.data['comment']);
   }
 
  @override
@@ -101,7 +100,6 @@ class _CommentScreenState extends State<CommentScreen> {
               leading: GestureDetector(
                 onTap: () async {
                   // Display the image in large form.
-                  print("Comment Clicked");
                 },
                 child: Container(
                   height: 45.0,
@@ -150,7 +148,6 @@ class _CommentScreenState extends State<CommentScreen> {
         withBorder: false,
         sendButtonMethod: () {
           if (formKey.currentState.validate()) {
-            print(commentController.text);
             setState(() {
               var value = {
                 'name': 'New User',
@@ -163,9 +160,7 @@ class _CommentScreenState extends State<CommentScreen> {
 
             commentController.clear();
             FocusScope.of(context).unfocus();
-          } else {
-            print("Not validated");
-          }
+          } 
         },
         formKey: formKey,
         commentController: commentController,
