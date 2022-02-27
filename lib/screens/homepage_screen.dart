@@ -100,7 +100,7 @@ class _SearchBarState extends State<SearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    try{ return TextField(
       onSubmitted: (feeling) async {
         FocusScope.of(context).unfocus();
         await Future.delayed(const Duration(milliseconds: 500), () {});
@@ -157,7 +157,17 @@ class _SearchBarState extends State<SearchBar> {
       ),
       // autofocus: true,
       style: TextStyle(fontSize: 20, color: Colors.orange.shade400),
-    );
+    );} catch(error){
+       ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Sorry, Failed to load. Please Try Again 🙏',
+              style: TextStyle(color: Colors.orange),
+            ),
+            backgroundColor: Colors.black,
+          ),
+        );
+    }
   }
 }
 
@@ -242,9 +252,9 @@ class _HandWaveState extends State<HandWave> with TickerProviderStateMixin {
     """
                                       .trim()
                                   : """
-Hi 
-How are you feeling now ?
-"""
+    Hi 
+    How are you feeling now ?
+    """
                                       .trim(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
