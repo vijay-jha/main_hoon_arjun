@@ -39,44 +39,6 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return CircularProgressIndicator();
-<<<<<<< HEAD
-          if (snapshot.hasData) {
-            return StreamBuilder(
-                stream: SpeakerIcnBtn.player.playerStateStream,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting)
-                    return CircularProgressIndicator();
-                  if (snapshot.hasData) {
-                    final playerState = snapshot.data;
-                    final processingState = playerState.processingState;
-                    final playing = playerState.playing;
-
-                    if (processingState == ProcessingState.loading ||
-                        processingState == ProcessingState.buffering)
-                      return CircularProgressIndicator();
-                    if (playing != true) {
-                      SpeakerIcnBtn.player.play();
-                    } else if (processingState == ProcessingState.ready) {
-                      return Icon(
-                        Icons.pause_circle_outline_rounded,
-                        color: Colors.orange.shade900,
-                        size: 33,
-                      );
-                    } else if (playing == true &&
-                        processingState == ProcessingState.idle) {
-                      SpeakerIcnBtn.player.dispose();
-                      SpeakerIcnBtn.player = AudioPlayer();
-                      return playingAudio();
-                    }
-                    return Icon(
-                      Icons.pause_circle_outline_rounded,
-                      color: Colors.orange.shade900,
-                      size: 33,
-                    );
-                  }
-                  return CircularProgressIndicator();
-                });
-=======
 
           if (snapshot.hasData) {
             return StreamBuilder(
@@ -117,7 +79,6 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
                 return CircularProgressIndicator();
               },
             );
->>>>>>> adab7016f4a367023edfd358c513ac4553f2bf99
           }
           return CircularProgressIndicator();
         });
@@ -176,17 +137,6 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
                 Radius.circular(25),
               ),
             ),
-<<<<<<< HEAD
-            child: Consumer<PlayingShlok>(builder: (_, playingShlok, ch) {
-              return playingShlok.getCureentShlokPlay() == widget.shlokIndex
-                  ? playingAudio()
-                  : Icon(
-                      Icons.volume_up_sharp,
-                      color: Colors.orange.shade900,
-                      size: _deviceSize.height * 0.038,
-                    );
-            }),
-=======
             child: Provider.of<PlayingShlok>(context, listen: false)
                             .getCureentShlokPlay() ==
                         widget.shlokIndex &&
@@ -197,7 +147,6 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
                     color: Colors.orange.shade900,
                     size: _deviceSize.height * 0.038,
                   ),
->>>>>>> adab7016f4a367023edfd358c513ac4553f2bf99
           ),
         ));
   }

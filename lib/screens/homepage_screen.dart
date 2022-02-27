@@ -242,15 +242,9 @@ class _HandWaveState extends State<HandWave> with TickerProviderStateMixin {
     """
                                       .trim()
                                   : """
-<<<<<<< HEAD
-    Hi User
-    How are you feeling now ?
-    """
-=======
 Hi 
 How are you feeling now ?
 """
->>>>>>> adab7016f4a367023edfd358c513ac4553f2bf99
                                       .trim(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
