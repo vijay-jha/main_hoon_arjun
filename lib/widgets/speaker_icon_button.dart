@@ -75,12 +75,14 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
         });
   }
 
+
   @override
   Widget build(BuildContext context) {
     var playingShlok = Provider.of<PlayingShlok>(context, listen: false);
     final _deviceSize = MediaQuery.of(context).size;
 
     void _onTap() {
+    
       if (playingShlok.getCureentShlokPlay() != widget.shlokIndex) {
         SpeakerIcnBtn.player.stop();
         playingShlok.setCurrentshlokPlaying(widget.shlokIndex);

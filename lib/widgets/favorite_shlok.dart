@@ -21,6 +21,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
   final _controller = ScreenshotController();
   var firestore = FirebaseFirestore.instance;
   String shlokName;
+  String url;
 
   @override
   void initState() {
@@ -30,6 +31,8 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
         '_' +
         widget.shlok["ShlokNo"] +
         '.mp3';
+    () {}();
+    
   }
 
   Future<String> getshlokUrl() async {
@@ -135,7 +138,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
               SpeakerIcnBtn(
                 audioUrl: getshlokUrl(),
                 shlokIndex: widget.shlokIndex,
-              ),
+              )
             ],
           ),
         ),

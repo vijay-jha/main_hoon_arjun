@@ -93,7 +93,7 @@ class _FavoritesBodyState extends State<FavoritesBody> {
                     ? NoItemInList.loading(_deviceSize)
                     : Provider.of<FavoritesShlok>(context, listen: false)
                             .shlok()
-                            .isEmpty
+                            == null
                         ? 
                             NoItemInList.noShloks(_deviceSize, )
                         : FavoritesItemList(
