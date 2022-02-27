@@ -29,7 +29,6 @@ class Adhyay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var _deivceSize = MediaQuery.of(context).size;
-    print(title);
     getChapterData(title);
 
     return FutureBuilder(
