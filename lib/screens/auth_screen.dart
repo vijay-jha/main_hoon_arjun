@@ -252,7 +252,7 @@ class _AuthScreenState extends State<AuthScreen>
                         width: _deviceSize.width * 0.55,
                         height: _deviceSize.height * 0.2,
                       ),
-                       SizedBox(
+                      SizedBox(
                         height: _deviceSize.height * 0.08,
                       ),
                       RoundedInput(

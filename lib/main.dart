@@ -50,7 +50,8 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown,DeviceOrientation.portraitUp]);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
   runApp(MyApp());
   WidgetsBinding.instance.addObserver(_Handler());
 }
@@ -83,7 +84,10 @@ class MyApp extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (ctx, userSnapShot) {
             if (userSnapShot.hasData) {
-              return NavigationFile();
+              final _user = FirebaseAuth.instance.currentUser;
+              if (_user.emailVerified) {
+                return NavigationFile();
+              }
             }
             return OneTimeIntro();
           },
