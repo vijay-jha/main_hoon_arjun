@@ -44,9 +44,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     ),
                   ),
                   background: Image.asset(
-                    "assets/images/Arjun_Krishna.jpg",
-                    color: Colors.white.withOpacity(0.8),
-                     colorBlendMode: BlendMode.modulate,
+                    "assets/images/ShriKrushnaArjun.jpeg",
                     fit: BoxFit.cover,
                   ),
                 ),

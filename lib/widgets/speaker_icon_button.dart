@@ -5,11 +5,12 @@ import 'package:just_audio/just_audio.dart';
 import '../providers/playing_shlok.dart';
 
 class SpeakerIcnBtn extends StatefulWidget {
-  SpeakerIcnBtn({
+  const SpeakerIcnBtn({
+    Key key,
     this.audioUrl,
     this.shlokIndex,
     this.isDesired = false,
-  });
+  }) : super(key: key);
 
   final bool isDesired;
   final int shlokIndex;
@@ -35,28 +36,18 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
 
   Widget playingAudio() {
     Duration time;
-   ()async{ time = await SpeakerIcnBtn.player.setAudioSource(
-      AudioSource.uri(Uri.parse(url)),
-      
-    );}();
-    // return FutureBuilder(
-    //     future: SpeakerIcnBtn.player.setUrl(url),
-    //     builder: (context, snapshot) {
-    //       if (snapshot.connectionState == ConnectionState.waiting)
-    //         return CircularProgressIndicator();
+    () async {
+      time = await SpeakerIcnBtn.player.setAudioSource(
+        AudioSource.uri(Uri.parse(url)),
+      );
+    }();
 
-    // if (snapshot.hasData) {
     return StreamBuilder(
-      stream: SpeakerIcnBtn.player.playerStateStream,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting)
-          return CircularProgressIndicator();
-
-        if (snapshot.hasData) {
+        stream: SpeakerIcnBtn.player.playerStateStream,
+        builder: (context, snapshot) {
           final playerState = snapshot.data;
-
-          final processingState = playerState.processingState;
-          final playing = playerState.playing;
+          final processingState = playerState?.processingState;
+          final playing = playerState?.playing;
 
           if (processingState == ProcessingState.loading ||
               processingState == ProcessingState.buffering)
@@ -81,13 +72,7 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
             color: Colors.orange.shade900,
             size: 33,
           );
-        }
-        return CircularProgressIndicator();
-      },
-    );
-
-    //   return CircularProgressIndicator();
-    // });
+        });
   }
 
   @override
@@ -96,22 +81,10 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
     final _deviceSize = MediaQuery.of(context).size;
 
     void _onTap() {
-      // if (url == null) {
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(
-      //       content: Text(
-      //         'Audio is Loding. Please Try Again 🙏',
-      //         style: TextStyle(color: Colors.orange),
-      //       ),
-      //       backgroundColor: Colors.black,
-      //     ),
-      //   );
-      //   return;
-      // }
-
       if (playingShlok.getCureentShlokPlay() != widget.shlokIndex) {
         SpeakerIcnBtn.player.stop();
         playingShlok.setCurrentshlokPlaying(widget.shlokIndex);
+        print('+++++++++');
       } else {
         playingShlok.setCurrentshlokPlaying(-1);
         SpeakerIcnBtn.player.stop();
@@ -141,10 +114,9 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
                 Radius.circular(25),
               ),
             ),
-            child: Provider.of<PlayingShlok>(context, listen: false)
-                            .getCureentShlokPlay() ==
-                        widget.shlokIndex &&
-                    url != null
+            child: Provider.of<PlayingShlok>(context, listen: true)
+                        .getCureentShlokPlay() ==
+                    widget.shlokIndex
                 ? playingAudio()
                 : Icon(
                     Icons.volume_up_sharp,
