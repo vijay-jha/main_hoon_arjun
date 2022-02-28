@@ -86,7 +86,7 @@ class _AuthScreenState extends State<AuthScreen>
             return null;
           });
         } else {
-          _auth
+          await  _auth
               .createUserWithEmailAndPassword(
             email: email,
             password: password,
@@ -131,7 +131,7 @@ class _AuthScreenState extends State<AuthScreen>
             backgroundColor: Theme.of(ctx).errorColor,
           ),
         );
-      }
+      } 
     } else {
       ScaffoldMessenger.of(ctx).showSnackBar(
         SnackBar(

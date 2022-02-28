@@ -30,23 +30,7 @@ import './screens/introduction_screen.dart';
 import './screens/one_time_intro_screen.dart';
 
 void main() async {
-  ErrorWidget.builder = (FlutterErrorDetails details) => Container(
-        child: AlertDialog(
-          backgroundColor: Colors.orange.shade50,
-          content: Text("Sorry for inconvienience!! Please Restart."),
-          actions: [
-            OutlinedButton(
-              onPressed: () async {
-                await Future.delayed(Duration(milliseconds: 200));
-                FlutterRestart.restartApp();
-              },
-              child: Text("Restart"),
-            ),
-          ],
-        ),
-      );
-  RenderErrorBox.backgroundColor = Colors.transparent;
-  RenderErrorBox.textStyle = ui.TextStyle(color: Colors.transparent);
+  
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
