@@ -65,7 +65,7 @@ class _RoundedInputState extends State<RoundedInput>
         InputContainer(
           child: TextField(
             controller: _emailController,
-            cursorColor: primaryTextC,
+            cursorColor: widget.textColor,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               icon: Icon(
