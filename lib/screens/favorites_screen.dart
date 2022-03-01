@@ -40,7 +40,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   title: const Text(
                     "Favorites",
                     style: TextStyle(
-                      color: Colors.white, 
+                      color: Colors.white,
                     ),
                   ),
                   background: Image.asset(
@@ -93,9 +93,10 @@ class _FavoritesBodyState extends State<FavoritesBody> {
                     ? NoItemInList.loading(_deviceSize)
                     : Provider.of<FavoritesShlok>(context, listen: false)
                             .shlok()
-                            == null
-                        ? 
-                            NoItemInList.noShloks(_deviceSize, )
+                            .isEmpty
+                        ? NoItemInList.noShloks(
+                            _deviceSize,
+                          )
                         : FavoritesItemList(
                             shlok: Provider.of<FavoritesShlok>(context,
                                     listen: false)
@@ -103,8 +104,7 @@ class _FavoritesBodyState extends State<FavoritesBody> {
               },
             );
           }
-          return 
-              NoItemInList.noShloks(_deviceSize);
+          return NoItemInList.noShloks(_deviceSize);
         });
   }
 }

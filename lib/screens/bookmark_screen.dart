@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 class BookmarkScreen extends StatefulWidget {
   const BookmarkScreen();
-
+ 
   @override
   _BookmarkScreenState createState() => _BookmarkScreenState();
 }
