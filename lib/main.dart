@@ -86,7 +86,7 @@ class MyApp extends StatelessWidget {
       case AuthScreen.routeName:
         return MaterialPageRoute(builder: (_) => AuthScreen());
       case HomepageScreen.routeName:
-        return CustomPageTransition(child: HomepageScreen());
+        return MaterialPageRoute(builder: (_) => HomepageScreen());
       case SettingsScreen.routeName:
         return CustomPageTransition(child: SettingsScreen());
       case AboutScreen.routeName:
@@ -104,7 +104,7 @@ class MyApp extends StatelessWidget {
       case CommentScreen.routeName:
         return CustomPageTransition(child: CommentScreen());
       case NavigationFile.routeName:
-        return CustomPageTransition(child: NavigationFile());
+        return MaterialPageRoute(builder: (_) => NavigationFile());
       case DesiredShlokScreen.routeName:
         return CustomPageTransition(child: DesiredShlokScreen());
       case IntroductionScreens.routeName:
