@@ -199,6 +199,7 @@ class _VerifyScreenState extends State<VerifyScreen>
       setState(() {
         isVerified = true;
       });
+      
       timer.cancel();
     }
   }

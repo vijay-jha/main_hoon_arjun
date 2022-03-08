@@ -30,27 +30,12 @@ import './screens/introduction_screen.dart';
 import './screens/one_time_intro_screen.dart';
 
 void main() async {
-  ErrorWidget.builder = (FlutterErrorDetails details) => Container(
-        child: AlertDialog(
-          backgroundColor: Colors.orange.shade50,
-          content: Text("Sorry for inconvienience!! Please Restart."),
-          actions: [
-            OutlinedButton(
-              onPressed: () async {
-                await Future.delayed(Duration(milliseconds: 200));
-                FlutterRestart.restartApp();
-              },
-              child: Text("Restart"),
-            ),
-          ],
-        ),
-      );
-  RenderErrorBox.backgroundColor = Colors.transparent;
-  RenderErrorBox.textStyle = ui.TextStyle(color: Colors.transparent);
+  
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown,DeviceOrientation.portraitUp]);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
   runApp(MyApp());
   WidgetsBinding.instance.addObserver(_Handler());
 }
@@ -82,7 +67,7 @@ class MyApp extends StatelessWidget {
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (ctx, userSnapShot) {
-              if (userSnapShot.hasData) {
+            if (userSnapShot.hasData) {
               final _user = FirebaseAuth.instance.currentUser;
               if (_user.emailVerified) {
                 return NavigationFile();
@@ -101,7 +86,7 @@ class MyApp extends StatelessWidget {
       case AuthScreen.routeName:
         return MaterialPageRoute(builder: (_) => AuthScreen());
       case HomepageScreen.routeName:
-        return CustomPageTransition(child: HomepageScreen());
+        return MaterialPageRoute(builder: (_) => HomepageScreen());
       case SettingsScreen.routeName:
         return CustomPageTransition(child: SettingsScreen());
       case AboutScreen.routeName:
@@ -119,7 +104,7 @@ class MyApp extends StatelessWidget {
       case CommentScreen.routeName:
         return CustomPageTransition(child: CommentScreen());
       case NavigationFile.routeName:
-        return CustomPageTransition(child: NavigationFile());
+        return MaterialPageRoute(builder: (_) => NavigationFile());
       case DesiredShlokScreen.routeName:
         return CustomPageTransition(child: DesiredShlokScreen());
       case IntroductionScreens.routeName:

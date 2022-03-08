@@ -11,7 +11,7 @@ class ProfilePicture extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, SettingsScreen.routeName);
+        Navigator.pushReplacementNamed(context, SettingsScreen.routeName);
       },
       child: Padding(
         padding: const EdgeInsets.all(4),
