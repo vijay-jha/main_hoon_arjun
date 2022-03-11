@@ -52,6 +52,12 @@ class _RoundedInputState extends State<RoundedInput>
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _loginButtonController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Column(
@@ -59,7 +65,7 @@ class _RoundedInputState extends State<RoundedInput>
         InputContainer(
           child: TextField(
             controller: _emailController,
-            cursorColor: primaryTextC,
+            cursorColor: widget.textColor,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               icon: Icon(
@@ -227,7 +233,8 @@ class _RoundedInputState extends State<RoundedInput>
               borderRadius: BorderRadius.circular(30),
               color: kPrimaryC,
             ),
-            padding: EdgeInsets.symmetric(vertical: widget.deviceSize.height * 0.03),
+            padding:
+                EdgeInsets.symmetric(vertical: widget.deviceSize.height * 0.03),
             alignment: Alignment.center,
             child: isLoading
                 ? CircularProgressIndicator(color: Colors.white)

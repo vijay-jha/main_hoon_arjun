@@ -28,6 +28,21 @@ class _AuthScreenState extends State<AuthScreen>
   String errorMessage = 'Please enter your credentials.';
   Timer timer;
 
+@override
+  void initState() {
+    super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+
+    animationController =
+        AnimationController(vsync: this, duration: animationDuration);
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
   void _submitAuthForm(BuildContext ctx, email, password, isLogin) async {
     if (email.isNotEmpty && password.isNotEmpty) {
       UserCredential authResult;
@@ -86,7 +101,7 @@ class _AuthScreenState extends State<AuthScreen>
             return null;
           });
         } else {
-          _auth
+          await  _auth
               .createUserWithEmailAndPassword(
             email: email,
             password: password,
@@ -131,7 +146,7 @@ class _AuthScreenState extends State<AuthScreen>
             backgroundColor: Theme.of(ctx).errorColor,
           ),
         );
-      }
+      } 
     } else {
       ScaffoldMessenger.of(ctx).showSnackBar(
         SnackBar(
@@ -147,20 +162,7 @@ class _AuthScreenState extends State<AuthScreen>
   AnimationController animationController;
   Duration animationDuration = Duration(milliseconds: 270);
 
-  @override
-  void initState() {
-    super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-
-    animationController =
-        AnimationController(vsync: this, duration: animationDuration);
-  }
-
-  @override
-  void dispose() {
-    animationController.dispose();
-    super.dispose();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -252,7 +254,7 @@ class _AuthScreenState extends State<AuthScreen>
                         width: _deviceSize.width * 0.55,
                         height: _deviceSize.height * 0.2,
                       ),
-                       SizedBox(
+                      SizedBox(
                         height: _deviceSize.height * 0.08,
                       ),
                       RoundedInput(

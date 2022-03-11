@@ -125,12 +125,9 @@ class _ShlokSelectionState extends State<ShlokSelection>
             GestureDetector(
               onTap: () {
                 Navigator.pop(context);
-                //page change animation
+                // page change animation
                 if (selectedItem != -1) {
                   widget.pageController.jumpToPage(selectedItem);
-                  // widget.pageController.animateToPage(selectedItem,
-                  //     duration: const Duration(milliseconds: 700),
-                  //     curve: Curves.bounceInOut);
                 }
               },
               child: Container(
