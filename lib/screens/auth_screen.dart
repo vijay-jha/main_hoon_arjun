@@ -28,6 +28,21 @@ class _AuthScreenState extends State<AuthScreen>
   String errorMessage = 'Please enter your credentials.';
   Timer timer;
 
+@override
+  void initState() {
+    super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+
+    animationController =
+        AnimationController(vsync: this, duration: animationDuration);
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
   void _submitAuthForm(BuildContext ctx, email, password, isLogin) async {
     if (email.isNotEmpty && password.isNotEmpty) {
       UserCredential authResult;
@@ -147,20 +162,7 @@ class _AuthScreenState extends State<AuthScreen>
   AnimationController animationController;
   Duration animationDuration = Duration(milliseconds: 270);
 
-  @override
-  void initState() {
-    super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-
-    animationController =
-        AnimationController(vsync: this, duration: animationDuration);
-  }
-
-  @override
-  void dispose() {
-    animationController.dispose();
-    super.dispose();
-  }
+  
 
   @override
   Widget build(BuildContext context) {

@@ -91,7 +91,8 @@ class _FavoritesBodyState extends State<FavoritesBody> {
               builder: (context, snapshot) {
                 return snapshot.connectionState == ConnectionState.waiting
                     ? NoItemInList.loading(_deviceSize)
-                    : Provider.of<FavoritesShlok>(context, listen: false)
+                    : Provider.of<FavoritesShlok>(context, listen: true
+                    )
                             .shlok()
                             .isEmpty
                         ? NoItemInList.noShloks(

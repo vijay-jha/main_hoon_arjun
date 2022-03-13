@@ -91,35 +91,57 @@ class _ShlokCardState extends State<ShlokCard> {
         borderRadius: BorderRadius.circular(15),
       ),
       width: double.infinity,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        padding: const EdgeInsets.all(17),
-        alignment: Alignment.center,
-        margin: EdgeInsets.symmetric(
-          vertical: _deviceSize.height * 0.04,
-          horizontal: _deviceSize.width * 0.08,
-        ),
-        child: Text(
-          snapshot.hasData
-              ? snapshot.data['Shlok${widget.shlokNo}']['text'].toString().trim()
-              : '''
-........
-........
-........
-........
-          ''',
-          style: TextStyle(
-            color: Colors.orange.shade900,
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(
+             
+              vertical: _deviceSize.height * 0.005,
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              "अ.${widget.chapterNo}, श्लोक.${widget.shlokNo}",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+            fontSize: _deviceSize.height * 0.020,
+            color: Colors.orange.shade800,
           ),
-          textAlign: TextAlign.center,
-          softWrap: true,
-        ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            padding: const EdgeInsets.all(17),
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(
+              bottom: _deviceSize.height * 0.04,
+              right: _deviceSize.width * 0.08,
+              left: _deviceSize.width * 0.08,
+            ),
+            child: Text(
+              snapshot.hasData
+                  ? snapshot.data['Shlok${widget.shlokNo}']['text']
+                      .toString()
+                      .trim()
+                  : '''
+........
+........
+........
+........
+              ''',
+              style: TextStyle(
+                color: Colors.orange.shade900,
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
+              softWrap: true,
+            ),
+          ),
+        ],
       ),
     );
   }
