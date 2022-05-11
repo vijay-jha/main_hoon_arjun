@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -51,7 +52,13 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
 
           if (processingState == ProcessingState.loading ||
               processingState == ProcessingState.buffering)
-            return CircularProgressIndicator();
+            return Container(
+              width: 5,
+              height: 5,
+              child: CircularProgressIndicator.adaptive(
+                strokeWidth: 3.0,
+              ),
+            );
 
           if (playing != true) {
             SpeakerIcnBtn.player.play();
@@ -75,14 +82,12 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
         });
   }
 
-
   @override
   Widget build(BuildContext context) {
     var playingShlok = Provider.of<PlayingShlok>(context, listen: false);
     final _deviceSize = MediaQuery.of(context).size;
 
     void _onTap() {
-    
       if (playingShlok.getCureentShlokPlay() != widget.shlokIndex) {
         SpeakerIcnBtn.player.stop();
         playingShlok.setCurrentshlokPlaying(widget.shlokIndex);
@@ -94,9 +99,9 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
 
     return Consumer<PlayingShlok>(builder: (_, playingShlok, ch) {
       return Card(
-        elevation: widget.isDesired ? 10 : 0,
+        elevation: widget.isDesired ? 0 : 0,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(25)),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: InkWell(
           onTap: _onTap,
@@ -112,7 +117,7 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
                   : Colors.orange.shade200,
               //  border: Border.all(width: 1),
               borderRadius: const BorderRadius.all(
-                Radius.circular(25),
+                Radius.circular(10),
               ),
             ),
             child: Provider.of<PlayingShlok>(context, listen: true)

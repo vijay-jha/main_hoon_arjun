@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:main_hoon_arjun/providers/favorite.dart';
 import 'package:main_hoon_arjun/widgets/shareImage.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
@@ -23,7 +24,7 @@ class DesiredShlokScreen extends StatefulWidget {
   DesiredShlokScreen({this.emotions, this.shlokMap});
 
   dynamic emotions;
-  Map<String, dynamic> shlokMap;
+  FavoriteItem shlokMap;
 
   @override
   State<DesiredShlokScreen> createState() => _DesiredShlokScreenState();
@@ -32,14 +33,14 @@ class DesiredShlokScreen extends StatefulWidget {
 class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _controller = ScreenshotController();
-
   var _user;
   var doc;
-
   String currentShlok;
   String shlokNo;
   String chapterNo;
   bool isFavorite = false;
+  bool itExists;
+  bool isShareVisible = true;
 
   Future<String> getshlokUrl() async {
     return await FirebaseStorage.instance
@@ -53,8 +54,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   void toggleFavShlok() {
     isFavorite = !isFavorite;
   }
-
-  bool itExists;
 
   @override
   void initState() {
@@ -103,8 +102,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
     }
   }
 
-  bool isShareVisible = true;
-
   @override
   Widget build(BuildContext context) {
     final _deviceSize = MediaQuery.of(context).size;
@@ -130,7 +127,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
         if (snapshot.hasData) {
           if (widget.shlokMap != null) {
             currentShlok =
-                '${widget.shlokMap["Chapter"]}_${widget.shlokMap["ShlokNo"]}';
+                '${widget.shlokMap.chapter}_${widget.shlokMap.shlokNo}';
             chapterNo = currentShlok.substring(7, 9);
             shlokNo = currentShlok.substring(15);
           }
@@ -153,6 +150,8 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
           key: _scaffoldKey,
           appBar: AppBar(
             title: Text("Shlok"),
+            elevation: 0,
+            backgroundColor: Colors.orange,
             actions: [
               ProfilePicture(),
             ],
@@ -171,7 +170,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                 ),
               ),
               SizedBox(
-                height: _deviceSize.height * 0.03,
+                height: _deviceSize.height * 0.02,
               ),
               Container(
                 margin:
@@ -186,13 +185,14 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                 ),
               ),
               SizedBox(
-                height: _deviceSize.height * 0.03,
+                height: _deviceSize.height * 0.02,
               ),
               TranslationCard(
                 currentShlok: currentShlok,
                 shlokNo: shlokNo,
                 chapterNo: chapterNo,
               ),
+              Expanded(child: Container()),
             ],
           ),
           floatingActionButton: ElevatedButton(
@@ -201,9 +201,9 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
               shape: CircleBorder(),
             ),
             child: Container(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.all(10),
               child: Icon(
-                Icons.offline_share,
+                Icons.share_outlined,
                 color: Colors.orange.shade50,
               ),
             ),

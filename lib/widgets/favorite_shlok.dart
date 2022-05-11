@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:main_hoon_arjun/providers/favorite.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 
@@ -10,9 +11,9 @@ import '../screens/desired_shlok_screen.dart';
 import '../providers/playing_shlok.dart';
 
 class FavoriteShlokItem extends StatefulWidget {
-  final Map<String, dynamic> shlok;
+  final FavoriteItem favoriteShlok;
   final int shlokIndex;
-  FavoriteShlokItem(this.shlok, this.shlokIndex);
+  FavoriteShlokItem(this.favoriteShlok, this.shlokIndex);
   @override
   _FavoritesShlokState createState() => _FavoritesShlokState();
 }
@@ -27,19 +28,18 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
   void initState() {
     super.initState();
     shlokName = "Chap" +
-        widget.shlok["Chapter"].substring(7) +
+        widget.favoriteShlok.chapter.substring(7) +
         '_' +
-        widget.shlok["ShlokNo"] +
+        widget.favoriteShlok.shlokNo +
         '.mp3';
     () {}();
-    
   }
 
   Future<String> getshlokUrl() async {
     return await FirebaseStorage.instance
         .ref()
         .child('Shlok Audio Files')
-        .child(widget.shlok["Chapter"])
+        .child(widget.favoriteShlok.chapter)
         .child(shlokName)
         .getDownloadURL();
   }
@@ -52,7 +52,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
       context,
       MaterialPageRoute(
         builder: (context) => DesiredShlokScreen(
-          shlokMap: widget.shlok,
+          shlokMap: widget.favoriteShlok,
         ),
       ),
     );
@@ -96,7 +96,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
                     Container(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        widget.shlok["Number"],
+                        widget.favoriteShlok.number,
                         style: TextStyle(
                           fontSize: 17,
                           color: Colors.orange.shade800,
@@ -129,7 +129,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
                     right: _deviceSize.width * 0.035, //14
                   ),
                   child: ShlokCard(
-                    shlok: widget.shlok["Shlok"],
+                    shlok: widget.favoriteShlok.shlok,
                     deviceSize: _deviceSize,
                   ),
                   width: double.infinity,

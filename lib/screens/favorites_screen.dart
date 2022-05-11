@@ -91,17 +91,16 @@ class _FavoritesBodyState extends State<FavoritesBody> {
               builder: (context, snapshot) {
                 return snapshot.connectionState == ConnectionState.waiting
                     ? NoItemInList.loading(_deviceSize)
-                    : Provider.of<FavoritesShlok>(context, listen: true
-                    )
-                            .shlok()
+                    : Provider.of<FavoritesShlok>(context, listen: true)
+                            .shloks()
                             .isEmpty
                         ? NoItemInList.noShloks(
                             _deviceSize,
                           )
                         : FavoritesItemList(
-                            shlok: Provider.of<FavoritesShlok>(context,
+                            favoriteShloks: Provider.of<FavoritesShlok>(context,
                                     listen: false)
-                                .shlok());
+                                .shloks());
               },
             );
           }
@@ -112,10 +111,10 @@ class _FavoritesBodyState extends State<FavoritesBody> {
 
 class FavoritesItemList extends StatefulWidget {
   FavoritesItemList({
-    @required this.shlok,
+    @required this.favoriteShloks,
   });
 
-  List<Map<String, dynamic>> shlok;
+  List<FavoriteItem> favoriteShloks;
 
   @override
   State<FavoritesItemList> createState() => _FavoritesItemListState();
@@ -124,11 +123,12 @@ class FavoritesItemList extends StatefulWidget {
 class _FavoritesItemListState extends State<FavoritesItemList> {
   @override
   Widget build(BuildContext context) {
-    widget.shlok = [...widget.shlok.reversed];
+    widget.favoriteShloks = [...widget.favoriteShloks.reversed];
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        (context, index) => FavoriteShlokItem(widget.shlok[index], index),
-        childCount: widget.shlok.length,
+        (context, index) =>
+            FavoriteShlokItem(widget.favoriteShloks[index], index),
+        childCount: widget.favoriteShloks.length,
       ),
     );
   }
