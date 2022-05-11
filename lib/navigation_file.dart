@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:main_hoon_arjun/screens/feed_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -38,9 +39,8 @@ class _NavigationFileState extends State<NavigationFile> {
   // Different pages to navigate to
   final List<Widget> _children = [
     GeetaReadScreen(),
-    BookmarkScreen(),
+    FeedScreen(),
     HomepageScreen(),
-    // FeedScreen(),
     FavoritesScreen(),
     SettingsScreen(),
   ];
@@ -60,10 +60,16 @@ class _NavigationFileState extends State<NavigationFile> {
             icon: Icon(Icons.menu_book_outlined),
             label: 'Geeta',
           ),
+          // BottomNavigationBarItem(
+          //   activeIcon: Icon(Icons.bookmark),
+          //   icon: Icon(Icons.bookmark_border_outlined),
+          //   label: 'Bookmark',
+          // ),
           BottomNavigationBarItem(
-            activeIcon: Icon(Icons.bookmark),
-            icon: Icon(Icons.bookmark_border_outlined),
-            label: 'Bookmark',
+            activeIcon: Icon(Icons.feed_rounded),
+            backgroundColor: Colors.red,
+            icon: Icon(Icons.feed_outlined),
+            label: 'Feed',
           ),
           BottomNavigationBarItem(
             activeIcon: Icon(Icons.home_rounded),
@@ -75,12 +81,6 @@ class _NavigationFileState extends State<NavigationFile> {
             icon: Icon(Icons.favorite_border_rounded),
             label: 'Favorite',
           ),
-          // BottomNavigationBarItem(
-          //   activeIcon: Icon(Icons.feed_rounded),
-          //   backgroundColor: Colors.red,
-          //   icon: Icon(Icons.feed_outlined),
-          //   label: 'Feed',
-          // ),
 
           BottomNavigationBarItem(
             activeIcon: Icon(Icons.settings_rounded),
