@@ -29,6 +29,7 @@ class _NavigationFileState extends State<NavigationFile> {
 
     Provider.of<MahabharatCharacters>(context, listen: false)
         .getIndexFromLocal();
+        
     if (FEELING_API.isEmpty) {
       () async {
         var doc = await FirebaseFirestore.instance
