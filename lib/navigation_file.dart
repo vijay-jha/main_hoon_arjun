@@ -1,16 +1,17 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:main_hoon_arjun/screens/feed_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import './screens/favorites_screen.dart';
-import './screens/bookmark_screen.dart';
 // import './screens/feed_screen.dart';
 import './screens/geeta_read_screen.dart';
 import './screens/homepage_screen.dart';
 import './screens/settings_screen.dart';
 import './providers/mahabharat_characters.dart';
+import './constants.dart' show FEELING_API;
 
 class NavigationFile extends StatefulWidget {
   static const routeName = '/navigation-file';
@@ -28,6 +29,18 @@ class _NavigationFileState extends State<NavigationFile> {
 
     Provider.of<MahabharatCharacters>(context, listen: false)
         .getIndexFromLocal();
+        
+    if (FEELING_API.isEmpty) {
+      () async {
+        var doc = await FirebaseFirestore.instance
+            .collection('constants')
+            .doc('FEELING_API')
+            .get();
+        var data = doc.data();
+        FEELING_API = data['apiEndPoint'];
+        print(FEELING_API);
+      }();
+    }
   }
 
   void _navigateBottomBar(int index) {
@@ -60,6 +73,7 @@ class _NavigationFileState extends State<NavigationFile> {
             icon: Icon(Icons.menu_book_outlined),
             label: 'Geeta',
           ),
+          
           // BottomNavigationBarItem(
           //   activeIcon: Icon(Icons.bookmark),
           //   icon: Icon(Icons.bookmark_border_outlined),
