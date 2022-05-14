@@ -133,7 +133,7 @@ class BuildAppBar extends StatelessWidget {
     return AppBar(
       iconTheme: IconThemeData(color: Colors.orange), //change your color here
       elevation: 0,
-      backgroundColor: Colors.orange.shade50,
+      backgroundColor: Colors.orange.shade100,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
