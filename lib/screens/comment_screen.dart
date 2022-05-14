@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +34,9 @@ class _CommentScreenState extends State<CommentScreen> {
           .collection('Feed')
           .doc(widget.currentShloK)
           .collection('comments')
-          .doc(_user.uid)
+          .doc()
           .set({
+        'createdAt': Timestamp.now(),
         'user': _user.uid,
         'comment': comment,
       });
@@ -42,29 +45,30 @@ class _CommentScreenState extends State<CommentScreen> {
           .collection('Feed')
           .doc(widget.currentShloK)
           .collection('comments')
-          .doc('sibfiukab')
-          .set({
+          .add({
+        'createdAt': Timestamp.now(),
         'user': _user.uid,
         'comment': comment,
       });
     }
   }
 
+  var snapshot;
   void _getComments() async {
-    AsyncSnapshot snapshot;
     final _user = FirebaseAuth.instance.currentUser;
     snapshot = (await FirebaseFirestore.instance
         .collection('Feed')
         .doc(widget.currentShloK)
-        .collection('comments').doc(_user.uid)
-        .get()) as AsyncSnapshot;
+        .collection('comments')
+        .get());
   }
 
- @override
+  @override
   void initState() {
     _getComments();
     super.initState();
   }
+
   final formKey = GlobalKey<FormState>();
   final TextEditingController commentController = TextEditingController();
   List filedata = [
@@ -140,35 +144,54 @@ class _CommentScreenState extends State<CommentScreen> {
         elevation: 0,
         backgroundColor: backgroundC,
       ),
-      body: CommentBox(
-        userImage: "https://picsum.photos/200/400",
-        child: commentChild(filedata),
-        labelText: 'Write a comment...',
-        errorText: 'Comment cannot be blank',
-        withBorder: false,
-        sendButtonMethod: () {
-          if (formKey.currentState.validate()) {
-            setState(() {
-              var value = {
-                'name': 'New User',
-                'pic': 'https://picsum.photos/200/400',
-                'message': commentController.text
-              };
-              filedata.insert(0, value);
-            });
-            _postComment(commentController.text);
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('Feed')
+              .doc(widget.currentShloK)
+              .collection('comments')
+              .snapshots(),
+          builder: (context, AsyncSnapshot snapshot) {
+            var data;
+            if (snapshot.hasData) {
+              // var data = snapshot.data.docs;
+              // print(data[0]['user']);
+              return CommentBox(
+                userImage: "https://picsum.photos/200/400",
+                child: commentChild(filedata),
+                labelText: 'Write a comment...',
+                errorText: 'Comment cannot be blank',
+                withBorder: false,
+                sendButtonMethod: () {
+                  if (formKey.currentState.validate()) {
+                    setState(() {
+                      var value = {
+                        'name': 'New User',
+                        'pic': 'https://picsum.photos/200/400',
+                        'message': commentController.text
+                      };            
+                        filedata.insert(0, value);
+                    });
+                    _postComment(commentController.text);
 
-            commentController.clear();
-            FocusScope.of(context).unfocus();
-          } 
-        },
-        formKey: formKey,
-        commentController: commentController,
-        backgroundColor: backgroundC,
-        textColor: Colors.white,
-        sendWidget: Icon(Icons.send_sharp, size: 30, color: Colors.white),
-      ),
+                    commentController.clear();
+                    FocusScope.of(context).unfocus();
+                  }
+                },
+                formKey: formKey,
+                commentController: commentController,
+                backgroundColor: backgroundC,
+                textColor: Colors.white,
+                sendWidget:
+                    Icon(Icons.send_sharp, size: 30, color: Colors.white),
+              );
+            }
+            return CircularProgressIndicator();
+          }),
     );
+  }
+
+  void printData(var data) {
+    print(data);
   }
 }
 

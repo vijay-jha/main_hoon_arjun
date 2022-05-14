@@ -93,7 +93,10 @@ class ShlokPost extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => CommentScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => CommentScreen(
+                                  currentShloK: 'Chapter03_Shlok04',
+                                )),
                       );
                     },
                     icon: const Icon(

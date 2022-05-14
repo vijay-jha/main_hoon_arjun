@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:main_hoon_arjun/screens/comment_screen.dart';
 import 'package:main_hoon_arjun/widgets/shareImage.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
@@ -158,41 +159,72 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
             ],
           ),
           backgroundColor: Colors.orange.shade50,
-          body: ListView(
+          body: Stack(
             children: [
-              Screenshot(
-                controller: _controller,
-                child: ShlokCard(
-                  currentShlok: currentShlok,
-                  isFavorite: isFavorite,
-                  toggleFavorite: toggleFavShlok,
-                  shlokNo: shlokNo,
-                  chapterNo: chapterNo,
-                ),
-              ),
-              SizedBox(
-                height: _deviceSize.height * 0.03,
+              ListView(
+                children: [
+                  Screenshot(
+                    controller: _controller,
+                    child: ShlokCard(
+                      currentShlok: currentShlok,
+                      isFavorite: isFavorite,
+                      toggleFavorite: toggleFavShlok,
+                      shlokNo: shlokNo,
+                      chapterNo: chapterNo,
+                    ),
+                  ),
+                  SizedBox(
+                    height: _deviceSize.height * 0.03,
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                        horizontal: _deviceSize.width * 0.42),
+                    child: ChangeNotifierProvider(
+                      create: (ctx) => PlayingShlok(),
+                      child: SpeakerIcnBtn(
+                        audioUrl: getshlokUrl(),
+                        shlokIndex: 0,
+                        isDesired: true,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: _deviceSize.height * 0.03,
+                  ),
+                  TranslationCard(
+                    currentShlok: currentShlok,
+                    shlokNo: shlokNo,
+                    chapterNo: chapterNo,
+                  ),
+                  //Comment button
+                  // ElevatedButton(
+                  //   style: ElevatedButton.styleFrom(
+                  //     primary: Colors.orange,
+                  //     shape: CircleBorder(),
+                  //   ),
+                  //   child: Container(
+                  //     padding: const EdgeInsets.all(12),
+                  //     child: Icon(
+                  //       Icons.comment,
+                  //       color: Colors.orange.shade50,
+                  //     ),
+                  //   ),
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) => CommentScreen(
+                  //                 currentShloK: currentShlok,
+                  //               )),
+                  //     );
+                  //   },
+                  // ),
+                ],
               ),
               Container(
-                margin:
-                    EdgeInsets.symmetric(horizontal: _deviceSize.width * 0.42),
-                child: ChangeNotifierProvider(
-                  create: (ctx) => PlayingShlok(),
-                  child: SpeakerIcnBtn(
-                    audioUrl: getshlokUrl(),
-                    shlokIndex: 0,
-                    isDesired: true,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: _deviceSize.height * 0.03,
-              ),
-              TranslationCard(
-                currentShlok: currentShlok,
-                shlokNo: shlokNo,
-                chapterNo: chapterNo,
-              ),
+                
+                child: Text('Add your thoughts..'),
+              )
             ],
           ),
           floatingActionButton: ElevatedButton(
@@ -203,7 +235,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
             child: Container(
               padding: const EdgeInsets.all(15),
               child: Icon(
-                Icons.offline_share,
+                Icons.share,
                 color: Colors.orange.shade50,
               ),
             ),
