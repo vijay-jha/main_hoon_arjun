@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:main_hoon_arjun/widgets/profile_picture.dart';
 
 import '../widgets/comment.dart';
 import '../constants.dart';
@@ -21,39 +22,40 @@ class CommentScreen extends StatefulWidget {
 
 class _CommentScreenState extends State<CommentScreen> {
   var comments;
-  // var filedata;
 
   void _postComment(comment) async {
     final _user = FirebaseAuth.instance.currentUser;
-    // var doc = await FirebaseFirestore.instance
-    //     .collection('Feed')
-    //     .doc(widget.currentShloK)
-    //     .get();
-    // if (!doc.exists) {
-    //   await FirebaseFirestore.instance
-    //       .collection('Feed')
-    //       .doc(widget.currentShloK)
-    //       .collection('comments')
-    //       .doc()
-    //       .set({
-    //     'createdAt': Timestamp.now(),
-    //     'comment': comment,
-    //     'user': _user,
-    //   });
-    // }
+    var userInfo = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get();
+    var userData = userInfo.data();
+
     await FirebaseFirestore.instance
         .collection('Feed')
         .doc(widget.currentShloK)
         .collection('comments')
         .add({
       'createdAt': Timestamp.now(),
+      'user': _user.uid,
+      'username': userData['username'],
+      'avatarIndex': userData['avatarIndex'],
       'comment': comment,
-      'user': _user,
     });
   }
 
+  // var snapshot;
+  // void _getComments() async {
+  //   snapshot = (await FirebaseFirestore.instance
+  //       .collection('Feed')
+  //       .doc(widget.currentShloK)
+  //       .collection('comments')
+  //       .get());
+  // }
+
   @override
   void initState() {
+    // _getComments();
     super.initState();
   }
 
@@ -87,22 +89,20 @@ class _CommentScreenState extends State<CommentScreen> {
       children: [
         for (var i = 0; i < data.length; i++)
           Padding(
-            padding: const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 0.0),
+            padding: const EdgeInsets.fromLTRB(1.0, 8.0, 1.0, 0.0),
             child: ListTile(
               leading: GestureDetector(
                 onTap: () async {
                   // Display the image in large form.
                 },
-                child: Container(
-                  height: 45.0,
-                  width: 45.0,
-                  decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.all(Radius.circular(50))),
-                  child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: NetworkImage(data[i]['pic'])),
-                ),
+                child: ProfilePicture(),
+                // child: Container(
+                //   height: 45.0,
+                //   width: 45.0,
+                //   decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.all(Radius.circular(50))),
+                //   child: ProfilePicture(),
+                // ),
               ),
               title: Text(
                 data[i]['name'],
@@ -137,16 +137,14 @@ class _CommentScreenState extends State<CommentScreen> {
               .collection('Feed')
               .doc(widget.currentShloK)
               .collection('comments')
-              
               .snapshots(),
           builder: (context, snapshot) {
-          if(snapshot.hasData){
-            var data = snapshot.data.docs;
-            print(data);
-          }
-
+            if (snapshot.hasData) {
+              var data = snapshot.data.docs;
+              printData(data);
+            }
             return CommentBox(
-              userImage: "https://picsum.photos/200/400",
+              userImage: "",
               child: commentChild(filedata),
               labelText: 'Write a comment...',
               errorText: 'Comment cannot be blank',
@@ -162,7 +160,6 @@ class _CommentScreenState extends State<CommentScreen> {
                     filedata.insert(0, value);
                   });
                   _postComment(commentController.text);
-
                   commentController.clear();
                   FocusScope.of(context).unfocus();
                 }
@@ -175,6 +172,10 @@ class _CommentScreenState extends State<CommentScreen> {
             );
           }),
     );
+  }
+
+  void printData(var data) {
+    // print(data[0]['comment']);
   }
 }
 

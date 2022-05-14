@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 import '../screens/comment_screen.dart';
 
-class ShlokPost extends StatelessWidget {
+class ShlokFeedCard extends StatelessWidget {
   String sample = "User";
   String shlok =
       "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।\nमा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥";
@@ -95,7 +95,7 @@ class ShlokPost extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => CommentScreen(
-                                currentShloK: "Chapter03_Shlok04")),
+                                currentShloK: 'Chapter03_Shlok09')),
                       );
                     },
                     icon: const Icon(

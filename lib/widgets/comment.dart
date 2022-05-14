@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:main_hoon_arjun/widgets/profile_picture.dart';
 
 class CommentBox extends StatelessWidget {
   Widget child;
@@ -46,12 +47,7 @@ class CommentBox extends StatelessWidget {
           tileColor: backgroundColor,
           leading: Container(
             height: 40.0,
-            width: 40.0,
-            decoration:  BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.all(Radius.circular(50))),
-            child: CircleAvatar(
-                radius: 50, backgroundImage: NetworkImage(userImage)),
+            child: ProfilePicture(),
           ),
           title: Form(
             key: formKey,
