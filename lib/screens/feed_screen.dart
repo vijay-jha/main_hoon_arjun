@@ -1,7 +1,6 @@
-
 import 'package:flutter/material.dart';
 
-import '../widgets/shlok_post.dart';
+import '../widgets/shlok_feed_card.dart';
 import '../constants.dart';
 
 class FeedScreen extends StatelessWidget {
@@ -10,7 +9,7 @@ class FeedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:Colors.orange.shade50,
+      backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
         backgroundColor: Colors.orange.shade50,
         elevation: 0,
@@ -26,7 +25,7 @@ class FeedScreen extends StatelessWidget {
       body: ListView.builder(
         itemCount: 10,
         itemBuilder: (BuildContext context, int index) {
-          return ShlokPost();
+          return ShlokFeedCard();
         },
       ),
     );
