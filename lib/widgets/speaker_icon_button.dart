@@ -55,9 +55,7 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
             return Container(
               width: 5,
               height: 5,
-              child: CircularProgressIndicator.adaptive(
-                strokeWidth: 3.0,
-              ),
+              child: CircularProgressIndicator(strokeWidth: 3),
             );
 
           if (playing != true) {

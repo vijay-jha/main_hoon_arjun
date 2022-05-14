@@ -14,6 +14,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../widgets/translation_card.dart';
 import '../widgets/profile_picture.dart';
+import './comment_screen.dart';
 import '../widgets/shlok_card.dart';
 import '../widgets/speaker_icon_button.dart';
 import '../providers/playing_shlok.dart';
@@ -157,54 +158,93 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
             ],
           ),
           backgroundColor: Colors.orange.shade50,
-          body: ListView(
+          body: Stack(
+            alignment: AlignmentDirectional.bottomStart,
             children: [
-              Screenshot(
-                controller: _controller,
-                child: ShlokCard(
-                  currentShlok: currentShlok,
-                  isFavorite: isFavorite,
-                  toggleFavorite: toggleFavShlok,
-                  shlokNo: shlokNo,
-                  chapterNo: chapterNo,
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 25),
+                child: ListView(
+                  children: [
+                    Screenshot(
+                      controller: _controller,
+                      child: ShlokCard(
+                        currentShlok: currentShlok,
+                        isFavorite: isFavorite,
+                        toggleFavorite: toggleFavShlok,
+                        shlokNo: shlokNo,
+                        chapterNo: chapterNo,
+                      ),
+                    ),
+                    SizedBox(
+                      height: _deviceSize.height * 0.02,
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: _deviceSize.width * 0.42),
+                      child: ChangeNotifierProvider(
+                        create: (ctx) => PlayingShlok(),
+                        child: SpeakerIcnBtn(
+                          audioUrl: getshlokUrl(),
+                          shlokIndex: 0,
+                          isDesired: true,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: _deviceSize.height * 0.02,
+                    ),
+                    TranslationCard(
+                      currentShlok: currentShlok,
+                      shlokNo: shlokNo,
+                      chapterNo: chapterNo,
+                    ),
+                    // Expanded(child: Container()),
+                  ],
                 ),
               ),
-              SizedBox(
-                height: _deviceSize.height * 0.02,
-              ),
-              Container(
-                margin:
-                    EdgeInsets.symmetric(horizontal: _deviceSize.width * 0.42),
-                child: ChangeNotifierProvider(
-                  create: (ctx) => PlayingShlok(),
-                  child: SpeakerIcnBtn(
-                    audioUrl: getshlokUrl(),
-                    shlokIndex: 0,
-                    isDesired: true,
+              Positioned(
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              CommentScreen(currentShloK: currentShlok)),
+                    );
+                  },
+                  child: Container(
+                    height: 40,
+                    margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.elliptical(160, 80),
+                          topLeft: Radius.elliptical(160, 80)),
+                      color: Colors.orange,
+                    ),
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    child: Text(
+                      "View thoughts",
+                      style:
+                          TextStyle(fontSize: 17, color: Colors.orange.shade50),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
               ),
-              SizedBox(
-                height: _deviceSize.height * 0.02,
-              ),
-              TranslationCard(
-                currentShlok: currentShlok,
-                shlokNo: shlokNo,
-                chapterNo: chapterNo,
-              ),
-              Expanded(child: Container()),
             ],
           ),
           floatingActionButton: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: Colors.orange,
+              primary: Colors.orange.shade200,
               shape: CircleBorder(),
             ),
             child: Container(
               padding: const EdgeInsets.all(10),
               child: Icon(
-                Icons.share_outlined,
-                color: Colors.orange.shade50,
+                Icons.share,
+                color: Colors.orange.shade900,
+                size: 28,
               ),
             ),
             onPressed: () async {
