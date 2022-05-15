@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:main_hoon_arjun/providers/mahabharat_characters.dart';
+import 'package:main_hoon_arjun/widgets/profile_picture.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/comment.dart';
@@ -54,15 +55,12 @@ class _CommentScreenState extends State<CommentScreen> {
   final TextEditingController commentController = TextEditingController();
 
   Widget commentChild(data) {
-    return ListView(
-      children: [
-        for (var i = 0; i < data.length; i++)
-          CommentStructure(
-              username: data[i]['username'],
-              avatarIndex: data[i]['avatarIndex'],
-              comment: data[i]['comment'])
-      ],
-    );
+    return ListView.builder(
+        itemBuilder: (context, index) => CommentStructure(
+            username: data[index]['username'],
+            avatarIndex: data[index]['avatarIndex'],
+            comment: data[index]['comment']),
+        itemCount: data.length);
   }
 
   @override
@@ -72,7 +70,7 @@ class _CommentScreenState extends State<CommentScreen> {
       appBar: AppBar(
         title: const Text('Comments'),
         elevation: 0,
-        backgroundColor: backgroundC,
+        backgroundColor: Colors.orange,
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -126,13 +124,25 @@ class CommentStructure extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            child: CircleAvatar(
-              backgroundColor: Colors.orange.shade50,
-              radius: 30,
-              child: Image.asset(
-                Provider.of<MahabharatCharacters>(context, listen: true)
-                    .getChosenAvatarLink(),
-                fit: BoxFit.cover,
+            child: GestureDetector(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (ctx) {
+                      return ProfilePictureDialog(
+                        avatarIndex: avatarIndex,
+                        username: username,
+                      );
+                    });
+              },
+              child: CircleAvatar(
+                backgroundColor: Colors.orange.shade50,
+                radius: 30,
+                child: Image.asset(
+                  Provider.of<MahabharatCharacters>(context, listen: true)
+                      .getChosenAvatarLink(),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             height: 30.0,

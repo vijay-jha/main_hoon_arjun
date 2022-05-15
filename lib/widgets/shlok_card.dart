@@ -42,14 +42,14 @@ class _ShlokCardState extends State<ShlokCard> {
                 borderRadius: BorderRadius.circular(15),
               ),
               margin: EdgeInsets.only(
-                top: _deviceSize.height * 0.05,
+                top: _deviceSize.height * 0.03,
                 left: _deviceSize.width * 0.09,
                 right: _deviceSize.width * 0.09,
               ),
               child: shlokCard(_deviceSize, snapshot),
             ),
             Positioned(
-              top: _deviceSize.height * 0.027,
+              top: _deviceSize.height * 0.007,
               right: _deviceSize.width * 0.042,
               child: CircleAvatar(
                 backgroundColor: Colors.white,
@@ -95,7 +95,6 @@ class _ShlokCardState extends State<ShlokCard> {
         children: [
           Container(
             margin: EdgeInsets.symmetric(
-             
               vertical: _deviceSize.height * 0.005,
             ),
             alignment: Alignment.center,
@@ -103,9 +102,9 @@ class _ShlokCardState extends State<ShlokCard> {
               "अ.${widget.chapterNo}, श्लोक.${widget.shlokNo}",
               textAlign: TextAlign.center,
               style: TextStyle(
-            fontSize: _deviceSize.height * 0.020,
-            color: Colors.orange.shade800,
-          ),
+                fontSize: _deviceSize.height * 0.020,
+                color: Colors.orange.shade800,
+              ),
             ),
           ),
           Container(

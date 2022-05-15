@@ -38,7 +38,7 @@ class _TranslationCardState extends State<TranslationCard> {
                 margin: EdgeInsets.only(
                   left: _deviceSize.width * 0.08,
                   right: _deviceSize.width * 0.08,
-                  bottom: _deviceSize.height* 0.02,
+                  bottom: _deviceSize.height * 0.02,
                 ),
                 decoration: BoxDecoration(
                   color: Colors.orange.shade100,
@@ -59,9 +59,13 @@ class _TranslationCardState extends State<TranslationCard> {
                     snapshot.hasData
                         ? isTranslatedToEnglish
                             ? snapshot.data['Shlok${widget.shlokNo}']
-                                ['translation']['english'].toString().trim()
+                                    ['translation']['english']
+                                .toString()
+                                .trim()
                             : snapshot.data['Shlok${widget.shlokNo}']
-                                ['translation']['hindi'].toString().trimLeft()
+                                    ['translation']['hindi']
+                                .toString()
+                                .trimLeft()
                         : '''
               ........
               ........
@@ -71,7 +75,7 @@ class _TranslationCardState extends State<TranslationCard> {
                     style: TextStyle(
                       color: Colors.orange.shade900,
                       fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                      // fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
                     softWrap: true,

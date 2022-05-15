@@ -21,7 +21,7 @@ class _ShlokSelectionState extends State<ShlokSelection>
   Animation<double> scaleAnimation;
   int selectedItem = -1;
 
-  @override
+    @override
   void initState() {
     super.initState();
 
@@ -29,12 +29,6 @@ class _ShlokSelectionState extends State<ShlokSelection>
         vsync: this, duration: const Duration(milliseconds: 700));
     scaleAnimation =
         CurvedAnimation(parent: controller, curve: Curves.easeInOut);
-
-    controller.addListener(() {
-      setState(() {});
-    });
-
-    controller.forward();
   }
 
   @override
