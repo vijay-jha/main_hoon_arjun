@@ -159,71 +159,96 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
             ],
           ),
           backgroundColor: Colors.orange.shade50,
-          body: Stack(
+          body: ListView(
             children: [
-              ListView(
-                children: [
-                  Screenshot(
-                    controller: _controller,
-                    child: ShlokCard(
-                      currentShlok: currentShlok,
-                      isFavorite: isFavorite,
-                      toggleFavorite: toggleFavShlok,
-                      shlokNo: shlokNo,
-                      chapterNo: chapterNo,
-                    ),
-                  ),
-                  SizedBox(
-                    height: _deviceSize.height * 0.03,
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(
-                        horizontal: _deviceSize.width * 0.42),
-                    child: ChangeNotifierProvider(
-                      create: (ctx) => PlayingShlok(),
-                      child: SpeakerIcnBtn(
-                        audioUrl: getshlokUrl(),
-                        shlokIndex: 0,
-                        isDesired: true,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: _deviceSize.height * 0.03,
-                  ),
-                  TranslationCard(
-                    currentShlok: currentShlok,
-                    shlokNo: shlokNo,
-                    chapterNo: chapterNo,
-                  ),
-                  //Comment button
-                  // ElevatedButton(
-                  //   style: ElevatedButton.styleFrom(
-                  //     primary: Colors.orange,
-                  //     shape: CircleBorder(),
-                  //   ),
-                  //   child: Container(
-                  //     padding: const EdgeInsets.all(12),
-                  //     child: Icon(
-                  //       Icons.comment,
-                  //       color: Colors.orange.shade50,
-                  //     ),
-                  //   ),
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //           builder: (context) => CommentScreen(
-                  //                 currentShloK: currentShlok,
-                  //               )),
-                  //     );
-                  //   },
-                  // ),
-                ],
+              Screenshot(
+                controller: _controller,
+                child: ShlokCard(
+                  currentShlok: currentShlok,
+                  isFavorite: isFavorite,
+                  toggleFavorite: toggleFavShlok,
+                  shlokNo: shlokNo,
+                  chapterNo: chapterNo,
+                ),
+              ),
+              SizedBox(
+                height: _deviceSize.height * 0.03,
               ),
               Container(
-                
-                child: Text('Add your thoughts..'),
+                margin:
+                    EdgeInsets.symmetric(horizontal: _deviceSize.width * 0.42),
+                child: ChangeNotifierProvider(
+                  create: (ctx) => PlayingShlok(),
+                  child: SpeakerIcnBtn(
+                    audioUrl: getshlokUrl(),
+                    shlokIndex: 0,
+                    isDesired: true,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: _deviceSize.height * 0.03,
+              ),
+              TranslationCard(
+                currentShlok: currentShlok,
+                shlokNo: shlokNo,
+                chapterNo: chapterNo,
+              ),
+              //Comment button
+              // ElevatedButton(
+              //   style: ElevatedButton.styleFrom(
+              //     primary: Colors.orange,
+              //     shape: CircleBorder(),
+              //   ),
+              //   child: Container(
+              //     padding: const EdgeInsets.all(12),
+              //     child: Icon(
+              //       Icons.comment,
+              //       color: Colors.orange.shade50,
+              //     ),
+              //   ),
+              //   onPressed: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //           builder: (context) => CommentScreen(
+              //                 currentShloK: currentShlok,
+              //               )),
+              //     );
+              //   },
+              // ),    
+              //comment button
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CommentScreen(
+                        currentShloK: currentShlok,
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                     color: Colors.orange[100],
+                    // border: Border.all(
+                    //   color: Colors.orange,
+                    // ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  margin: const EdgeInsets.fromLTRB(35, 5, 35, 50),
+                  padding: EdgeInsets.symmetric(vertical: 6),
+                  width: double.infinity,
+                  child: Center(
+                      child: Text(
+                    'View thoughts..',
+                    style:  TextStyle(
+                      color: Colors.orange,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18),
+                  )),
+                ),
               )
             ],
           ),
