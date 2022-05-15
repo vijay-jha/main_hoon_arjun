@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:main_hoon_arjun/providers/favorite.dart';
 import 'package:main_hoon_arjun/widgets/shareImage.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
@@ -13,6 +14,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../widgets/translation_card.dart';
 import '../widgets/profile_picture.dart';
+import './comment_screen.dart';
 import '../widgets/shlok_card.dart';
 import '../widgets/speaker_icon_button.dart';
 import '../providers/playing_shlok.dart';
@@ -23,7 +25,7 @@ class DesiredShlokScreen extends StatefulWidget {
   DesiredShlokScreen({this.emotions, this.shlokMap});
 
   dynamic emotions;
-  Map<String, dynamic> shlokMap;
+  FavoriteItem shlokMap;
 
   @override
   State<DesiredShlokScreen> createState() => _DesiredShlokScreenState();
@@ -32,14 +34,14 @@ class DesiredShlokScreen extends StatefulWidget {
 class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _controller = ScreenshotController();
-
   var _user;
   var doc;
-
   String currentShlok;
   String shlokNo;
   String chapterNo;
   bool isFavorite = false;
+  bool itExists;
+  bool isShareVisible = true;
 
   Future<String> getshlokUrl() async {
     return await FirebaseStorage.instance
@@ -53,8 +55,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
   void toggleFavShlok() {
     isFavorite = !isFavorite;
   }
-
-  bool itExists;
 
   @override
   void initState() {
@@ -103,8 +103,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
     }
   }
 
-  bool isShareVisible = true;
-
   @override
   Widget build(BuildContext context) {
     final _deviceSize = MediaQuery.of(context).size;
@@ -130,7 +128,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
         if (snapshot.hasData) {
           if (widget.shlokMap != null) {
             currentShlok =
-                '${widget.shlokMap["Chapter"]}_${widget.shlokMap["ShlokNo"]}';
+                '${widget.shlokMap.chapter}_${widget.shlokMap.shlokNo}';
             chapterNo = currentShlok.substring(7, 9);
             shlokNo = currentShlok.substring(15);
           }
@@ -153,58 +151,100 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
           key: _scaffoldKey,
           appBar: AppBar(
             title: Text("Shlok"),
+            elevation: 0,
+            backgroundColor: Colors.orange,
             actions: [
               ProfilePicture(),
             ],
           ),
           backgroundColor: Colors.orange.shade50,
-          body: ListView(
+          body: Stack(
+            alignment: AlignmentDirectional.bottomStart,
             children: [
-              Screenshot(
-                controller: _controller,
-                child: ShlokCard(
-                  currentShlok: currentShlok,
-                  isFavorite: isFavorite,
-                  toggleFavorite: toggleFavShlok,
-                  shlokNo: shlokNo,
-                  chapterNo: chapterNo,
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 25),
+                child: ListView(
+                  children: [
+                    Screenshot(
+                      controller: _controller,
+                      child: ShlokCard(
+                        currentShlok: currentShlok,
+                        isFavorite: isFavorite,
+                        toggleFavorite: toggleFavShlok,
+                        shlokNo: shlokNo,
+                        chapterNo: chapterNo,
+                      ),
+                    ),
+                    SizedBox(
+                      height: _deviceSize.height * 0.02,
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: _deviceSize.width * 0.42),
+                      child: ChangeNotifierProvider(
+                        create: (ctx) => PlayingShlok(),
+                        child: SpeakerIcnBtn(
+                          audioUrl: getshlokUrl(),
+                          shlokIndex: 0,
+                          isDesired: true,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: _deviceSize.height * 0.02,
+                    ),
+                    TranslationCard(
+                      currentShlok: currentShlok,
+                      shlokNo: shlokNo,
+                      chapterNo: chapterNo,
+                    ),
+                    // Expanded(child: Container()),
+                  ],
                 ),
               ),
-              SizedBox(
-                height: _deviceSize.height * 0.03,
-              ),
-              Container(
-                margin:
-                    EdgeInsets.symmetric(horizontal: _deviceSize.width * 0.42),
-                child: ChangeNotifierProvider(
-                  create: (ctx) => PlayingShlok(),
-                  child: SpeakerIcnBtn(
-                    audioUrl: getshlokUrl(),
-                    shlokIndex: 0,
-                    isDesired: true,
+              Positioned(
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              CommentScreen(currentShloK: currentShlok)),
+                    );
+                  },
+                  child: Container(
+                    height: 40,
+                    margin: EdgeInsets.fromLTRB(10, 5, 10, 0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.elliptical(160, 80),
+                          topLeft: Radius.elliptical(160, 80)),
+                      color: Colors.orange,
+                    ),
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    child: Text(
+                      "View thoughts",
+                      style:
+                          TextStyle(fontSize: 17, color: Colors.orange.shade50),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: _deviceSize.height * 0.03,
-              ),
-              TranslationCard(
-                currentShlok: currentShlok,
-                shlokNo: shlokNo,
-                chapterNo: chapterNo,
               ),
             ],
           ),
           floatingActionButton: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: Colors.orange,
+              primary: Colors.orange.shade200,
               shape: CircleBorder(),
             ),
             child: Container(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.all(10),
               child: Icon(
-                Icons.offline_share,
-                color: Colors.orange.shade50,
+                Icons.share,
+                color: Colors.orange.shade900,
+                size: 28,
               ),
             ),
             onPressed: () async {

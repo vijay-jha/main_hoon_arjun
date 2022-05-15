@@ -104,4 +104,6 @@ class MahabharatCharacters with ChangeNotifier {
   void deleteIndexFromLocal() {
     DBHelper.delete('avatar_index', 'id = ?', 1);
   }
+
+  
 }
