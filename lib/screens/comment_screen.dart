@@ -85,6 +85,8 @@ class _CommentScreenState extends State<CommentScreen> {
   ];
 
   Widget commentChild(data) {
+    ListView.builder(
+        itemBuilder: (context, index) => Container(), itemCount: data.length);
     return ListView(
       children: [
         for (var i = 0; i < data.length; i++)
@@ -92,10 +94,19 @@ class _CommentScreenState extends State<CommentScreen> {
             padding: const EdgeInsets.fromLTRB(1.0, 8.0, 1.0, 0.0),
             child: ListTile(
               leading: GestureDetector(
-                onTap: () async {
-                  // Display the image in large form.
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext ctx) {
+                        return ProfilePictureDialog(
+                          uid: i,
+                          index: 1,
+                          username: "Akshay Gade",
+                        );
+                      });
                 },
-                child: ProfilePicture(),
+
+                child: ProfilePicture(tag: i),
                 // child: Container(
                 //   height: 45.0,
                 //   width: 45.0,
@@ -107,14 +118,14 @@ class _CommentScreenState extends State<CommentScreen> {
               title: Text(
                 data[i]['name'],
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                    // fontWeight: FontWeight.bold,
                     fontSize: 17,
-                    color: Colors.white),
+                    color: Colors.orange.shade800),
               ),
               subtitle: Text(data[i]['message'],
                   style: TextStyle(
                     fontSize: 17,
-                    color: Colors.white70,
+                    color: Colors.orange.shade400,
                     fontWeight: FontWeight.w600,
                   )),
             ),
@@ -126,11 +137,11 @@ class _CommentScreenState extends State<CommentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundC,
+      backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
         title: const Text('Comments'),
         elevation: 0,
-        backgroundColor: backgroundC,
+        backgroundColor: Colors.orange,
       ),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
@@ -166,9 +177,10 @@ class _CommentScreenState extends State<CommentScreen> {
               },
               formKey: formKey,
               commentController: commentController,
-              backgroundColor: backgroundC,
-              textColor: Colors.white,
-              sendWidget: Icon(Icons.send_sharp, size: 30, color: Colors.white),
+              backgroundColor: Colors.orange.shade50,
+              textColor: Colors.orange,
+              sendWidget:
+                  Icon(Icons.send_sharp, size: 30, color: Colors.orange),
             );
           }),
     );
@@ -178,23 +190,3 @@ class _CommentScreenState extends State<CommentScreen> {
     // print(data[0]['comment']);
   }
 }
-
-// class AddCommentBox extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       alignment: Alignment.center,
-//       color: backgroundC,
-//       child: const TextField(
-//         decoration: InputDecoration(
-//           border: InputBorder.none,
-//           hintText: 'Comment',
-//         ),
-//       ),
-//     );
-//     // GestureDetector(
-//     //   child: const Icon(Icons.send),
-//     //   onTap: () {},
-//     // )
-//   }
-// }

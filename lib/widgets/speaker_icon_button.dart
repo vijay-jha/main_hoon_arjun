@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -52,11 +51,7 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
 
           if (processingState == ProcessingState.loading ||
               processingState == ProcessingState.buffering)
-            return Container(
-              width: 5,
-              height: 5,
-              child: CircularProgressIndicator(strokeWidth: 3),
-            );
+            return CircularProgressIndicator();
 
           if (playing != true) {
             SpeakerIcnBtn.player.play();
@@ -97,9 +92,9 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
 
     return Consumer<PlayingShlok>(builder: (_, playingShlok, ch) {
       return Card(
-        elevation: widget.isDesired ? 0 : 0,
+        elevation: widget.isDesired ? 10 : 0,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(25)),
         ),
         child: InkWell(
           onTap: _onTap,
@@ -115,7 +110,7 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
                   : Colors.orange.shade200,
               //  border: Border.all(width: 1),
               borderRadius: const BorderRadius.all(
-                Radius.circular(10),
+                Radius.circular(25),
               ),
             ),
             child: Provider.of<PlayingShlok>(context, listen: true)
