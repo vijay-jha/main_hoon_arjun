@@ -5,7 +5,8 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:main_hoon_arjun/widgets/profile_picture.dart';
+import 'package:main_hoon_arjun/providers/mahabharat_characters.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/comment.dart';
 import '../constants.dart';
@@ -44,81 +45,22 @@ class _CommentScreenState extends State<CommentScreen> {
     });
   }
 
-  // var snapshot;
-  // void _getComments() async {
-  //   snapshot = (await FirebaseFirestore.instance
-  //       .collection('Feed')
-  //       .doc(widget.currentShloK)
-  //       .collection('comments')
-  //       .get());
-  // }
-
   @override
   void initState() {
-    // _getComments();
     super.initState();
   }
 
   final formKey = GlobalKey<FormState>();
   final TextEditingController commentController = TextEditingController();
-  List filedata = [
-    {
-      'name': 'Vijay Jha',
-      'pic': 'https://picsum.photos/200/300',
-      'message': "Great Shlok"
-    },
-    {
-      'name': 'Akshay Gade',
-      'pic': 'https://picsum.photos/200/200',
-      'message': "Best Shlok"
-    },
-    {
-      'name': 'Vinay Bhujbal',
-      'pic': 'https://picsum.photos/200/100',
-      'message': "Excellent Shlok"
-    },
-    {
-      'name': 'Pranavraj Goje',
-      'pic': 'https://picsum.photos/100/300',
-      'message': 'Noice Shlok'
-    },
-  ];
 
   Widget commentChild(data) {
     return ListView(
       children: [
         for (var i = 0; i < data.length; i++)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(1.0, 8.0, 1.0, 0.0),
-            child: ListTile(
-              leading: GestureDetector(
-                onTap: () async {
-                  // Display the image in large form.
-                },
-                child: ProfilePicture(),
-                // child: Container(
-                //   height: 45.0,
-                //   width: 45.0,
-                //   decoration: BoxDecoration(
-                //       borderRadius: BorderRadius.all(Radius.circular(50))),
-                //   child: ProfilePicture(),
-                // ),
-              ),
-              title: Text(
-                data[i]['name'],
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                    color: Colors.white),
-              ),
-              subtitle: Text(data[i]['message'],
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: Colors.white70,
-                    fontWeight: FontWeight.w600,
-                  )),
-            ),
-          )
+          CommentStructure(
+              username: data[i]['username'],
+              avatarIndex: data[i]['avatarIndex'],
+              comment: data[i]['comment'])
       ],
     );
   }
@@ -126,39 +68,28 @@ class _CommentScreenState extends State<CommentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundC,
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text('Comments'),
         elevation: 0,
         backgroundColor: backgroundC,
       ),
       body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('Feed')
-              .doc(widget.currentShloK)
-              .collection('comments')
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              var data = snapshot.data.docs;
-              printData(data);
-            }
+        stream: FirebaseFirestore.instance
+            .collection('Feed')
+            .doc(widget.currentShloK)
+            .collection('comments')
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
             return CommentBox(
               userImage: "",
-              child: commentChild(filedata),
+              child: commentChild(snapshot.data.docs),
               labelText: 'Write a comment...',
               errorText: 'Comment cannot be blank',
               withBorder: false,
               sendButtonMethod: () {
                 if (formKey.currentState.validate()) {
-                  setState(() {
-                    var value = {
-                      'name': 'New User',
-                      'pic': 'https://picsum.photos/200/400',
-                      'message': commentController.text
-                    };
-                    filedata.insert(0, value);
-                  });
                   _postComment(commentController.text);
                   commentController.clear();
                   FocusScope.of(context).unfocus();
@@ -168,33 +99,81 @@ class _CommentScreenState extends State<CommentScreen> {
               commentController: commentController,
               backgroundColor: backgroundC,
               textColor: Colors.white,
-              sendWidget: Icon(Icons.send_sharp, size: 30, color: Colors.white),
+              sendWidget: Icon(
+                Icons.send_sharp,
+                size: 30,
+                color: Colors.white,
+              ),
             );
-          }),
+          }
+          return CircularProgressIndicator();
+        },
+      ),
     );
-  }
-
-  void printData(var data) {
-    // print(data[0]['comment']);
   }
 }
 
-// class AddCommentBox extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       alignment: Alignment.center,
-//       color: backgroundC,
-//       child: const TextField(
-//         decoration: InputDecoration(
-//           border: InputBorder.none,
-//           hintText: 'Comment',
-//         ),
-//       ),
-//     );
-//     // GestureDetector(
-//     //   child: const Icon(Icons.send),
-//     //   onTap: () {},
-//     // )
-//   }
-// }
+class CommentStructure extends StatelessWidget {
+  final String username;
+  final String comment;
+  final int avatarIndex;
+  CommentStructure({this.username, this.comment, this.avatarIndex});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 15, bottom: 15, right: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            child: CircleAvatar(
+              backgroundColor: Colors.orange.shade50,
+              radius: 30,
+              child: Image.asset(
+                Provider.of<MahabharatCharacters>(context, listen: true)
+                    .getChosenAvatarLink(),
+                fit: BoxFit.cover,
+              ),
+            ),
+            height: 30.0,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 280,
+                padding: EdgeInsets.all(1),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      username,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
+                    ),
+                    Icon(
+                      Icons.more_vert,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                width: 280,
+                child: Text(
+                  comment,
+                  style: TextStyle(color: Colors.white),
+                  softWrap: true,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
