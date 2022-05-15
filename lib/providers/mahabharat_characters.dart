@@ -105,7 +105,5 @@ class MahabharatCharacters with ChangeNotifier {
     DBHelper.delete('avatar_index', 'id = ?', 1);
   }
 
-  String getByIndex(int index){
-    return _mahabharatCharacters[index]['link'];
-  }
+  
 }

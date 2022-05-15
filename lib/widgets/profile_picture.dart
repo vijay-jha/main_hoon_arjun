@@ -26,43 +26,21 @@ class ProfilePicture extends StatelessWidget {
   }
 }
 
-class ProfilePictureDialog extends StatefulWidget {
-  const ProfilePictureDialog({this.uid, this.index, this.username});
-  final uid;
-  final index;
+class ProfilePictureDialog extends StatelessWidget {
+  ProfilePictureDialog({this.avatarIndex, this.username});
+
+  final avatarIndex;
   final username;
 
-  @override
-  State<ProfilePictureDialog> createState() => _ProfilePictureDialogState();
-}
-
-class _ProfilePictureDialogState extends State<ProfilePictureDialog>
-    with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation<double> scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-
-    controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 700));
-    scaleAnimation =
-        CurvedAnimation(parent: controller, curve: Curves.easeInBack);
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     var _deviceSize = MediaQuery.of(context).size;
     return Center(
       child: Container(
-        height: 371,
+        height: 400,
         decoration: BoxDecoration(
             color: Colors.orange.shade50,
             borderRadius: BorderRadius.circular(30)),
@@ -73,28 +51,29 @@ class _ProfilePictureDialogState extends State<ProfilePictureDialog>
         child: Column(
           children: [
             Container(
-              height: 300,
               child: Image.asset(
                 Provider.of<MahabharatCharacters>(context, listen: true)
-                    .getByIndex(widget.index),
+                    .getCharacterImageLink(avatarIndex),
                 fit: BoxFit.fitHeight,
               ),
             ),
             Container(
               decoration: BoxDecoration(
-                  color: Colors.black26,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30))),
+                color: Colors.black26,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30)),
+              ),
               padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
               margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
               alignment: Alignment.center,
               child: Text(
-                widget.username,
+                username,
                 style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                    decoration: TextDecoration.none),
+                  fontSize: 18,
+                  color: Colors.white,
+                  decoration: TextDecoration.none,
+                ),
                 textAlign: TextAlign.center,
               ),
             )
