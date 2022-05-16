@@ -65,6 +65,10 @@ class MahabharatCharacters with ChangeNotifier {
     return _mahabharatCharacters[_currentAvatar]['name'];
   }
 
+  int getCurrentAvatarIndex() {
+    return _currentAvatar;
+  }
+
   void currentAvatar(int index) async {
     _currentAvatar = index;
     await FirebaseFirestore.instance
@@ -104,6 +108,4 @@ class MahabharatCharacters with ChangeNotifier {
   void deleteIndexFromLocal() {
     DBHelper.delete('avatar_index', 'id = ?', 1);
   }
-
-  
 }
