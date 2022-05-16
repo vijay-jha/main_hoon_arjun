@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,15 +26,14 @@ class CommentScreen extends StatefulWidget {
 
 class _CommentScreenState extends State<CommentScreen> {
   var comments;
+<<<<<<< HEAD
   bool isLiked = false;
+=======
+  List<dynamic> allUsers = [];
+>>>>>>> 811cfc08fb1fe67021789ee498f8f53131e9fcfd
 
   void _postComment(comment) async {
     final _user = FirebaseAuth.instance.currentUser;
-    var userInfo = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .get();
-    var userData = userInfo.data();
 
     final data = await FirebaseFirestore.instance
         .collection('Feed')
@@ -62,10 +62,14 @@ class _CommentScreenState extends State<CommentScreen> {
         .doc('${widget.currentShloK}_${data['count']}')
         .set({
       'createdAt': Timestamp.now(),
+<<<<<<< HEAD
       'commentID': "${widget.currentShloK}_${data['count']}",
       'user': _user.uid,
       'username': userData['username'],
       'avatarIndex': userData['avatarIndex'],
+=======
+      'useremail': _user.email,
+>>>>>>> 811cfc08fb1fe67021789ee498f8f53131e9fcfd
       'comment': comment,
     });
     //     .add({
@@ -84,24 +88,30 @@ class _CommentScreenState extends State<CommentScreen> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  final formKey = GlobalKey<FormState>();
-  final TextEditingController commentController = TextEditingController();
-
   Widget commentChild(data) {
     return ListView.builder(
+<<<<<<< HEAD
         itemBuilder: (context, index) => CommentStructure(
             isLiked: isLiked,
             handleLikes: handleLikes,
             username: data[index]['username'],
             avatarIndex: data[index]['avatarIndex'],
             comment: data[index]['comment']),
+=======
+        itemBuilder: (context, index) {
+          var commenter = allUsers.indexWhere(
+              (element) => element['email'] == data[index]['useremail']);
+          return CommentStructure(
+              username: allUsers[commenter]['username'],
+              comment: data[index]['comment'],
+              avatarIndex: allUsers[commenter]['avatarIndex']);
+        },
+>>>>>>> 811cfc08fb1fe67021789ee498f8f53131e9fcfd
         itemCount: data.length);
   }
+
+  final formKey = GlobalKey<FormState>();
+  final TextEditingController commentController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -112,39 +122,53 @@ class _CommentScreenState extends State<CommentScreen> {
         elevation: 0,
         backgroundColor: Colors.orange,
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('Feed')
-            .doc(widget.currentShloK)
-            .collection('comments')
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return CommentBox(
-              userImage: "",
-              child: commentChild(snapshot.data.docs),
-              labelText: 'Write a comment...',
-              errorText: 'Comment cannot be blank',
-              withBorder: false,
-              sendButtonMethod: () {
-                if (formKey.currentState.validate()) {
-                  _postComment(commentController.text);
-                  commentController.clear();
-                  FocusScope.of(context).unfocus();
-                }
-              },
-              formKey: formKey,
-              commentController: commentController,
-              backgroundColor: backgroundC,
-              textColor: Colors.white,
-              sendWidget: Icon(
-                Icons.send_sharp,
-                size: 30,
-                color: Colors.white,
-              ),
+      body: FutureBuilder(
+        future: FirebaseFirestore.instance.collection("users").get(),
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
             );
           }
-          return CircularProgressIndicator();
+          if (snapshot.hasData) {
+            allUsers = snapshot.data.docs.map((e) => e.data()).toList();
+            return StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('Feed')
+                  .doc(widget.currentShloK)
+                  .collection('comments')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return CommentBox(
+                    userImage: "",
+                    child: commentChild(snapshot.data.docs),
+                    labelText: 'Write a comment...',
+                    errorText: 'Comment cannot be blank',
+                    withBorder: false,
+                    sendButtonMethod: () {
+                      if (formKey.currentState.validate()) {
+                        _postComment(commentController.text);
+                        commentController.clear();
+                        FocusScope.of(context).unfocus();
+                      }
+                    },
+                    formKey: formKey,
+                    commentController: commentController,
+                    backgroundColor: backgroundC,
+                    textColor: Colors.white,
+                    sendWidget: Icon(
+                      Icons.send_sharp,
+                      size: 30,
+                      color: Colors.white,
+                    ),
+                  );
+                }
+                return CircularProgressIndicator();
+              },
+            );
+          }
+          return Container();
         },
       ),
     );
@@ -187,7 +211,7 @@ class CommentStructure extends StatelessWidget {
                 radius: 30,
                 child: Image.asset(
                   Provider.of<MahabharatCharacters>(context, listen: true)
-                      .getChosenAvatarLink(),
+                      .getCharacterImageLink(avatarIndex),
                   fit: BoxFit.cover,
                 ),
               ),
