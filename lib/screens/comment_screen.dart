@@ -26,26 +26,26 @@ class CommentScreen extends StatefulWidget {
 
 class _CommentScreenState extends State<CommentScreen> {
   var comments;
-<<<<<<< HEAD
   bool isLiked = false;
-=======
   List<dynamic> allUsers = [];
->>>>>>> 811cfc08fb1fe67021789ee498f8f53131e9fcfd
 
   void _postComment(comment) async {
     final _user = FirebaseAuth.instance.currentUser;
-
+    bool isFirst =  false;
     final data = await FirebaseFirestore.instance
         .collection('Feed')
         .doc(widget.currentShloK)
         .get();
     if (!data.exists) {
+      isFirst = true;
+      print("aiufiaubfaiubfiabfiabfi");  
       await FirebaseFirestore.instance
           .collection('Feed')
           .doc(widget.currentShloK)
           .set({
         'count': 1,
       });
+      print("----------setting count");
     } else {
       await FirebaseFirestore.instance
           .collection('Feed')
@@ -54,24 +54,19 @@ class _CommentScreenState extends State<CommentScreen> {
         'count': data['count'] + 1,
       });
     }
-
+    print("----------saving comment");
     await FirebaseFirestore.instance
         .collection('Feed')
         .doc(widget.currentShloK)
         .collection('comments')
-        .doc('${widget.currentShloK}_${data['count']}')
+        .doc( isFirst ?'${widget.currentShloK}_1' :'${widget.currentShloK}_${data['count']}' )
         .set({
+      'commentId': isFirst ?'${widget.currentShloK}_1' :'${widget.currentShloK}_${data['count']}',
       'createdAt': Timestamp.now(),
-<<<<<<< HEAD
-      'commentID': "${widget.currentShloK}_${data['count']}",
-      'user': _user.uid,
-      'username': userData['username'],
-      'avatarIndex': userData['avatarIndex'],
-=======
       'useremail': _user.email,
->>>>>>> 811cfc08fb1fe67021789ee498f8f53131e9fcfd
       'comment': comment,
     });
+    
     //     .add({
     //   'createdAt': Timestamp.now(),
     //   'commentID': "${widget.currentShloK}_${data.docs.length}",
@@ -90,23 +85,16 @@ class _CommentScreenState extends State<CommentScreen> {
 
   Widget commentChild(data) {
     return ListView.builder(
-<<<<<<< HEAD
-        itemBuilder: (context, index) => CommentStructure(
-            isLiked: isLiked,
-            handleLikes: handleLikes,
-            username: data[index]['username'],
-            avatarIndex: data[index]['avatarIndex'],
-            comment: data[index]['comment']),
-=======
         itemBuilder: (context, index) {
           var commenter = allUsers.indexWhere(
               (element) => element['email'] == data[index]['useremail']);
           return CommentStructure(
+              isLiked: isLiked,
+              handleLikes: handleLikes,
               username: allUsers[commenter]['username'],
               comment: data[index]['comment'],
               avatarIndex: allUsers[commenter]['avatarIndex']);
         },
->>>>>>> 811cfc08fb1fe67021789ee498f8f53131e9fcfd
         itemCount: data.length);
   }
 
