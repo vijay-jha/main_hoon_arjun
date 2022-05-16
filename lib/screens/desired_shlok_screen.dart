@@ -4,11 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-<<<<<<< HEAD
-import 'package:main_hoon_arjun/screens/comment_screen.dart';
-=======
 import 'package:main_hoon_arjun/providers/favorite.dart';
->>>>>>> 248b27f6e695018a2dc888bef43fcb79727a1ad3
 import 'package:main_hoon_arjun/widgets/shareImage.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';

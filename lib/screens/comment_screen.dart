@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:main_hoon_arjun/providers/mahabharat_characters.dart';
+import 'package:main_hoon_arjun/screens/homepage_screen.dart';
 import 'package:main_hoon_arjun/widgets/profile_picture.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +25,7 @@ class CommentScreen extends StatefulWidget {
 
 class _CommentScreenState extends State<CommentScreen> {
   var comments;
+  bool isLiked = false;
 
   void _postComment(comment) async {
     final _user = FirebaseAuth.instance.currentUser;
@@ -33,16 +35,52 @@ class _CommentScreenState extends State<CommentScreen> {
         .get();
     var userData = userInfo.data();
 
+    final data = await FirebaseFirestore.instance
+        .collection('Feed')
+        .doc(widget.currentShloK)
+        .get();
+    if (!data.exists) {
+      await FirebaseFirestore.instance
+          .collection('Feed')
+          .doc(widget.currentShloK)
+          .set({
+        'count': 1,
+      });
+    } else {
+      await FirebaseFirestore.instance
+          .collection('Feed')
+          .doc(widget.currentShloK)
+          .update({
+        'count': data['count'] + 1,
+      });
+    }
+
     await FirebaseFirestore.instance
         .collection('Feed')
         .doc(widget.currentShloK)
         .collection('comments')
-        .add({
+        .doc('${widget.currentShloK}_${data['count']}')
+        .set({
       'createdAt': Timestamp.now(),
+      'commentID': "${widget.currentShloK}_${data['count']}",
       'user': _user.uid,
       'username': userData['username'],
       'avatarIndex': userData['avatarIndex'],
       'comment': comment,
+    });
+    //     .add({
+    //   'createdAt': Timestamp.now(),
+    //   'commentID': "${widget.currentShloK}_${data.docs.length}",
+    //   'user': _user.uid,
+    //   'username': userData['username'],
+    //   'avatarIndex': userData['avatarIndex'],
+    //   'comment': comment,
+    // });
+  }
+
+  void handleLikes() {
+    setState(() {
+      isLiked = !isLiked;
     });
   }
 
@@ -57,6 +95,8 @@ class _CommentScreenState extends State<CommentScreen> {
   Widget commentChild(data) {
     return ListView.builder(
         itemBuilder: (context, index) => CommentStructure(
+            isLiked: isLiked,
+            handleLikes: handleLikes,
             username: data[index]['username'],
             avatarIndex: data[index]['avatarIndex'],
             comment: data[index]['comment']),
@@ -112,10 +152,17 @@ class _CommentScreenState extends State<CommentScreen> {
 }
 
 class CommentStructure extends StatelessWidget {
+  final bool isLiked;
   final String username;
   final String comment;
   final int avatarIndex;
-  CommentStructure({this.username, this.comment, this.avatarIndex});
+  final Function handleLikes;
+  CommentStructure(
+      {this.username,
+      this.comment,
+      this.avatarIndex,
+      this.handleLikes,
+      this.isLiked});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -180,6 +227,31 @@ class CommentStructure extends StatelessWidget {
                   softWrap: true,
                 ),
               ),
+              //like button
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  InkWell(
+                    onTap: handleLikes,
+                    child: Container(
+                        padding: EdgeInsets.all(0),
+                        margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
+                        child: Icon(
+                          Icons.arrow_upward_outlined,
+                          color: isLiked ? Colors.yellow : Colors.white,
+                          size: 16,
+                        )),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(0),
+                    margin: EdgeInsets.fromLTRB(0, 0, 2, 0),
+                    child: Text(
+                      "1",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ],
