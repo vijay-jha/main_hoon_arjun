@@ -5,9 +5,10 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:main_hoon_arjun/providers/mahabharat_characters.dart';
-import 'package:main_hoon_arjun/screens/homepage_screen.dart';
+// import 'package:main_hoon_arjun/screens/homepage_screen.dart';
 import 'package:main_hoon_arjun/widgets/profile_picture.dart';
 import 'package:provider/provider.dart';
 
@@ -25,59 +26,61 @@ class CommentScreen extends StatefulWidget {
 }
 
 class _CommentScreenState extends State<CommentScreen> {
+  final String currentUserId = FirebaseAuth.instance.currentUser.uid;
   var comments;
   bool isLiked = false;
   List<dynamic> allUsers = [];
+  var likesData;
+  var data;
+  Map likes;
+
+  @override
+  void initState() {
+    () async {
+      data = await FirebaseFirestore.instance
+          .collection('Feed')
+          .doc(widget.currentShloK)
+          .get();
+      if (!data.exists) {
+        await FirebaseFirestore.instance
+            .collection('Feed')
+            .doc(widget.currentShloK)
+            .set({
+          'count': 0,
+        });
+        // print("----------setting count");
+      }
+    }();
+    super.initState();
+  }
 
   void _postComment(comment) async {
     final _user = FirebaseAuth.instance.currentUser;
-    bool isFirst =  false;
-    final data = await FirebaseFirestore.instance
+    data = await FirebaseFirestore.instance
         .collection('Feed')
         .doc(widget.currentShloK)
         .get();
-    if (!data.exists) {
-      isFirst = true;
-      print("aiufiaubfaiubfiabfiabfi");  
-      await FirebaseFirestore.instance
-          .collection('Feed')
-          .doc(widget.currentShloK)
-          .set({
-        'count': 1,
-      });
-      print("----------setting count");
-    } else {
-      await FirebaseFirestore.instance
-          .collection('Feed')
-          .doc(widget.currentShloK)
-          .update({
-        'count': data['count'] + 1,
-      });
-    }
-    print("----------saving comment");
+    
     await FirebaseFirestore.instance
         .collection('Feed')
         .doc(widget.currentShloK)
         .collection('comments')
-        .doc( isFirst ?'${widget.currentShloK}_1' :'${widget.currentShloK}_${data['count']}' )
+        .doc( '${widget.currentShloK}_${data['count']+1}')
         .set({
-      'commentId': isFirst ?'${widget.currentShloK}_1' :'${widget.currentShloK}_${data['count']}',
+      'commentId':  '${widget.currentShloK}_${data['count']+1}',
       'createdAt': Timestamp.now(),
       'useremail': _user.email,
       'comment': comment,
     });
-    
-    //     .add({
-    //   'createdAt': Timestamp.now(),
-    //   'commentID': "${widget.currentShloK}_${data.docs.length}",
-    //   'user': _user.uid,
-    //   'username': userData['username'],
-    //   'avatarIndex': userData['avatarIndex'],
-    //   'comment': comment,
-    // });
+
+    await FirebaseFirestore.instance
+        .collection('Feed')
+        .doc(widget.currentShloK).set({
+          'count' : data['count']+1
+        });
   }
 
-  void handleLikes() {
+  void handleLikes(commentId) async {
     setState(() {
       isLiked = !isLiked;
     });
@@ -89,6 +92,7 @@ class _CommentScreenState extends State<CommentScreen> {
           var commenter = allUsers.indexWhere(
               (element) => element['email'] == data[index]['useremail']);
           return CommentStructure(
+              commentId: data[index]['commentId'],
               isLiked: isLiked,
               handleLikes: handleLikes,
               username: allUsers[commenter]['username'],
@@ -164,6 +168,7 @@ class _CommentScreenState extends State<CommentScreen> {
 }
 
 class CommentStructure extends StatelessWidget {
+  final String commentId;
   final bool isLiked;
   final String username;
   final String comment;
@@ -171,12 +176,14 @@ class CommentStructure extends StatelessWidget {
   final Function handleLikes;
   CommentStructure(
       {this.username,
+      this.commentId,
       this.comment,
       this.avatarIndex,
       this.handleLikes,
       this.isLiked});
   @override
   Widget build(BuildContext context) {
+    print(commentId);
     return Container(
       margin: EdgeInsets.only(top: 15, bottom: 15, right: 10),
       child: Row(
@@ -244,7 +251,7 @@ class CommentStructure extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   InkWell(
-                    onTap: handleLikes,
+                    onTap: () => handleLikes(commentId),
                     child: Container(
                         padding: EdgeInsets.all(0),
                         margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
