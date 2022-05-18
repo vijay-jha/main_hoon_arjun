@@ -232,6 +232,48 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: _deviceSize.height * 0.03,
+              ),
+              TranslationCard(
+                currentShlok: currentShlok,
+                shlokNo: shlokNo,
+                chapterNo: chapterNo,
+              ),
+                // //comment button
+              // GestureDetector(
+              //   onTap: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => CommentScreen(
+              //           currentShloK: currentShlok,
+              //         ),
+              //       ),
+              //     );
+              //   },
+              //   child: Container(
+              //     decoration: BoxDecoration(
+              //        color: Colors.orange[100],
+              //       // border: Border.all(
+              //       //   color: Colors.orange,
+              //       // ),
+              //       borderRadius: BorderRadius.circular(10),
+              //     ),
+              //     margin: const EdgeInsets.fromLTRB(35, 5, 35, 50),
+              //     padding: EdgeInsets.symmetric(vertical: 6),
+              //     width: double.infinity,
+              //     child: Center(
+              //         child: Text(
+              //       'View thoughts..',
+              //       style:  TextStyle(
+              //         color: Colors.orange,
+              //         fontWeight: FontWeight.w600,
+              //         fontSize: 18),
+              //     )),
+              //   ),
+              // )
+             
             ],
           ),
           floatingActionButton: ElevatedButton(
