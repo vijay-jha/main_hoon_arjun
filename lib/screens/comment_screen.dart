@@ -88,7 +88,7 @@ class _CommentScreenState extends State<CommentScreen> {
               withBorder: false,
               sendButtonMethod: () {
                 if (formKey.currentState.validate()) {
-                  _postComment(commentController.text);
+                  _postComment(commentController.text.trim());
                   commentController.clear();
                   FocusScope.of(context).unfocus();
                 }
@@ -129,7 +129,7 @@ class CommentStructure extends StatelessWidget {
               radius: 30,
               child: Image.asset(
                 Provider.of<MahabharatCharacters>(context, listen: true)
-                    .getChosenAvatarLink(),
+                    .getCharacterImageLink(avatarIndex),
                 fit: BoxFit.cover,
               ),
             ),
