@@ -85,7 +85,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   child: Column(
                     children: [
-
                       choice(context, 'Username', snapshot, _deviceSize),
                       Divider(height: 1),
                       choice(context, 'Avatar', snapshot, _deviceSize),

@@ -1,11 +1,6 @@
 // ignore_for_file: prefer_const_constructors
-
-import 'dart:convert';
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:main_hoon_arjun/providers/mahabharat_characters.dart';
 // import 'package:main_hoon_arjun/screens/homepage_screen.dart';
@@ -41,6 +36,7 @@ class _CommentScreenState extends State<CommentScreen> {
           .collection('Feed')
           .doc(widget.currentShloK)
           .get();
+
       if (!data.exists) {
         await FirebaseFirestore.instance
             .collection('Feed')
@@ -48,7 +44,6 @@ class _CommentScreenState extends State<CommentScreen> {
             .set({
           'count': 0,
         });
-        // print("----------setting count");
       }
     }();
     super.initState();
@@ -60,14 +55,14 @@ class _CommentScreenState extends State<CommentScreen> {
         .collection('Feed')
         .doc(widget.currentShloK)
         .get();
-    
+
     await FirebaseFirestore.instance
         .collection('Feed')
         .doc(widget.currentShloK)
         .collection('comments')
-        .doc( '${widget.currentShloK}_${data['count']+1}')
+        .doc('${widget.currentShloK}_${data['count'] + 1}')
         .set({
-      'commentId':  '${widget.currentShloK}_${data['count']+1}',
+      'commentId': '${widget.currentShloK}_${data['count'] + 1}',
       'createdAt': Timestamp.now(),
       'useremail': _user.email,
       'comment': comment,
@@ -75,15 +70,15 @@ class _CommentScreenState extends State<CommentScreen> {
 
     await FirebaseFirestore.instance
         .collection('Feed')
-        .doc(widget.currentShloK).set({
-          'count' : data['count']+1
-        });
+        .doc(widget.currentShloK)
+        .set({'count': data['count'] + 1});
   }
 
   void handleLikes(commentId) async {
     setState(() {
       isLiked = !isLiked;
     });
+    // isLiked = !isLiked;
   }
 
   Widget commentChild(data) {
@@ -92,6 +87,8 @@ class _CommentScreenState extends State<CommentScreen> {
           var commenter = allUsers.indexWhere(
               (element) => element['email'] == data[index]['useremail']);
           return CommentStructure(
+              currentShlok: widget.currentShloK,
+              email: data[index]['useremail'],
               commentId: data[index]['commentId'],
               isLiked: isLiked,
               handleLikes: handleLikes,
@@ -140,7 +137,7 @@ class _CommentScreenState extends State<CommentScreen> {
                     withBorder: false,
                     sendButtonMethod: () {
                       if (formKey.currentState.validate()) {
-                        _postComment(commentController.text);
+                        _postComment(commentController.text.trim());
                         commentController.clear();
                         FocusScope.of(context).unfocus();
                       }
@@ -174,17 +171,26 @@ class CommentStructure extends StatelessWidget {
   final String comment;
   final int avatarIndex;
   final Function handleLikes;
-  CommentStructure(
-      {this.username,
-      this.commentId,
-      this.comment,
-      this.avatarIndex,
-      this.handleLikes,
-      this.isLiked});
+  final email;
+  final String currentShlok;
+  final _user = FirebaseAuth.instance.currentUser;
+
+  CommentStructure({
+    this.currentShlok,
+    this.email,
+    this.username,
+    this.commentId,
+    this.comment,
+    this.avatarIndex,
+    this.handleLikes,
+    this.isLiked,
+  });
+
   @override
   Widget build(BuildContext context) {
     print(commentId);
     return Container(
+      padding: EdgeInsets.only(bottom: 15),
       margin: EdgeInsets.only(top: 15, bottom: 15, right: 10),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,10 +236,83 @@ class CommentStructure extends StatelessWidget {
                         fontSize: 13,
                       ),
                     ),
-                    Icon(
-                      Icons.more_vert,
-                      color: Colors.white,
-                      size: 20,
+                    PopupMenuButton(
+                      color: Colors.black12,
+                      icon: Icon(
+                        Icons.more_vert,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      itemBuilder: (context) => [
+                        _user.email == email
+                            ? PopupMenuItem(
+                                value: 'delete',
+                                child: Text(
+                                  'Delete',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              )
+                            : PopupMenuItem(
+                                value: 'report',
+                                child: Text(
+                                  'Report',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              )
+                      ],
+                      onSelected: (item) async {
+                        if (item == 'delete') {
+                          if (_user.email == email) {
+                            showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                backgroundColor: Colors.orange.shade50,
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: const [
+                                    Text("Delete Comment"),
+                                    Divider(
+                                      thickness: 1,
+                                    ),
+                                  ],
+                                ),
+                                content: Text(
+                                    "Do you really want to delete your comment?"),
+                                actions: [
+                                  OutlinedButton(
+                                      onPressed: () async {
+                                        await Future.delayed(
+                                            Duration(milliseconds: 200));
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("Cancel")),
+                                  OutlinedButton(
+                                      onPressed: () async {
+                                        await Future.delayed(
+                                            Duration(milliseconds: 200));
+                                        // Deleting Comment
+                                        FirebaseFirestore.instance
+                                            .collection('Feed')
+                                            .doc(currentShlok)
+                                            .collection('comments')
+                                            .doc(commentId)
+                                            .delete();
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("Delete")),
+                                ],
+                              ),
+                            );
+                          }
+                        } else {
+                          await FirebaseFirestore.instance
+                              .collection('reported_comments')
+                              .doc(currentShlok)
+                              .set({
+                            'comment-id': FieldValue.arrayUnion([commentId])
+                          }, SetOptions(merge: true));
+                        }
+                      },
                     ),
                   ],
                 ),
