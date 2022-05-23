@@ -27,12 +27,9 @@ class CommentScreen extends StatefulWidget {
 
 class _CommentScreenState extends State<CommentScreen> {
   final String currentUserId = FirebaseAuth.instance.currentUser.uid;
-  var comments;
   bool isLiked = false;
   List<dynamic> allUsers = [];
-  var likesData;
   var data;
-  Map likes;
 
   @override
   void initState() {
@@ -60,30 +57,24 @@ class _CommentScreenState extends State<CommentScreen> {
         .collection('Feed')
         .doc(widget.currentShloK)
         .get();
-    
+
     await FirebaseFirestore.instance
         .collection('Feed')
         .doc(widget.currentShloK)
         .collection('comments')
-        .doc( '${widget.currentShloK}_${data['count']+1}')
+        .doc('${widget.currentShloK}_${data['count'] + 1}')
         .set({
-      'commentId':  '${widget.currentShloK}_${data['count']+1}',
+      'commentId': '${widget.currentShloK}_${data['count'] + 1}',
       'createdAt': Timestamp.now(),
       'useremail': _user.email,
+      'likes': [],
       'comment': comment,
     });
 
     await FirebaseFirestore.instance
         .collection('Feed')
-        .doc(widget.currentShloK).set({
-          'count' : data['count']+1
-        });
-  }
-
-  void handleLikes(commentId) async {
-    setState(() {
-      isLiked = !isLiked;
-    });
+        .doc(widget.currentShloK)
+        .set({'count': data['count'] + 1});
   }
 
   Widget commentChild(data) {
@@ -92,9 +83,10 @@ class _CommentScreenState extends State<CommentScreen> {
           var commenter = allUsers.indexWhere(
               (element) => element['email'] == data[index]['useremail']);
           return CommentStructure(
+              userId: currentUserId,
+              likesData: data[index]['likes'],
               commentId: data[index]['commentId'],
               isLiked: isLiked,
-              handleLikes: handleLikes,
               username: allUsers[commenter]['username'],
               comment: data[index]['comment'],
               avatarIndex: allUsers[commenter]['avatarIndex']);
@@ -167,23 +159,53 @@ class _CommentScreenState extends State<CommentScreen> {
   }
 }
 
-class CommentStructure extends StatelessWidget {
+class CommentStructure extends StatefulWidget {
   final String commentId;
-  final bool isLiked;
+  bool isLiked;
   final String username;
   final String comment;
   final int avatarIndex;
-  final Function handleLikes;
+  final String userId;
+  final likesData;
+
   CommentStructure(
       {this.username,
+      this.userId,
+      this.likesData,
       this.commentId,
       this.comment,
       this.avatarIndex,
-      this.handleLikes,
       this.isLiked});
+
+  @override
+  State<CommentStructure> createState() => _CommentStructureState();
+}
+
+class _CommentStructureState extends State<CommentStructure> {
+  void handleLikes(commentId, userId) async {
+    var data = await FirebaseFirestore.instance
+        .collection('Feed')
+        .doc(widget.commentId.replaceRange(17, widget.commentId.length, ""))
+        .collection('comments')
+        .doc(commentId)
+        .get();
+    var likes = data.data()['likes'];
+    // likes.add(userId);
+    // print(likes);
+    if (!likes.contains(userId)) {
+      likes.add(userId);
+      print(likes);
+      FirebaseFirestore.instance
+          .collection('Feed')
+          .doc(widget.commentId.replaceRange(17, widget.commentId.length, ""))
+          .collection('comments')
+          .doc(commentId)
+          .set({'likes' : likes});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(commentId);
     return Container(
       margin: EdgeInsets.only(top: 15, bottom: 15, right: 10),
       child: Row(
@@ -196,8 +218,8 @@ class CommentStructure extends StatelessWidget {
                     context: context,
                     builder: (ctx) {
                       return ProfilePictureDialog(
-                        avatarIndex: avatarIndex,
-                        username: username,
+                        avatarIndex: widget.avatarIndex,
+                        username: widget.username,
                       );
                     });
               },
@@ -206,7 +228,7 @@ class CommentStructure extends StatelessWidget {
                 radius: 30,
                 child: Image.asset(
                   Provider.of<MahabharatCharacters>(context, listen: true)
-                      .getCharacterImageLink(avatarIndex),
+                      .getCharacterImageLink(widget.avatarIndex),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -223,7 +245,7 @@ class CommentStructure extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      username,
+                      widget.username,
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -241,35 +263,42 @@ class CommentStructure extends StatelessWidget {
               Container(
                 width: 280,
                 child: Text(
-                  comment,
+                  widget.comment,
                   style: TextStyle(color: Colors.white),
                   softWrap: true,
                 ),
               ),
               //like button
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  InkWell(
-                    onTap: () => handleLikes(commentId),
-                    child: Container(
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    widget.isLiked = !widget.isLiked;
+                  });
+                  handleLikes(widget.commentId, widget.userId);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
                         padding: EdgeInsets.all(0),
                         margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
                         child: Icon(
                           Icons.arrow_upward_outlined,
-                          color: isLiked ? Colors.yellow : Colors.white,
+                          color: widget.isLiked ? Colors.yellow : Colors.white,
                           size: 16,
                         )),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(0),
-                    margin: EdgeInsets.fromLTRB(0, 0, 2, 0),
-                    child: Text(
-                      "1",
-                      style: TextStyle(color: Colors.white),
+                    Container(
+                      padding: EdgeInsets.all(0),
+                      margin: EdgeInsets.fromLTRB(0, 0, 2, 0),
+                      child: Text(
+                        widget.likesData.length.compareTo(0) == 0
+                            ? " "
+                            : widget.likesData.length.toString(),
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               )
             ],
           ),
