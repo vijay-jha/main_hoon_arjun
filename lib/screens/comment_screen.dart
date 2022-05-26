@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -184,23 +185,30 @@ class _CommentStructureState extends State<CommentStructure> {
         .doc(commentId)
         .get();
     var likes = data.data()['likes'];
-    // likes.add(userId);
-    // print(likes);
     if (!likes.contains(userId)) {
-      likes.add(userId);
-      print(likes);
       FirebaseFirestore.instance
           .collection('Feed')
           .doc(widget.commentId.replaceRange(17, widget.commentId.length, ""))
           .collection('comments')
           .doc(commentId)
-          .set({'likes' : likes});
+          .set({
+        'likes': FieldValue.arrayUnion([userId])
+      }, SetOptions(merge: true));
+    }else{
+      FirebaseFirestore.instance
+          .collection('Feed')
+          .doc(widget.commentId.replaceRange(17, widget.commentId.length, ""))
+          .collection('comments')
+          .doc(commentId)
+          .set({
+        'likes': FieldValue.arrayRemove([userId])
+      }, SetOptions(merge: true));
     }
   }
-  
   var _user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
+    widget.isLiked = widget.likesData.contains(_user.uid);
     return Container(
       padding: EdgeInsets.only(bottom: 15),
       margin: EdgeInsets.only(top: 15, bottom: 15, right: 10),
@@ -235,10 +243,12 @@ class _CommentStructureState extends State<CommentStructure> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
+                 // decoration: BoxDecoration(border: Border.all(color: Colors.white)),
                 width: 280,
                 padding: EdgeInsets.all(1),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       widget.username,
@@ -248,83 +258,94 @@ class _CommentStructureState extends State<CommentStructure> {
                         fontSize: 13,
                       ),
                     ),
-                    PopupMenuButton(
-                      color: Colors.black12,
-                      icon: Icon(
-                        Icons.more_vert,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                      itemBuilder: (context) => [
-                         _user.email == widget.email
-                            ? PopupMenuItem(
-                                value: 'delete',
-                                child: Text(
-                                  'Delete',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              )
-                            : PopupMenuItem(
-                                value: 'report',
-                                child: Text(
-                                  'Report',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              )
-                      ],
-                      onSelected: (item) async {
-                        if (item == 'delete') {
-                          if (_user.email == widget.email) {
-                            showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                backgroundColor: Colors.orange.shade50,
-                                title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
-                                    Text("Delete Comment"),
-                                    Divider(
-                                      thickness: 1,
-                                    ),
+                    Container(
+                      height: 25,
+                      // decoration: BoxDecoration(border: Border.all(color: Colors.white)),
+                      child: PopupMenuButton(
+                        color: Colors.black12,
+                        icon: Icon(
+                          Icons.more_vert,
+                          color: Colors.white,
+                          size: 18, 
+                        ),
+                        itemBuilder: (context) => [
+                          _user.email == widget.email
+                              ? PopupMenuItem(
+                                  value: 'delete',
+                                  child: Text(
+                                    'Delete',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                )
+                              : PopupMenuItem(
+                                  value: 'report',
+                                  child: Text(
+                                    'Report',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                )
+                        ],
+                        onSelected: (item) async {
+                          if (item == 'delete') {
+                            if (_user.email == widget.email) {
+                              showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  backgroundColor: Colors.orange.shade50,
+                                  title: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: const [
+                                      Text("Delete Comment"),
+                                      Divider(
+                                        thickness: 1,
+                                      ),
+                                    ],
+                                  ),
+                                  content: Text(
+                                      "Do you really want to delete your comment?"),
+                                  actions: [
+                                    OutlinedButton(
+                                        onPressed: () async {
+                                          await Future.delayed(
+                                              Duration(milliseconds: 200));
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text("Cancel")),
+                                    OutlinedButton(
+                                        onPressed: () async {
+                                          await Future.delayed(
+                                              Duration(milliseconds: 200));
+                                          // Deleting Comment
+                                          FirebaseFirestore.instance
+                                              .collection('Feed')
+                                              .doc(widget.commentId
+                                                  .replaceRange(
+                                                      17,
+                                                      widget.commentId.length,
+                                                      ""))
+                                              .collection('comments')
+                                              .doc(widget.commentId)
+                                              .delete();
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text("Delete")),
                                   ],
                                 ),
-                                content: Text(
-                                    "Do you really want to delete your comment?"),
-                                actions: [
-                                  OutlinedButton(
-                                      onPressed: () async {
-                                        await Future.delayed(
-                                            Duration(milliseconds: 200));
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text("Cancel")),
-                                  OutlinedButton(
-                                      onPressed: () async {
-                                        await Future.delayed(
-                                            Duration(milliseconds: 200));
-                                        // Deleting Comment
-                                        FirebaseFirestore.instance
-                                            .collection('Feed')
-                                            .doc(widget.commentId.replaceRange(17, widget.commentId.length, ""))
-                                            .collection('comments')
-                                            .doc(widget.commentId)
-                                            .delete();
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text("Delete")),
-                                ],
-                              ),
-                            );
+                              );
+                            }
+                          } else {
+                            await FirebaseFirestore.instance
+                                .collection('reported_comments')
+                                .doc(widget.commentId.replaceRange(
+                                    17, widget.commentId.length, ""))
+                                .set({
+                              'comment-id':
+                                  FieldValue.arrayUnion([widget.commentId])
+                            }, SetOptions(merge: true));
                           }
-                        } else {
-                          await FirebaseFirestore.instance
-                              .collection('reported_comments')
-                              .doc(widget.commentId.replaceRange(17, widget.commentId.length, ""))
-                              .set({
-                            'comment-id': FieldValue.arrayUnion([widget.commentId])
-                          }, SetOptions(merge: true));
-                        }
-                      },
+                        },
+                      ),
                     ),
                   ],
                 ),
