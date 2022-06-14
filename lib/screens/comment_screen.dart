@@ -105,7 +105,7 @@ class _CommentScreenState extends State<CommentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
         title: const Text('Comments'),
         elevation: 0,
@@ -190,8 +190,9 @@ class CommentStructure extends StatelessWidget {
   Widget build(BuildContext context) {
     print(commentId);
     return Container(
-      padding: EdgeInsets.only(bottom: 15),
-      margin: EdgeInsets.only(top: 15, bottom: 15, right: 10),
+      color: Colors.blue,
+      padding: EdgeInsets.only(bottom: 15, top: 15),
+      margin: EdgeInsets.only(top: 15, bottom: 15),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
