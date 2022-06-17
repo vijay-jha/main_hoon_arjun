@@ -11,6 +11,7 @@ class ShlokFeedCard extends StatelessWidget {
       "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।\nमा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥";
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -94,8 +95,11 @@ class ShlokFeedCard extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CommentScreen(
-                                currentShloK: 'Chapter03_Shlok09')),
+                          builder: (context) => CommentScreen(
+                            currentShloK: 'Chapter03_Shlok09',
+                            size: _deviceSize,
+                          ),
+                        ),
                       );
                     },
                     icon: const Icon(

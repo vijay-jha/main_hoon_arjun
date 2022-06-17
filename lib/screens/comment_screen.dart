@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,27 +8,23 @@ import 'package:main_hoon_arjun/providers/mahabharat_characters.dart';
 import 'package:main_hoon_arjun/widgets/profile_picture.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/comment.dart';
-import '../constants.dart';
+import '../widgets/comment_box.dart';
 
 class CommentScreen extends StatefulWidget {
   static const routeName = '/comment-screen';
   final currentShloK;
+  final Size size;
 
   // ignore: use_key_in_widget_constructors
-  const CommentScreen({this.currentShloK});
+  const CommentScreen({this.currentShloK, this.size});
   @override
   State<CommentScreen> createState() => _CommentScreenState();
 }
 
 class _CommentScreenState extends State<CommentScreen> {
-  final String currentUserId = FirebaseAuth.instance.currentUser.uid;
-  var comments;
   bool isLiked = false;
   List<dynamic> allUsers = [];
-  var likesData;
   var data;
-  Map likes;
 
   @override
   void initState() {
@@ -65,6 +62,7 @@ class _CommentScreenState extends State<CommentScreen> {
       'commentId': '${widget.currentShloK}_${data['count'] + 1}',
       'createdAt': Timestamp.now(),
       'useremail': _user.email,
+      'likes': [],
       'comment': comment,
     });
 
@@ -74,24 +72,17 @@ class _CommentScreenState extends State<CommentScreen> {
         .set({'count': data['count'] + 1});
   }
 
-  void handleLikes(commentId) async {
-    setState(() {
-      isLiked = !isLiked;
-    });
-    // isLiked = !isLiked;
-  }
-
   Widget commentChild(data) {
     return ListView.builder(
         itemBuilder: (context, index) {
           var commenter = allUsers.indexWhere(
               (element) => element['email'] == data[index]['useremail']);
           return CommentStructure(
-              currentShlok: widget.currentShloK,
+              size: widget.size,
+              likesData: data[index]['likes'],
               email: data[index]['useremail'],
               commentId: data[index]['commentId'],
               isLiked: isLiked,
-              handleLikes: handleLikes,
               username: allUsers[commenter]['username'],
               comment: data[index]['comment'],
               avatarIndex: allUsers[commenter]['avatarIndex']);
@@ -144,16 +135,18 @@ class _CommentScreenState extends State<CommentScreen> {
                     },
                     formKey: formKey,
                     commentController: commentController,
-                    backgroundColor: backgroundC,
+                    backgroundColor: Colors.orange,
                     textColor: Colors.white,
                     sendWidget: Icon(
                       Icons.send_sharp,
-                      size: 30,
+                      size: widget.size.height * 0.035,
                       color: Colors.white,
                     ),
                   );
                 }
-                return CircularProgressIndicator();
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
               },
             );
           }
@@ -164,35 +157,85 @@ class _CommentScreenState extends State<CommentScreen> {
   }
 }
 
-class CommentStructure extends StatelessWidget {
+class CommentStructure extends StatefulWidget {
   final String commentId;
-  final bool isLiked;
+  bool isLiked;
   final String username;
   final String comment;
   final int avatarIndex;
-  final Function handleLikes;
-  final email;
-  final String currentShlok;
-  final _user = FirebaseAuth.instance.currentUser;
+  final String email;
+  final likesData;
+  final size;
 
   CommentStructure({
-    this.currentShlok,
-    this.email,
+    this.size,
     this.username,
+    this.email,
+    this.likesData,
     this.commentId,
     this.comment,
     this.avatarIndex,
-    this.handleLikes,
     this.isLiked,
   });
 
   @override
+  State<CommentStructure> createState() => _CommentStructureState();
+}
+
+class _CommentStructureState extends State<CommentStructure> {
+  void handleLikes(commentId, userId) async {
+    var data = await FirebaseFirestore.instance
+        .collection('Feed')
+        .doc(widget.commentId.replaceRange(17, widget.commentId.length, ""))
+        .collection('comments')
+        .doc(commentId)
+        .get();
+    var likes = data.data()['likes'];
+    if (!likes.contains(userId)) {
+      FirebaseFirestore.instance
+          .collection('Feed')
+          .doc(widget.commentId.replaceRange(17, widget.commentId.length, ""))
+          .collection('comments')
+          .doc(commentId)
+          .set({
+        'likes': FieldValue.arrayUnion([userId])
+      }, SetOptions(merge: true));
+    } else {
+      FirebaseFirestore.instance
+          .collection('Feed')
+          .doc(widget.commentId.replaceRange(17, widget.commentId.length, ""))
+          .collection('comments')
+          .doc(commentId)
+          .set({
+        'likes': FieldValue.arrayRemove([userId])
+      }, SetOptions(merge: true));
+    }
+  }
+
+  var _user = FirebaseAuth.instance.currentUser;
+  @override
   Widget build(BuildContext context) {
-    print(commentId);
+    widget.isLiked = widget.likesData.contains(_user.uid);
     return Container(
-      color: Colors.blue,
-      padding: EdgeInsets.only(bottom: 15, top: 15),
-      margin: EdgeInsets.only(top: 15, bottom: 15),
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 2,
+          color: Colors.orange.shade400,
+        ),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.grey,
+            offset: Offset(0.0, 1.0), //(x,y)
+            blurRadius: 7.0,
+          ),
+        ],
+        color: Colors.orange.shade100,
+      ),
+      padding: EdgeInsets.only(
+        bottom: widget.size.height * 0.02,
+        top: widget.size.height * 0.02,
+      ),
+      margin: EdgeInsets.only(bottom: widget.size.height * 0.02),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -203,8 +246,8 @@ class CommentStructure extends StatelessWidget {
                     context: context,
                     builder: (ctx) {
                       return ProfilePictureDialog(
-                        avatarIndex: avatarIndex,
-                        username: username,
+                        avatarIndex: widget.avatarIndex,
+                        username: widget.username,
                       );
                     });
               },
@@ -213,143 +256,173 @@ class CommentStructure extends StatelessWidget {
                 radius: 30,
                 child: Image.asset(
                   Provider.of<MahabharatCharacters>(context, listen: true)
-                      .getCharacterImageLink(avatarIndex),
+                      .getCharacterImageLink(widget.avatarIndex),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            height: 30.0,
+            height: widget.size.height * 0.05,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 280,
+                // decoration: BoxDecoration(border: Border.all(color: Colors.white)),
+                width: widget.size.width * 0.8,
                 padding: EdgeInsets.all(1),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      username,
+                      widget.username,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.orange,
                         fontWeight: FontWeight.bold,
-                        fontSize: 13,
+                        fontSize: 15,
                       ),
                     ),
-                    PopupMenuButton(
-                      color: Colors.black12,
-                      icon: Icon(
-                        Icons.more_vert,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                      itemBuilder: (context) => [
-                        _user.email == email
-                            ? PopupMenuItem(
-                                value: 'delete',
-                                child: Text(
-                                  'Delete',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              )
-                            : PopupMenuItem(
-                                value: 'report',
-                                child: Text(
-                                  'Report',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              )
-                      ],
-                      onSelected: (item) async {
-                        if (item == 'delete') {
-                          if (_user.email == email) {
-                            showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                backgroundColor: Colors.orange.shade50,
-                                title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
-                                    Text("Delete Comment"),
-                                    Divider(
-                                      thickness: 1,
-                                    ),
+                    Container(
+                      height: widget.size.height * 0.035,
+                      child: PopupMenuButton(
+                        color: Colors.orange.shade400,
+                        padding: EdgeInsets.all(0.0),
+                        icon: Icon(
+                          Icons.more_vert,
+                          color: Colors.orange,
+                          size: widget.size.height * 0.025,
+                        ),
+                        itemBuilder: (context) => [
+                          _user.email == widget.email
+                              ? PopupMenuItem(
+                                  height: widget.size.height * 0.03,
+                                  value: 'delete',
+                                  child: Text(
+                                    'Delete',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                )
+                              : PopupMenuItem(
+                                  height: widget.size.height * 0.03,
+                                  value: 'report',
+                                  child: Text(
+                                    'Report',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                )
+                        ],
+                        onSelected: (item) async {
+                          if (item == 'delete') {
+                            if (_user.email == widget.email) {
+                              showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  backgroundColor: Colors.orange.shade50,
+                                  title: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: const [
+                                      Text("Delete Comment"),
+                                      Divider(
+                                        thickness: 1,
+                                      ),
+                                    ],
+                                  ),
+                                  content: Text(
+                                      "Do you really want to delete your comment?"),
+                                  actions: [
+                                    OutlinedButton(
+                                        onPressed: () async {
+                                          await Future.delayed(
+                                              Duration(milliseconds: 200));
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text("Cancel")),
+                                    OutlinedButton(
+                                        onPressed: () async {
+                                          await Future.delayed(
+                                              Duration(milliseconds: 200));
+                                          // Deleting Comment
+                                          FirebaseFirestore.instance
+                                              .collection('Feed')
+                                              .doc(widget.commentId
+                                                  .replaceRange(
+                                                      17,
+                                                      widget.commentId.length,
+                                                      ""))
+                                              .collection('comments')
+                                              .doc(widget.commentId)
+                                              .delete();
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text("Delete")),
                                   ],
                                 ),
-                                content: Text(
-                                    "Do you really want to delete your comment?"),
-                                actions: [
-                                  OutlinedButton(
-                                      onPressed: () async {
-                                        await Future.delayed(
-                                            Duration(milliseconds: 200));
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text("Cancel")),
-                                  OutlinedButton(
-                                      onPressed: () async {
-                                        await Future.delayed(
-                                            Duration(milliseconds: 200));
-                                        // Deleting Comment
-                                        FirebaseFirestore.instance
-                                            .collection('Feed')
-                                            .doc(currentShlok)
-                                            .collection('comments')
-                                            .doc(commentId)
-                                            .delete();
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text("Delete")),
-                                ],
-                              ),
-                            );
+                              );
+                            }
+                          } else {
+                            await FirebaseFirestore.instance
+                                .collection('reported_comments')
+                                .doc(widget.commentId.replaceRange(
+                                    17, widget.commentId.length, ""))
+                                .set({
+                              'comment-id':
+                                  FieldValue.arrayUnion([widget.commentId])
+                            }, SetOptions(merge: true));
                           }
-                        } else {
-                          await FirebaseFirestore.instance
-                              .collection('reported_comments')
-                              .doc(currentShlok)
-                              .set({
-                            'comment-id': FieldValue.arrayUnion([commentId])
-                          }, SetOptions(merge: true));
-                        }
-                      },
+                        },
+                      ),
                     ),
                   ],
                 ),
               ),
               Container(
-                width: 280,
+                width: widget.size.width * 0.8,
                 child: Text(
-                  comment,
-                  style: TextStyle(color: Colors.white),
+                  widget.comment,
+                  style: TextStyle(color: Colors.orange, fontSize: 15),
                   softWrap: true,
                 ),
               ),
               //like button
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  InkWell(
-                    onTap: () => handleLikes(commentId),
-                    child: Container(
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    widget.isLiked = !widget.isLiked;
+                  });
+                  handleLikes(widget.commentId, _user.uid);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
                         padding: EdgeInsets.all(0),
-                        margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
+                        margin: EdgeInsets.only(
+                          top: widget.size.height * 0.01,
+                          right: widget.size.width * 0.05,
+                        ),
                         child: Icon(
-                          Icons.arrow_upward_outlined,
-                          color: isLiked ? Colors.yellow : Colors.white,
-                          size: 16,
+                          widget.isLiked
+                              ? Icons.thumb_up
+                              : Icons.thumb_up_alt_outlined,
+                          // color: widget.isLiked ? Colors.yellow : Colors.orange,
+                          color: Colors.orange,
+                          size: widget.size.height * 0.02,
                         )),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(0),
-                    margin: EdgeInsets.fromLTRB(0, 0, 2, 0),
-                    child: Text(
-                      "1",
-                      style: TextStyle(color: Colors.white),
+                    Container(
+                      padding: EdgeInsets.all(0),
+                      margin: EdgeInsets.only(
+                        top: widget.size.height * 0.01,
+                      ),
+                      child: Text(
+                        widget.likesData.length.compareTo(0) == 0
+                            ? " "
+                            : widget.likesData.length.toString(),
+                        style: TextStyle(color: Colors.orange),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               )
             ],
           ),
