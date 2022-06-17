@@ -36,17 +36,15 @@ class CommentBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _deviceSize = MediaQuery.of(context).size;
     return Column(
       children: [
         Expanded(child: child),
-        Divider(
-          height: 1,
-        ),
         header ?? SizedBox.shrink(),
         ListTile(
           tileColor: backgroundColor,
           leading: Container(
-            height: 40.0,
+            height: _deviceSize.height * 0.05, // 40
             child: ProfilePicture(),
           ),
           title: Form(

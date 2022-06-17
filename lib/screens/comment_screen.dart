@@ -8,15 +8,15 @@ import 'package:main_hoon_arjun/providers/mahabharat_characters.dart';
 import 'package:main_hoon_arjun/widgets/profile_picture.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/comment.dart';
-import '../constants.dart';
+import '../widgets/comment_box.dart';
 
 class CommentScreen extends StatefulWidget {
   static const routeName = '/comment-screen';
   final currentShloK;
+  final Size size;
 
   // ignore: use_key_in_widget_constructors
-  const CommentScreen({this.currentShloK});
+  const CommentScreen({this.currentShloK, this.size});
   @override
   State<CommentScreen> createState() => _CommentScreenState();
 }
@@ -78,6 +78,7 @@ class _CommentScreenState extends State<CommentScreen> {
           var commenter = allUsers.indexWhere(
               (element) => element['email'] == data[index]['useremail']);
           return CommentStructure(
+              size: widget.size,
               likesData: data[index]['likes'],
               email: data[index]['useremail'],
               commentId: data[index]['commentId'],
@@ -95,7 +96,7 @@ class _CommentScreenState extends State<CommentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
         title: const Text('Comments'),
         elevation: 0,
@@ -134,16 +135,18 @@ class _CommentScreenState extends State<CommentScreen> {
                     },
                     formKey: formKey,
                     commentController: commentController,
-                    backgroundColor: backgroundC,
+                    backgroundColor: Colors.orange,
                     textColor: Colors.white,
                     sendWidget: Icon(
                       Icons.send_sharp,
-                      size: 30,
+                      size: widget.size.height * 0.035,
                       color: Colors.white,
                     ),
                   );
                 }
-                return CircularProgressIndicator();
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
               },
             );
           }
@@ -162,15 +165,18 @@ class CommentStructure extends StatefulWidget {
   final int avatarIndex;
   final String email;
   final likesData;
+  final size;
 
-  CommentStructure(
-      {this.username,
-      this.email,
-      this.likesData,
-      this.commentId,
-      this.comment,
-      this.avatarIndex,
-      this.isLiked});
+  CommentStructure({
+    this.size,
+    this.username,
+    this.email,
+    this.likesData,
+    this.commentId,
+    this.comment,
+    this.avatarIndex,
+    this.isLiked,
+  });
 
   @override
   State<CommentStructure> createState() => _CommentStructureState();
@@ -194,7 +200,7 @@ class _CommentStructureState extends State<CommentStructure> {
           .set({
         'likes': FieldValue.arrayUnion([userId])
       }, SetOptions(merge: true));
-    }else{
+    } else {
       FirebaseFirestore.instance
           .collection('Feed')
           .doc(widget.commentId.replaceRange(17, widget.commentId.length, ""))
@@ -205,13 +211,31 @@ class _CommentStructureState extends State<CommentStructure> {
       }, SetOptions(merge: true));
     }
   }
+
   var _user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     widget.isLiked = widget.likesData.contains(_user.uid);
     return Container(
-      padding: EdgeInsets.only(bottom: 15),
-      margin: EdgeInsets.only(top: 15, bottom: 15, right: 10),
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 2,
+          color: Colors.orange.shade400,
+        ),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.grey,
+            offset: Offset(0.0, 1.0), //(x,y)
+            blurRadius: 7.0,
+          ),
+        ],
+        color: Colors.orange.shade100,
+      ),
+      padding: EdgeInsets.only(
+        bottom: widget.size.height * 0.02,
+        top: widget.size.height * 0.02,
+      ),
+      margin: EdgeInsets.only(bottom: widget.size.height * 0.02),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -237,14 +261,14 @@ class _CommentStructureState extends State<CommentStructure> {
                 ),
               ),
             ),
-            height: 30.0,
+            height: widget.size.height * 0.05,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                 // decoration: BoxDecoration(border: Border.all(color: Colors.white)),
-                width: 280,
+                // decoration: BoxDecoration(border: Border.all(color: Colors.white)),
+                width: widget.size.width * 0.8,
                 padding: EdgeInsets.all(1),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -253,24 +277,25 @@ class _CommentStructureState extends State<CommentStructure> {
                     Text(
                       widget.username,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.orange,
                         fontWeight: FontWeight.bold,
-                        fontSize: 13,
+                        fontSize: 15,
                       ),
                     ),
                     Container(
-                      height: 25,
-                      // decoration: BoxDecoration(border: Border.all(color: Colors.white)),
+                      height: widget.size.height * 0.035,
                       child: PopupMenuButton(
-                        color: Colors.black12,
+                        color: Colors.orange.shade400,
+                        padding: EdgeInsets.all(0.0),
                         icon: Icon(
                           Icons.more_vert,
-                          color: Colors.white,
-                          size: 18, 
+                          color: Colors.orange,
+                          size: widget.size.height * 0.025,
                         ),
                         itemBuilder: (context) => [
                           _user.email == widget.email
                               ? PopupMenuItem(
+                                  height: widget.size.height * 0.03,
                                   value: 'delete',
                                   child: Text(
                                     'Delete',
@@ -278,6 +303,7 @@ class _CommentStructureState extends State<CommentStructure> {
                                   ),
                                 )
                               : PopupMenuItem(
+                                  height: widget.size.height * 0.03,
                                   value: 'report',
                                   child: Text(
                                     'Report',
@@ -351,10 +377,10 @@ class _CommentStructureState extends State<CommentStructure> {
                 ),
               ),
               Container(
-                width: 280,
+                width: widget.size.width * 0.8,
                 child: Text(
                   widget.comment,
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.orange, fontSize: 15),
                   softWrap: true,
                 ),
               ),
@@ -371,20 +397,28 @@ class _CommentStructureState extends State<CommentStructure> {
                   children: [
                     Container(
                         padding: EdgeInsets.all(0),
-                        margin: EdgeInsets.fromLTRB(0, 0, 6, 0),
+                        margin: EdgeInsets.only(
+                          top: widget.size.height * 0.01,
+                          right: widget.size.width * 0.05,
+                        ),
                         child: Icon(
-                          Icons.arrow_upward_outlined,
-                          color: widget.isLiked ? Colors.yellow : Colors.white,
-                          size: 16,
+                          widget.isLiked
+                              ? Icons.thumb_up
+                              : Icons.thumb_up_alt_outlined,
+                          // color: widget.isLiked ? Colors.yellow : Colors.orange,
+                          color: Colors.orange,
+                          size: widget.size.height * 0.02,
                         )),
                     Container(
                       padding: EdgeInsets.all(0),
-                      margin: EdgeInsets.fromLTRB(0, 0, 2, 0),
+                      margin: EdgeInsets.only(
+                        top: widget.size.height * 0.01,
+                      ),
                       child: Text(
                         widget.likesData.length.compareTo(0) == 0
                             ? " "
                             : widget.likesData.length.toString(),
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.orange),
                       ),
                     ),
                   ],
