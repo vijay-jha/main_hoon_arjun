@@ -225,7 +225,7 @@ class _CommentStructureState extends State<CommentStructure> {
         boxShadow: const [
           BoxShadow(
             color: Colors.grey,
-            offset: Offset(0.0, 1.0), //(x,y)
+            offset: Offset(0.0, 1.0), // ( x , y )
             blurRadius: 7.0,
           ),
         ],
