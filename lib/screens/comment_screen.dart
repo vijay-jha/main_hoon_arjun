@@ -69,7 +69,10 @@ class _CommentScreenState extends State<CommentScreen> {
     await FirebaseFirestore.instance
         .collection('Feed')
         .doc(widget.currentShloK)
-        .set({'count': data['count'] + 1});
+        .set({
+      'count': data['count'] + 1,
+      "chapter_shlok": widget.currentShloK,
+    });
   }
 
   Widget commentChild(data) {
@@ -95,6 +98,7 @@ class _CommentScreenState extends State<CommentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var height = widget.size.height;
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
@@ -285,93 +289,171 @@ class _CommentStructureState extends State<CommentStructure> {
                     Container(
                       height: widget.size.height * 0.035,
                       child: PopupMenuButton(
-                        color: Colors.orange.shade400,
-                        padding: EdgeInsets.all(0.0),
-                        icon: Icon(
-                          Icons.more_vert,
-                          color: Colors.orange,
-                          size: widget.size.height * 0.025,
-                        ),
-                        itemBuilder: (context) => [
-                          _user.email == widget.email
-                              ? PopupMenuItem(
-                                  height: widget.size.height * 0.03,
-                                  value: 'delete',
-                                  child: Text(
-                                    'Delete',
-                                    style: TextStyle(color: Colors.white),
+                          color: Colors.orange.shade400,
+                          padding: EdgeInsets.all(0.0),
+                          icon: Icon(
+                            Icons.more_vert,
+                            color: Colors.orange,
+                            size: widget.size.height * 0.025,
+                          ),
+                          itemBuilder: (context) => [
+                                _user.email == widget.email
+                                    ? PopupMenuItem(
+                                        height: widget.size.height * 0.03,
+                                        value: 'delete',
+                                        child: Text(
+                                          'Delete',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      )
+                                    : PopupMenuItem(
+                                        height: widget.size.height * 0.03,
+                                        value: 'report',
+                                        child: Text(
+                                          'Report',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      )
+                              ],
+                          onSelected: (item) async {
+                            if (item == 'delete') {
+                              if (_user.email == widget.email) {
+                                final snackbar = SnackBar(
+                                  margin: EdgeInsets.fromLTRB(
+                                      0, 0, 0, widget.size.height * 0.02),
+                                  content: Text(
+                                    "Deleted Successfully",
+                                    style: TextStyle(
+                                        color: Colors.orange,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                )
-                              : PopupMenuItem(
-                                  height: widget.size.height * 0.03,
-                                  value: 'report',
-                                  child: Text(
-                                    'Report',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                )
-                        ],
-                        onSelected: (item) async {
-                          if (item == 'delete') {
-                            if (_user.email == widget.email) {
-                              showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                  backgroundColor: Colors.orange.shade50,
-                                  title: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: const [
-                                      Text("Delete Comment"),
-                                      Divider(
-                                        thickness: 1,
-                                      ),
+                                  backgroundColor: Colors.orange[100],
+                                  behavior: SnackBarBehavior.floating,
+                                  duration: Duration(seconds: 2),
+                                );
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => AlertDialog(
+                                    backgroundColor: Colors.orange.shade50,
+                                    title: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: const [
+                                        Text("Delete Comment"),
+                                        Divider(
+                                          thickness: 1,
+                                        ),
+                                      ],
+                                    ),
+                                    content: Text(
+                                        "Do you really want to delete your comment?"),
+                                    actions: [
+                                      OutlinedButton(
+                                          onPressed: () async {
+                                            await Future.delayed(
+                                                Duration(milliseconds: 200));
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text("Cancel")),
+                                      OutlinedButton(
+                                          onPressed: () async {
+                                            await Future.delayed(
+                                                Duration(milliseconds: 200));
+                                            // Deleting Comment
+                                            FirebaseFirestore.instance
+                                                .collection('Feed')
+                                                .doc(widget.commentId
+                                                    .replaceRange(
+                                                        17,
+                                                        widget.commentId.length,
+                                                        ""))
+                                                .collection('comments')
+                                                .doc(widget.commentId)
+                                                .delete();
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(snackbar);
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text("Delete")),
                                     ],
                                   ),
-                                  content: Text(
-                                      "Do you really want to delete your comment?"),
-                                  actions: [
-                                    OutlinedButton(
-                                        onPressed: () async {
-                                          await Future.delayed(
-                                              Duration(milliseconds: 200));
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text("Cancel")),
-                                    OutlinedButton(
-                                        onPressed: () async {
-                                          await Future.delayed(
-                                              Duration(milliseconds: 200));
-                                          // Deleting Comment
-                                          FirebaseFirestore.instance
-                                              .collection('Feed')
-                                              .doc(widget.commentId
-                                                  .replaceRange(
-                                                      17,
-                                                      widget.commentId.length,
-                                                      ""))
-                                              .collection('comments')
-                                              .doc(widget.commentId)
-                                              .delete();
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text("Delete")),
-                                  ],
+                                );
+                              }
+                            } else {
+                              final snackbar = SnackBar(
+                                margin: EdgeInsets.fromLTRB(
+                                    0, 0, 0, widget.size.height * 0.02),
+                                content: Text(
+                                  "Reported Successfully",
+                                  style: TextStyle(
+                                      color: Colors.orange,
+                                      fontWeight: FontWeight.bold),
                                 ),
+                                backgroundColor: Colors.orange[100],
+                                behavior: SnackBarBehavior.floating,
+                                duration: Duration(seconds: 2),
                               );
+                              showDialog(
+                                  context: context,
+                                  builder: (_) => AlertDialog(
+                                        backgroundColor: Colors.orange.shade50,
+                                        title: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: const [
+                                            Text("Report Comment"),
+                                            Divider(
+                                              thickness: 1,
+                                            ),
+                                          ],
+                                        ),
+                                        content: Text(
+                                            "Do you really want to delete your comment?"),
+                                        actions: [
+                                          OutlinedButton(
+                                              onPressed: () async {
+                                                await Future.delayed(Duration(
+                                                    milliseconds: 200));
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text("Cancel")),
+                                          OutlinedButton(
+                                              onPressed: () async {
+                                                await Future.delayed(Duration(
+                                                    milliseconds: 200));
+                                                // Deleting Comment
+                                                FirebaseFirestore.instance
+                                                    .collection(
+                                                        'reported_comments')
+                                                    .doc(widget.commentId
+                                                        .replaceRange(
+                                                            17,
+                                                            widget.commentId
+                                                                .length,
+                                                            ""))
+                                                    .set({
+                                                  'comment-id':
+                                                      FieldValue.arrayUnion(
+                                                          [widget.commentId])
+                                                }, SetOptions(merge: true));
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackbar);
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text("Report")),
+                                        ],
+                                      ));
+                              //   await FirebaseFirestore.instance
+                              //       .collection('reported_comments')
+                              //       .doc(widget.commentId.replaceRange(
+                              //           17, widget.commentId.length, ""))
+                              //       .set({
+                              //     'comment-id':
+                              //         FieldValue.arrayUnion([widget.commentId])
+                              //   }, SetOptions(merge: true));
+                              // }
                             }
-                          } else {
-                            await FirebaseFirestore.instance
-                                .collection('reported_comments')
-                                .doc(widget.commentId.replaceRange(
-                                    17, widget.commentId.length, ""))
-                                .set({
-                              'comment-id':
-                                  FieldValue.arrayUnion([widget.commentId])
-                            }, SetOptions(merge: true));
-                          }
-                        },
-                      ),
+                          }),
                     ),
                   ],
                 ),

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/shlok_feed_card.dart';
@@ -11,37 +12,30 @@ class FeedScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
-        backgroundColor: Colors.orange.shade50,
-        elevation: 0,
-        title: TextBox(),
-        leading: GestureDetector(
-          onTap: () {},
-          child: const Icon(
-            Icons.search,
-            color: primaryTextC,
-          ),
-        ),
+        backgroundColor: Colors.orange,
+        elevation: 10,
+        title: Text("Your Thoughts on Shloks"),
       ),
-      body: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (BuildContext context, int index) {
-          return ShlokFeedCard();
-        },
-      ),
-    );
-  }
-}
-
-class TextBox extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      color: Colors.orange.shade50,
-      child: const TextField(
-        decoration:
-            InputDecoration(border: InputBorder.none, hintText: 'Search'),
-      ),
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance.collection("Feed").snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              // QuerySnapshot<Object> data =
+              //     snapshot.data as QuerySnapshot<Object>;
+              final List<DocumentSnapshot> documents = snapshot.data.docs;
+              for (int i = 0; i < documents.length; i++) {
+                var data = documents[i]['chapter_shlok'];
+                print(data);
+              }
+              return ListView.builder(
+                itemCount: 10,
+                itemBuilder: (BuildContext context, int index) {
+                  return ShlokFeedCard();
+                },
+              );
+            }
+            return CircularProgressIndicator();
+          }),
     );
   }
 }
