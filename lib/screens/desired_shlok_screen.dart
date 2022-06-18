@@ -129,6 +129,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
           if (widget.shlokMap != null) {
             currentShlok =
                 '${widget.shlokMap.chapter}_${widget.shlokMap.shlokNo}';
+            print(currentShlok);
             chapterNo = currentShlok.substring(7, 9);
             shlokNo = currentShlok.substring(15);
           }
@@ -209,7 +210,7 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              CommentScreen(currentShloK: currentShlok)),
+                              CommentScreen(currentShloK: currentShlok,size: _deviceSize,)),
                     );
                   },
                   child: Container(
@@ -234,11 +235,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
               ),
               SizedBox(
                 height: _deviceSize.height * 0.03,
-              ),
-              TranslationCard(
-                currentShlok: currentShlok,
-                shlokNo: shlokNo,
-                chapterNo: chapterNo,
               ),
                 // //comment button
               // GestureDetector(
