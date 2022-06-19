@@ -42,15 +42,7 @@ class FavoritesShlok with ChangeNotifier {
       }
 
       var particularShlok = allShloksFromChapter[chapterAndShlok[1]];
-
-      // shlok.add({
-      //   "Shlok": particularShlok['text'],
-      //   "Number":
-      //       "अ.${chapterAndShlok[0].substring(7)}, श्लोक.${chapterAndShlok[1].substring(5)}",
-      //   "Chapter": chapterAndShlok[0],
-      //   "ShlokNo": chapterAndShlok[1],
-      // });
-
+      
       shlok.add(
         FavoriteItem(
             shlok: particularShlok['text'],

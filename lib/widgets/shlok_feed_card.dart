@@ -1,126 +1,155 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:main_hoon_arjun/widgets/shareImage.dart';
+import 'package:screenshot/screenshot.dart';
 
 import '../constants.dart';
 import '../screens/comment_screen.dart';
 
-class ShlokFeedCard extends StatelessWidget {
-  String sample = "User";
-  String shlok =
-      "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।\nमा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥";
-  
+class ShlokFeedCard extends StatefulWidget {
+  final currentShlok;
+  final data;
+
+  ShlokFeedCard({this.currentShlok, this.data});
+
+  @override
+  State<ShlokFeedCard> createState() => _ShlokFeedCardState();
+}
+
+class _ShlokFeedCardState extends State<ShlokFeedCard> {
   @override
   Widget build(BuildContext context) {
     final _deviceSize = MediaQuery.of(context).size;
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(15),
-            bottomRight: Radius.circular(15),
-            topLeft: Radius.circular(7),
-            topRight: Radius.circular(7),
-          ),
-        ),
-        elevation: 5,
-        child: Column(
-          children: [
-            //name settings
-            Container(
-              decoration: const BoxDecoration(
-                color: primaryTextC,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      sample,
-                      style: const TextStyle(
-                        color: secondaryC,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.more_vert_sharp,
-                      color: secondaryC,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              height: 200,
-              width: double.infinity,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: primaryTextC,
-                  border: Border.all(color: Colors.black12, width: 0.5)),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    text: shlok,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      // background: secondaryC,
-                      fontSize: 30,
-                    ),
-                  ),
+    final chapterAndShlok = widget.currentShlok.split('_');
+    final _controller = ScreenshotController();
+    return Screenshot(
+      controller: _controller,
+      child: FutureBuilder(
+          future: FirebaseFirestore.instance
+              .collection('Geeta')
+              .doc(chapterAndShlok[0])
+              .get(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var data = snapshot.data;
+              var particularShlok = data[chapterAndShlok[1]];
+              return Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: _deviceSize.width * 0.03,
+                  vertical: _deviceSize.height * 0.015,
                 ),
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: primaryTextC,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const IconButton(
-                    icon: Icon(
-                      Icons.arrow_upward_sharp,
-                      color: secondaryC,
+                child: Card(
+                  color: Colors.orange.shade100,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: Colors.orange,
+                      width: 2,
                     ),
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CommentScreen(
-                            currentShloK: 'Chapter03_Shlok09',
-                            size: _deviceSize,
+                  elevation: 5,
+                  child: Column(
+                    children: [
+                      //name settings
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: _deviceSize.width * 0.03,
+                                  vertical: _deviceSize.height * 0.02),
+                              child: Text(
+                                "अ.${chapterAndShlok[0].substring(7)}, श्लोक.${chapterAndShlok[1].substring(5)}",
+                                style: const TextStyle(
+                                  color: Colors.orange,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.orange.shade100,
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: _deviceSize.width * 0.03),
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              text: particularShlok['text'].trim(),
+                              style: const TextStyle(
+                                color: Colors.orange,
+                                fontSize: 30,
+                              ),
+                            ),
                           ),
                         ),
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.comment,
-                      color: secondaryC,
-                    ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.orange.shade100,
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: _deviceSize.width * 0.03,
+                          vertical: _deviceSize.height * 0.01,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CommentScreen(
+                                      currentShloK: widget.currentShlok,
+                                      size: _deviceSize,
+                                    ),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.comment,
+                                color: Colors.orange,
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                final image = await _controller.capture();
+                                if (image != null) {
+                                  ShareImage.shareImage(image);
+                                }
+                              },
+                              icon: Icon(
+                                Icons.share,
+                                color: Colors.orange,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                      //like comment share
+                    ],
                   ),
-                  const IconButton(
-                    icon: Icon(
-                      Icons.share,
-                      color: secondaryC,
-                    ),
-                  ),
-                ],
+                ),
+              );
+            }
+            return Container(
+              height: _deviceSize.height * 0.4,
+              child: Center(
+                child: CircularProgressIndicator(),
               ),
-            )
-            //like comment share
-          ],
-        ),
-      ),
+            );
+          }),
     );
   }
 }
