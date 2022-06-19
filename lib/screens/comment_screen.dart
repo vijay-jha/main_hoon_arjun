@@ -3,7 +3,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:main_hoon_arjun/providers/mahabharat_characters.dart';
+import 'package:main_hoon_arjun/widgets/noItemInList.dart';
 // import 'package:main_hoon_arjun/screens/homepage_screen.dart';
 import 'package:main_hoon_arjun/widgets/profile_picture.dart';
 import 'package:provider/provider.dart';
@@ -76,6 +78,36 @@ class _CommentScreenState extends State<CommentScreen> {
   }
 
   Widget commentChild(data) {
+    if (data.length == 0) {
+      return KeyboardVisibilityBuilder(builder: (context, visible) {
+        return !visible
+            ? Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(
+                  top: widget.size.height * 0.16,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    EmptyList(),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Text(
+                        " Add Some !",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.orange,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : Center();
+      });
+    }
     return ListView.builder(
         itemBuilder: (context, index) {
           var commenter = allUsers.indexWhere(
@@ -98,6 +130,7 @@ class _CommentScreenState extends State<CommentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // final _deviceSize = MediaQuery.of(context).size;
     var height = widget.size.height;
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
@@ -157,6 +190,49 @@ class _CommentScreenState extends State<CommentScreen> {
           return Container();
         },
       ),
+      // body: StreamBuilder(
+      //     stream: FirebaseFirestore.instance
+      //         .collection('Feed')
+      //         .doc(widget.currentShloK)
+      //         .collection('comments')
+      //         .snapshots(),
+      //     builder: (context, snapshot) {
+      //       if (snapshot.hasData) {
+      //         return FutureBuilder(
+      //             future: FirebaseFirestore.instance.collection("users").get(),
+      //             builder: (ctx, snapshot) {
+      //               if (snapshot.connectionState == ConnectionState.waiting) {
+      //                 return Center(
+      //                   child: CircularProgressIndicator(),
+      //                 );
+      //               }
+      //               return CommentBox(
+      //                 userImage: "",
+      //                 child: commentChild(snapshot.data.docs),
+      //                 labelText: 'Write a comment...',
+      //                 errorText: 'Comment cannot be blank',
+      //                 withBorder: false,
+      //                 sendButtonMethod: () {
+      //                   if (formKey.currentState.validate()) {
+      //                     _postComment(commentController.text.trim());
+      //                     commentController.clear();
+      //                     FocusScope.of(context).unfocus();
+      //                   }
+      //                 },
+      //                 formKey: formKey,
+      //                 commentController: commentController,
+      //                 backgroundColor: Colors.orange,
+      //                 textColor: Colors.white,
+      //                 sendWidget: Icon(
+      //                   Icons.send_sharp,
+      //                   size: widget.size.height * 0.035,
+      //                   color: Colors.white,
+      //                 ),
+      //               );
+      //             });
+      //       }
+      //       return NoItemInList.noShloks(_deviceSize);
+      //     }),
     );
   }
 }
@@ -324,8 +400,9 @@ class _CommentStructureState extends State<CommentStructure> {
                                   content: Text(
                                     "Deleted Successfully",
                                     style: TextStyle(
-                                        color: Colors.orange,
-                                        fontWeight: FontWeight.bold),
+                                      color: Colors.orange,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                   backgroundColor: Colors.orange[100],
                                   behavior: SnackBarBehavior.floating,
@@ -386,8 +463,9 @@ class _CommentStructureState extends State<CommentStructure> {
                                 content: Text(
                                   "Reported Successfully",
                                   style: TextStyle(
-                                      color: Colors.orange,
-                                      fontWeight: FontWeight.bold),
+                                    color: Colors.orange,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                                 backgroundColor: Colors.orange[100],
                                 behavior: SnackBarBehavior.floating,
@@ -408,7 +486,7 @@ class _CommentStructureState extends State<CommentStructure> {
                                           ],
                                         ),
                                         content: Text(
-                                            "Do you really want to delete your comment?"),
+                                            "Do you really want to report this comment?"),
                                         actions: [
                                           OutlinedButton(
                                               onPressed: () async {
