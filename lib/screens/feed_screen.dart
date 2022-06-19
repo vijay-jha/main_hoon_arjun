@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/shlok_feed_card.dart';
-import '../constants.dart';
 
 class FeedScreen extends StatelessWidget {
   static const routeName = '/feed-screen';
@@ -20,21 +19,17 @@ class FeedScreen extends StatelessWidget {
           stream: FirebaseFirestore.instance.collection("Feed").snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              // QuerySnapshot<Object> data =
-              //     snapshot.data as QuerySnapshot<Object>;
               final List<DocumentSnapshot> documents = snapshot.data.docs;
-              for (int i = 0; i < documents.length; i++) {
-                var data = documents[i]['chapter_shlok'];
-                print(data);
-              }
               return ListView.builder(
-                itemCount: 10,
-                itemBuilder: (BuildContext context, int index) {
-                  return ShlokFeedCard();
+                itemCount: documents.length,
+                itemBuilder: (BuildContext context, int index)  {
+                  return ShlokFeedCard(
+                    currentShlok: documents[index]['chapter_shlok'],
+                  );
                 },
               );
             }
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator(),);
           }),
     );
   }

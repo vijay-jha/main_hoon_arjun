@@ -16,7 +16,11 @@ class CommentScreen extends StatefulWidget {
   final Size size;
 
   // ignore: use_key_in_widget_constructors
-  const CommentScreen({this.currentShloK, this.size});
+  const CommentScreen({
+    this.currentShloK,
+    this.size,
+  });
+
   @override
   State<CommentScreen> createState() => _CommentScreenState();
 }
@@ -229,7 +233,7 @@ class _CommentStructureState extends State<CommentStructure> {
         boxShadow: const [
           BoxShadow(
             color: Colors.grey,
-            offset: Offset(0.0, 1.0), //(x,y)
+            offset: Offset(0.0, 1.0), // ( x , y )
             blurRadius: 7.0,
           ),
         ],
@@ -370,9 +374,9 @@ class _CommentStructureState extends State<CommentStructure> {
                                                 .collection('comments')
                                                 .doc(widget.commentId)
                                                 .delete();
+                                            Navigator.of(context).pop();
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(snackbar);
-                                            Navigator.of(context).pop();
                                           },
                                           child: Text("Delete")),
                                     ],
@@ -436,9 +440,9 @@ class _CommentStructureState extends State<CommentStructure> {
                                                       FieldValue.arrayUnion(
                                                           [widget.commentId])
                                                 }, SetOptions(merge: true));
+                                                Navigator.of(context).pop();
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(snackbar);
-                                                Navigator.of(context).pop();
                                               },
                                               child: Text("Report")),
                                         ],

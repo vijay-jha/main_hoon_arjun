@@ -13,7 +13,9 @@ import '../providers/playing_shlok.dart';
 class FavoriteShlokItem extends StatefulWidget {
   final FavoriteItem favoriteShlok;
   final int shlokIndex;
+
   FavoriteShlokItem(this.favoriteShlok, this.shlokIndex);
+
   @override
   _FavoritesShlokState createState() => _FavoritesShlokState();
 }
@@ -149,6 +151,7 @@ class _FavoritesShlokState extends State<FavoriteShlokItem> {
 
 class ShlokCard extends StatelessWidget {
   ShlokCard({@required this.shlok, this.deviceSize});
+  
   final String shlok;
   final deviceSize;
 
