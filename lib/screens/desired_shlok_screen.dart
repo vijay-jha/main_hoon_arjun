@@ -129,7 +129,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
           if (widget.shlokMap != null) {
             currentShlok =
                 '${widget.shlokMap.chapter}_${widget.shlokMap.shlokNo}';
-            print(currentShlok);
             chapterNo = currentShlok.substring(7, 9);
             shlokNo = currentShlok.substring(15);
           }
@@ -199,7 +198,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
                       shlokNo: shlokNo,
                       chapterNo: chapterNo,
                     ),
-                    // Expanded(child: Container()),
                   ],
                 ),
               ),
@@ -236,40 +234,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
               SizedBox(
                 height: _deviceSize.height * 0.03,
               ),
-                // //comment button
-              // GestureDetector(
-              //   onTap: () {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) => CommentScreen(
-              //           currentShloK: currentShlok,
-              //         ),
-              //       ),
-              //     );
-              //   },
-              //   child: Container(
-              //     decoration: BoxDecoration(
-              //        color: Colors.orange[100],
-              //       // border: Border.all(
-              //       //   color: Colors.orange,
-              //       // ),
-              //       borderRadius: BorderRadius.circular(10),
-              //     ),
-              //     margin: const EdgeInsets.fromLTRB(35, 5, 35, 50),
-              //     padding: EdgeInsets.symmetric(vertical: 6),
-              //     width: double.infinity,
-              //     child: Center(
-              //         child: Text(
-              //       'View thoughts..',
-              //       style:  TextStyle(
-              //         color: Colors.orange,
-              //         fontWeight: FontWeight.w600,
-              //         fontSize: 18),
-              //     )),
-              //   ),
-              // )
-             
             ],
           ),
           floatingActionButton: ElevatedButton(
@@ -288,7 +252,6 @@ class _DesiredShlokScreenState extends State<DesiredShlokScreen> {
             onPressed: () async {
               final image = await _controller.capture();
               if (image != null) {
-                // await saveImage(image);
                 ShareImage.shareImage(image);
               }
             },

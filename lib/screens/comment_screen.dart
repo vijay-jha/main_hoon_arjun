@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:main_hoon_arjun/providers/mahabharat_characters.dart';
 import 'package:main_hoon_arjun/widgets/noItemInList.dart';
-// import 'package:main_hoon_arjun/screens/homepage_screen.dart';
 import 'package:main_hoon_arjun/widgets/profile_picture.dart';
 import 'package:provider/provider.dart';
 
@@ -87,11 +86,6 @@ class _CommentScreenState extends State<CommentScreen> {
   Widget commentChild(data) {
     if (data.length == 0) {
       return KeyboardVisibilityBuilder(builder: (context, visible) {
-        // if (!visible) {
-        //   () async {
-        //     await Future.delayed(const Duration(milliseconds: 500), () {});
-        //   }();
-        // }
         return !visible
             ? FutureBuilder(
                 future: Future.delayed(const Duration(milliseconds: 500)),
@@ -131,7 +125,6 @@ class _CommentScreenState extends State<CommentScreen> {
           var commenter = allUsers.indexWhere(
               (element) => element['email'] == data[index]['useremail']);
           return CommentStructure(
-              context: context,
               size: widget.size,
               likesData: data[index]['likes'],
               email: data[index]['useremail'],
@@ -220,11 +213,9 @@ class CommentStructure extends StatefulWidget {
   final int avatarIndex;
   final String email;
   final likesData;
-  final context;
   final size;
 
   CommentStructure({
-    this.context,
     this.size,
     this.username,
     this.email,
@@ -428,7 +419,7 @@ class _CommentStructureState extends State<CommentStructure> {
                                                 .doc(widget.commentId)
                                                 .delete();
                                             Navigator.of(context).pop();
-                                            ScaffoldMessenger.of(widget.context)
+                                            ScaffoldMessenger.of(context)
                                                 .showSnackBar(snackbar);
                                           },
                                           child: Text("Delete")),
@@ -496,21 +487,12 @@ class _CommentStructureState extends State<CommentStructure> {
                                                 }, SetOptions(merge: true));
                                                 Navigator.of(context).pop();
                                                 ScaffoldMessenger.of(
-                                                        widget.context)
+                                                        context)
                                                     .showSnackBar(snackbar);
                                               },
                                               child: Text("Report")),
                                         ],
                                       ));
-                              //   await FirebaseFirestore.instance
-                              //       .collection('reported_comments')
-                              //       .doc(widget.commentId.replaceRange(
-                              //           17, widget.commentId.length, ""))
-                              //       .set({
-                              //     'comment-id':
-                              //         FieldValue.arrayUnion([widget.commentId])
-                              //   }, SetOptions(merge: true));
-                              // }
                             }
                           }),
                     ),

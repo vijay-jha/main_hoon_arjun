@@ -126,12 +126,10 @@ class _VerifyScreenState extends State<VerifyScreen>
               ),
             )),
         Stack(
-          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               margin: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.33),
-              // decoration: BoxDecoration(border: Border.all(width: 1)),
               padding: !isVerified
                   ? null
                   : EdgeInsets.symmetric(horizontal: _deviceSize.width * 0.203),

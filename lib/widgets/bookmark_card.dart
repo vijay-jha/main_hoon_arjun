@@ -42,7 +42,6 @@ class BookmarkCard extends StatelessWidget {
       ),
       elevation: 3,
       child: Container(
-        // height: _deviceSize.height * 0.300, //240
         width: double.infinity,
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(25)),

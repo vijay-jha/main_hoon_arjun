@@ -108,7 +108,6 @@ class _SpeakerIcnBtnState extends State<SpeakerIcnBtn> {
               color: widget.isDesired
                   ? Colors.orange.shade100
                   : Colors.orange.shade200,
-              //  border: Border.all(width: 1),
               borderRadius: const BorderRadius.all(
                 Radius.circular(25),
               ),

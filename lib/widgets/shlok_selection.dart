@@ -98,8 +98,6 @@ class _ShlokSelectionState extends State<ShlokSelection>
                       onTap: () {
                         setState(() {
                           selectedItem = index;
-                          // Navigator.pop(context);
-                          //  widget.pageController.jumpToPage(selectedItem);
                         });
                       },
                       child: Container(

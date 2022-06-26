@@ -75,7 +75,6 @@ class _TranslationCardState extends State<TranslationCard> {
                     style: TextStyle(
                       color: Colors.orange.shade900,
                       fontSize: 20,
-                      // fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
                     softWrap: true,

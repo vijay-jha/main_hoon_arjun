@@ -38,7 +38,6 @@ class _NavigationFileState extends State<NavigationFile> {
             .get();
         var data = doc.data();
         FEELING_API = data['apiEndPoint'];
-        print(FEELING_API);
       }();
     }
   }
@@ -73,12 +72,6 @@ class _NavigationFileState extends State<NavigationFile> {
             icon: Icon(Icons.menu_book_outlined),
             label: 'Geeta',
           ),
-          
-          // BottomNavigationBarItem(
-          //   activeIcon: Icon(Icons.bookmark),
-          //   icon: Icon(Icons.bookmark_border_outlined),
-          //   label: 'Bookmark',
-          // ),
           BottomNavigationBarItem(
             activeIcon: Icon(Icons.feed_rounded),
             backgroundColor: Colors.red,
