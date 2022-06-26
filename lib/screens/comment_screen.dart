@@ -102,7 +102,6 @@ class _CommentScreenState extends State<CommentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var height = widget.size.height;
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
