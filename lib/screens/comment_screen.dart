@@ -29,6 +29,12 @@ class _CommentScreenState extends State<CommentScreen> {
   var data;
 
   @override
+  void dispose() {
+    commentController.clear();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     () async {
       data = await FirebaseFirestore.instance
@@ -81,31 +87,42 @@ class _CommentScreenState extends State<CommentScreen> {
   Widget commentChild(data) {
     if (data.length == 0) {
       return KeyboardVisibilityBuilder(builder: (context, visible) {
+        // if (!visible) {
+        //   () async {
+        //     await Future.delayed(const Duration(milliseconds: 500), () {});
+        //   }();
+        // }
         return !visible
-            ? Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.only(
-                  top: widget.size.height * 0.16,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    EmptyList(),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: Text(
-                        " Add your thoughts !",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.orange,
-                          fontWeight: FontWeight.w700,
-                        ),
+            ? FutureBuilder(
+                future: Future.delayed(const Duration(milliseconds: 500)),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState != ConnectionState.waiting) {
+                    return Container(
+                      margin: EdgeInsets.only(
+                        top: widget.size.height * 0.12,
                       ),
-                    ),
-                  ],
-                ),
-              )
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          EmptyList(),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: Text(
+                              " Add your thoughts !",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.orange,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return Center();
+                })
             : Center();
       });
     }
@@ -132,8 +149,6 @@ class _CommentScreenState extends State<CommentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final _deviceSize = MediaQuery.of(context).size;
-    var height = widget.size.height;
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
@@ -242,7 +257,7 @@ class _CommentStructureState extends State<CommentStructure> {
           .doc(commentId)
           .set({
         'likes': FieldValue.arrayUnion([userId]),
-        'likesCount': likesCount+1
+        'likesCount': likesCount + 1
       }, SetOptions(merge: true));
     } else {
       FirebaseFirestore.instance
@@ -252,7 +267,7 @@ class _CommentStructureState extends State<CommentStructure> {
           .doc(commentId)
           .set({
         'likes': FieldValue.arrayRemove([userId]),
-        'likesCount': likesCount-1
+        'likesCount': likesCount - 1
       }, SetOptions(merge: true));
     }
   }
