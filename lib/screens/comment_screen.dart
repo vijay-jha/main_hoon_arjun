@@ -3,7 +3,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:main_hoon_arjun/providers/mahabharat_characters.dart';
+import 'package:main_hoon_arjun/widgets/noItemInList.dart';
 // import 'package:main_hoon_arjun/screens/homepage_screen.dart';
 import 'package:main_hoon_arjun/widgets/profile_picture.dart';
 import 'package:provider/provider.dart';
@@ -16,11 +18,7 @@ class CommentScreen extends StatefulWidget {
   final Size size;
 
   // ignore: use_key_in_widget_constructors
-  const CommentScreen({
-    this.currentShloK,
-    this.size,
-  });
-
+  const CommentScreen({this.currentShloK, this.size});
   @override
   State<CommentScreen> createState() => _CommentScreenState();
 }
@@ -66,6 +64,7 @@ class _CommentScreenState extends State<CommentScreen> {
       'commentId': '${widget.currentShloK}_${data['count'] + 1}',
       'createdAt': Timestamp.now(),
       'useremail': _user.email,
+      'likesCount': 0,
       'likes': [],
       'comment': comment,
     });
@@ -80,11 +79,43 @@ class _CommentScreenState extends State<CommentScreen> {
   }
 
   Widget commentChild(data) {
+    if (data.length == 0) {
+      return KeyboardVisibilityBuilder(builder: (context, visible) {
+        return !visible
+            ? Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(
+                  top: widget.size.height * 0.16,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    EmptyList(),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Text(
+                        " Add your thoughts !",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.orange,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : Center();
+      });
+    }
     return ListView.builder(
         itemBuilder: (context, index) {
           var commenter = allUsers.indexWhere(
               (element) => element['email'] == data[index]['useremail']);
+          print(data[index]['comment']);
           return CommentStructure(
+              context: context,
               size: widget.size,
               likesData: data[index]['likes'],
               email: data[index]['useremail'],
@@ -102,6 +133,8 @@ class _CommentScreenState extends State<CommentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // final _deviceSize = MediaQuery.of(context).size;
+    var height = widget.size.height;
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
@@ -124,6 +157,7 @@ class _CommentScreenState extends State<CommentScreen> {
                   .collection('Feed')
                   .doc(widget.currentShloK)
                   .collection('comments')
+                  .orderBy("likesCount", descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
@@ -172,9 +206,11 @@ class CommentStructure extends StatefulWidget {
   final int avatarIndex;
   final String email;
   final likesData;
+  final context;
   final size;
 
   CommentStructure({
+    this.context,
     this.size,
     this.username,
     this.email,
@@ -197,6 +233,7 @@ class _CommentStructureState extends State<CommentStructure> {
         .collection('comments')
         .doc(commentId)
         .get();
+    var likesCount = data.data()['likesCount'];
     var likes = data.data()['likes'];
     if (!likes.contains(userId)) {
       FirebaseFirestore.instance
@@ -205,7 +242,8 @@ class _CommentStructureState extends State<CommentStructure> {
           .collection('comments')
           .doc(commentId)
           .set({
-        'likes': FieldValue.arrayUnion([userId])
+        'likes': FieldValue.arrayUnion([userId]),
+        'likesCount': likesCount+1
       }, SetOptions(merge: true));
     } else {
       FirebaseFirestore.instance
@@ -214,7 +252,8 @@ class _CommentStructureState extends State<CommentStructure> {
           .collection('comments')
           .doc(commentId)
           .set({
-        'likes': FieldValue.arrayRemove([userId])
+        'likes': FieldValue.arrayRemove([userId]),
+        'likesCount': likesCount-1
       }, SetOptions(merge: true));
     }
   }
@@ -232,7 +271,7 @@ class _CommentStructureState extends State<CommentStructure> {
         boxShadow: const [
           BoxShadow(
             color: Colors.grey,
-            offset: Offset(0.0, 1.0), // ( x , y )
+            offset: Offset(0.0, 1.0), //(x,y)
             blurRadius: 7.0,
           ),
         ],
@@ -327,8 +366,9 @@ class _CommentStructureState extends State<CommentStructure> {
                                   content: Text(
                                     "Deleted Successfully",
                                     style: TextStyle(
-                                        color: Colors.orange,
-                                        fontWeight: FontWeight.bold),
+                                      color: Colors.orange,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                   backgroundColor: Colors.orange[100],
                                   behavior: SnackBarBehavior.floating,
@@ -374,7 +414,7 @@ class _CommentStructureState extends State<CommentStructure> {
                                                 .doc(widget.commentId)
                                                 .delete();
                                             Navigator.of(context).pop();
-                                            ScaffoldMessenger.of(context)
+                                            ScaffoldMessenger.of(widget.context)
                                                 .showSnackBar(snackbar);
                                           },
                                           child: Text("Delete")),
@@ -389,8 +429,9 @@ class _CommentStructureState extends State<CommentStructure> {
                                 content: Text(
                                   "Reported Successfully",
                                   style: TextStyle(
-                                      color: Colors.orange,
-                                      fontWeight: FontWeight.bold),
+                                    color: Colors.orange,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                                 backgroundColor: Colors.orange[100],
                                 behavior: SnackBarBehavior.floating,
@@ -411,7 +452,7 @@ class _CommentStructureState extends State<CommentStructure> {
                                           ],
                                         ),
                                         content: Text(
-                                            "Do you really want to delete your comment?"),
+                                            "Do you really want to report this comment?"),
                                         actions: [
                                           OutlinedButton(
                                               onPressed: () async {
@@ -440,7 +481,8 @@ class _CommentStructureState extends State<CommentStructure> {
                                                           [widget.commentId])
                                                 }, SetOptions(merge: true));
                                                 Navigator.of(context).pop();
-                                                ScaffoldMessenger.of(context)
+                                                ScaffoldMessenger.of(
+                                                        widget.context)
                                                     .showSnackBar(snackbar);
                                               },
                                               child: Text("Report")),

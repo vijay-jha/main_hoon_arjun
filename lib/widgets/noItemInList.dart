@@ -67,7 +67,7 @@ class _EmptyListState extends State<EmptyList> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 80),
+      padding: const EdgeInsets.fromLTRB(80,0,80,0),
       child: Lottie.asset(
         'assets/lottie/empty_list.json',
         height: MediaQuery.of(context).size.height * 0.30,
