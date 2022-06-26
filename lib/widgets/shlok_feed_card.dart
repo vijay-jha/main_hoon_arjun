@@ -73,22 +73,35 @@ class _ShlokFeedCardState extends State<ShlokFeedCard> {
                           ],
                         ),
                       ),
-                      Container(
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.orange.shade100,
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: _deviceSize.width * 0.03),
-                          child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              text: particularShlok['text'].trim(),
-                              style: const TextStyle(
-                                color: Colors.orange,
-                                fontSize: 30,
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CommentScreen(
+                                currentShloK: widget.currentShlok,
+                                size: _deviceSize,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.orange.shade100,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: _deviceSize.width * 0.03),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                text: particularShlok['text'].trim(),
+                                style: const TextStyle(
+                                  color: Colors.orange,
+                                  fontSize: 30,
+                                ),
                               ),
                             ),
                           ),
