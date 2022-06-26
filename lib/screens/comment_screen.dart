@@ -113,7 +113,6 @@ class _CommentScreenState extends State<CommentScreen> {
         itemBuilder: (context, index) {
           var commenter = allUsers.indexWhere(
               (element) => element['email'] == data[index]['useremail']);
-          print(data[index]['comment']);
           return CommentStructure(
               context: context,
               size: widget.size,
