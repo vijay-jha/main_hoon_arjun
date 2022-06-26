@@ -18,11 +18,7 @@ class CommentScreen extends StatefulWidget {
   final Size size;
 
   // ignore: use_key_in_widget_constructors
-  const CommentScreen({
-    this.currentShloK,
-    this.size,
-  });
-
+  const CommentScreen({this.currentShloK, this.size});
   @override
   State<CommentScreen> createState() => _CommentScreenState();
 }
@@ -68,6 +64,7 @@ class _CommentScreenState extends State<CommentScreen> {
       'commentId': '${widget.currentShloK}_${data['count'] + 1}',
       'createdAt': Timestamp.now(),
       'useremail': _user.email,
+      'likesCount': 0,
       'likes': [],
       'comment': comment,
     });
@@ -97,7 +94,7 @@ class _CommentScreenState extends State<CommentScreen> {
                     Container(
                       margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                       child: Text(
-                        " Add Some !",
+                        " Add your thoughts !",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 18,
@@ -116,7 +113,9 @@ class _CommentScreenState extends State<CommentScreen> {
         itemBuilder: (context, index) {
           var commenter = allUsers.indexWhere(
               (element) => element['email'] == data[index]['useremail']);
+          print(data[index]['comment']);
           return CommentStructure(
+              context: context,
               size: widget.size,
               likesData: data[index]['likes'],
               email: data[index]['useremail'],
@@ -158,6 +157,7 @@ class _CommentScreenState extends State<CommentScreen> {
                   .collection('Feed')
                   .doc(widget.currentShloK)
                   .collection('comments')
+                  .orderBy("likesCount", descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
@@ -194,49 +194,6 @@ class _CommentScreenState extends State<CommentScreen> {
           return Container();
         },
       ),
-      // body: StreamBuilder(
-      //     stream: FirebaseFirestore.instance
-      //         .collection('Feed')
-      //         .doc(widget.currentShloK)
-      //         .collection('comments')
-      //         .snapshots(),
-      //     builder: (context, snapshot) {
-      //       if (snapshot.hasData) {
-      //         return FutureBuilder(
-      //             future: FirebaseFirestore.instance.collection("users").get(),
-      //             builder: (ctx, snapshot) {
-      //               if (snapshot.connectionState == ConnectionState.waiting) {
-      //                 return Center(
-      //                   child: CircularProgressIndicator(),
-      //                 );
-      //               }
-      //               return CommentBox(
-      //                 userImage: "",
-      //                 child: commentChild(snapshot.data.docs),
-      //                 labelText: 'Write a comment...',
-      //                 errorText: 'Comment cannot be blank',
-      //                 withBorder: false,
-      //                 sendButtonMethod: () {
-      //                   if (formKey.currentState.validate()) {
-      //                     _postComment(commentController.text.trim());
-      //                     commentController.clear();
-      //                     FocusScope.of(context).unfocus();
-      //                   }
-      //                 },
-      //                 formKey: formKey,
-      //                 commentController: commentController,
-      //                 backgroundColor: Colors.orange,
-      //                 textColor: Colors.white,
-      //                 sendWidget: Icon(
-      //                   Icons.send_sharp,
-      //                   size: widget.size.height * 0.035,
-      //                   color: Colors.white,
-      //                 ),
-      //               );
-      //             });
-      //       }
-      //       return NoItemInList.noShloks(_deviceSize);
-      //     }),
     );
   }
 }
@@ -249,9 +206,11 @@ class CommentStructure extends StatefulWidget {
   final int avatarIndex;
   final String email;
   final likesData;
+  final context;
   final size;
 
   CommentStructure({
+    this.context,
     this.size,
     this.username,
     this.email,
@@ -274,6 +233,7 @@ class _CommentStructureState extends State<CommentStructure> {
         .collection('comments')
         .doc(commentId)
         .get();
+    var likesCount = data.data()['likesCount'];
     var likes = data.data()['likes'];
     if (!likes.contains(userId)) {
       FirebaseFirestore.instance
@@ -282,7 +242,8 @@ class _CommentStructureState extends State<CommentStructure> {
           .collection('comments')
           .doc(commentId)
           .set({
-        'likes': FieldValue.arrayUnion([userId])
+        'likes': FieldValue.arrayUnion([userId]),
+        'likesCount': likesCount+1
       }, SetOptions(merge: true));
     } else {
       FirebaseFirestore.instance
@@ -291,7 +252,8 @@ class _CommentStructureState extends State<CommentStructure> {
           .collection('comments')
           .doc(commentId)
           .set({
-        'likes': FieldValue.arrayRemove([userId])
+        'likes': FieldValue.arrayRemove([userId]),
+        'likesCount': likesCount-1
       }, SetOptions(merge: true));
     }
   }
@@ -309,7 +271,7 @@ class _CommentStructureState extends State<CommentStructure> {
         boxShadow: const [
           BoxShadow(
             color: Colors.grey,
-            offset: Offset(0.0, 1.0), // ( x , y )
+            offset: Offset(0.0, 1.0), //(x,y)
             blurRadius: 7.0,
           ),
         ],
@@ -452,7 +414,7 @@ class _CommentStructureState extends State<CommentStructure> {
                                                 .doc(widget.commentId)
                                                 .delete();
                                             Navigator.of(context).pop();
-                                            ScaffoldMessenger.of(context)
+                                            ScaffoldMessenger.of(widget.context)
                                                 .showSnackBar(snackbar);
                                           },
                                           child: Text("Delete")),
@@ -519,7 +481,8 @@ class _CommentStructureState extends State<CommentStructure> {
                                                           [widget.commentId])
                                                 }, SetOptions(merge: true));
                                                 Navigator.of(context).pop();
-                                                ScaffoldMessenger.of(context)
+                                                ScaffoldMessenger.of(
+                                                        widget.context)
                                                     .showSnackBar(snackbar);
                                               },
                                               child: Text("Report")),
