@@ -162,7 +162,7 @@ class _RoundedInputState extends State<RoundedInput>
                             await Future.delayed(Duration(milliseconds: 200));
                             try {
                               await _user.sendPasswordResetEmail(
-                                email: _emailController.text,
+                                email: _emailController.text.trim(),
                               );
                             } on FirebaseAuthException catch (error) {
                               switch (error.code) {
