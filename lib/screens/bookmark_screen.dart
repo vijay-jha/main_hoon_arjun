@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:main_hoon_arjun/providers/bookmark.dart';
 import 'package:main_hoon_arjun/widgets/bookmark_card.dart';
-import 'package:main_hoon_arjun/widgets/noItemInList.dart';
+import 'package:main_hoon_arjun/widgets/no_item_in_list.dart';
 import 'package:provider/provider.dart';
 
 class BookmarkScreen extends StatefulWidget {

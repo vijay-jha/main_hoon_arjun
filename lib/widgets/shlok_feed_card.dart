@@ -2,7 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:main_hoon_arjun/widgets/shareImage.dart';
+import 'package:main_hoon_arjun/widgets/share_image.dart';
 import 'package:screenshot/screenshot.dart';
 
 import '../screens/comment_screen.dart';

@@ -5,7 +5,7 @@ import 'package:main_hoon_arjun/providers/favorite.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 
-import './shareImage.dart';
+import 'share_image.dart';
 import './speaker_icon_button.dart';
 import '../screens/desired_shlok_screen.dart';
 import '../providers/playing_shlok.dart';

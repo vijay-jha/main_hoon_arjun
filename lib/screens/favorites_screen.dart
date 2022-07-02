@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/noItemInList.dart';
+import '../widgets/no_item_in_list.dart';
 import '../widgets/favorite_shlok.dart';
 import '../widgets/speaker_icon_button.dart';
 import '../providers/playing_shlok.dart';

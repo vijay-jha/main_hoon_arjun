@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:main_hoon_arjun/providers/mahabharat_characters.dart';
-import 'package:main_hoon_arjun/widgets/noItemInList.dart';
+import 'package:main_hoon_arjun/widgets/no_item_in_list.dart';
 import 'package:main_hoon_arjun/widgets/profile_picture.dart';
 import 'package:provider/provider.dart';
 
@@ -47,6 +47,7 @@ class _CommentScreenState extends State<CommentScreen> {
             .doc(widget.currentShloK)
             .set({
           'count': 0,
+          'chapter_shlok': widget.currentShloK,
         });
       }
     }();
